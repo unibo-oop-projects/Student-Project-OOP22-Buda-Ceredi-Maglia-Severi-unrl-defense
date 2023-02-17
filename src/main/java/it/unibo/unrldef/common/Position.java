@@ -1,7 +1,7 @@
 package it.unibo.unrldef.common;
 
 /** 
- * the class "Position" represents the coordinates of a point in a 2d world.
+ * the coordinates of a point in a 2d world.
  */
 public final class Position {
 
@@ -64,6 +64,6 @@ public final class Position {
 
     @Override
     public String toString() {
-        return "Position [" + x + ", " + y + "]";
+        return "[" + x + ", " + y + "]";
     } 
 }
