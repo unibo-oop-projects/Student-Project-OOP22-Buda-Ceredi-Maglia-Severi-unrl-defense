@@ -2,6 +2,7 @@ package it.unibo.unrldef.common;
 
 /** 
  * the coordinates of a point in a 2d world.
+ * @author francesco.buda3@studio.unibo.it
  */
 public final class Position {
 
