@@ -1,3 +1,4 @@
+package it.unibo.unrldef.common;
 public class Position {
     private final double x, y;
 
