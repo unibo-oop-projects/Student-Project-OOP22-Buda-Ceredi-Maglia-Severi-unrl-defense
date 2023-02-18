@@ -1,5 +1,11 @@
 package it.unibo.unrldef.common;
-public class Position {
+
+/** 
+ * the coordinates of a point in a 2d world.
+ * @author francesco.buda3@studio.unibo.it
+ */
+public final class Position {
+
     private final double x, y;
 
     Position(final double x, final double y) {
