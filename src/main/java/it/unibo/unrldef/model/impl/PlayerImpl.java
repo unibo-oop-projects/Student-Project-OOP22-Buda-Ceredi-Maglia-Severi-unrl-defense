@@ -8,12 +8,21 @@ import java.util.Set;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.Potion;
 
+/**
+ * The main player in a tower defense game
+ * @author tommaso.severi2@studio.unibo.it
+ */
 public class PlayerImpl implements Player{
 
     private World map;
     private final String name;
     private final Set<Potion> potions = new HashSet<>();
 
+    /**
+     * Crates a new Player
+     * @param name its name
+     * @param map where he begins to play
+     */
     public PlayerImpl(String name, World map) {
         this.map = Objects.requireNonNull(map);
         this.name = Objects.requireNonNull(name);
@@ -35,16 +44,25 @@ public class PlayerImpl implements Player{
         return this.map;
     }
     
-    public void buildNewTower(int x, int y) {
-        this.map.addTower(x, y);
+    /**
+     * Places a new tower on the world map
+     * @param pos the position where to place it  
+     */
+    public void buildNewTower(Position pos) {
+        this.map.addTower(pos);
     }
 
-    public void throwPotion(String name, int x, int y) {
+    /**
+     * Places a new potion on the world map deling damage to enemies
+     * @param name its name
+     * @param pos its position
+     */
+    public void throwPotion(String name, Position pos) {
         final Potion selected = this.potions.stream()
                 .filter(p -> Objects.equals(p.getName(), name))
                 .findFirst().get();
         if (selected.isReady()) {
-            this.map.addPotion(selected, x, y);
+            this.map.addPotion(selected, pos);
         }
     }
 }

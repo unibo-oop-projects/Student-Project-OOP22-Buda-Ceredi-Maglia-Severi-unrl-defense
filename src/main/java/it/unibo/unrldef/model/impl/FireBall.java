@@ -1,7 +1,14 @@
 package it.unibo.unrldef.model.impl;
 
+import java.util.Optional;
+
+import it.unibo.unrldef.model.common.Position;
 import it.unibo.unrldef.model.api.Potion;
 
+/**
+ * A fireball potion used in a tower defense game
+ * @author tommaso.severi2@studio.unibo.it
+ */
 public class FireBall implements Potion{
 
     // Placeholders
@@ -12,10 +19,15 @@ public class FireBall implements Potion{
 
     private final String name;
     private Double state;
+    private Optional<Position> position;
 
+    /**
+     * Creates a new potion of type fireball 
+     */
     public FireBall() {
         this.name = "fireball";
         this.state = 0.0;
+        position = Optional.empty();
     }
 
     @Override
@@ -24,7 +36,7 @@ public class FireBall implements Potion{
     }
 
     @Override
-    public Double getDamagePerTick() {
+    public Double getDamagePerFrame() {
         return DMG;
     }
 
@@ -36,6 +48,11 @@ public class FireBall implements Potion{
     @Override
     public Double getRechargeState() {
         return this.state;
+    }
+
+    @Override
+    public Optional<Position> getCurrentPosition() {
+        return this.position;
     }
 
     @Override
