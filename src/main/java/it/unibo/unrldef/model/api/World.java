@@ -9,8 +9,8 @@ public interface World {
     void startWave(Wave wave);
     void buildTower(Position pos, Tower tower);
     List<GameObject> getSceneEntities();
-    CastleIntegrity getCastleIntegrity();
+    TargetIntegrity getCastleIntegrity();
     int getMoney();
-    Set<Tower> getTowers();
+    Set<Tower> getAvailableTowers();
     Path getPath();
 }
