@@ -28,8 +28,12 @@ public class WorldImpl implements World{
         // TODO
     }
 
+    public void startGame(){
+        // TODO
+    }
+
     @Override
-    public void startWave(Wave wave) {
+    private void startWave(Wave wave) {
         // TODO Auto-generated method stub
         
     }

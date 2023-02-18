@@ -6,7 +6,7 @@ import java.util.Set;
 import it.unibo.unrldef.common.*;
 
 public interface World {
-    void startWave(Wave wave);
+    void startGame();
     void buildTower(Position pos, Tower tower);
     List<GameObject> getSceneEntities();
     TargetIntegrity getCastleIntegrity();
