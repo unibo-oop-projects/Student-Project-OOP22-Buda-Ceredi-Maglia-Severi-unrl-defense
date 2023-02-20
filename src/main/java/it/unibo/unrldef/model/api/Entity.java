@@ -1,5 +1,8 @@
 package it.unibo.unrldef.model.api;
 
+import java.util.Objects;
+import java.util.Optional;
+
 import it.unibo.unrldef.common.Position;
 
 /**
@@ -7,7 +10,7 @@ import it.unibo.unrldef.common.Position;
  * @author danilo.maglia@studio.unibo.it
  */
 public abstract class Entity {
-    private Position position; 
+    private Optional<Position> position; 
     private final String name;
 
     /**
@@ -16,14 +19,14 @@ public abstract class Entity {
      */
     public Entity(Position position, String name) {
         this.setPosition(position);
-        this.name = name;
+        this.name = Objects.requireNonNull(name);
     }
 
     /**
      * 
      * @return the position of the entity
      */
-    public Position getPosition() {
+    public Optional<Position> getPosition() {
         return this.position;
     }
 
@@ -40,6 +43,6 @@ public abstract class Entity {
      * @param position the position to be set to the entity
      */
     public void setPosition(Position position) {
-        this.position = position;
+        this.position = Optional.of(position);
     }
 }

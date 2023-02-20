@@ -5,8 +5,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import it.unibo.unrldef.common.Position;
+import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.Potion;
+import it.unibo.unrldef.model.api.World;
 
 /**
  * The main player in a tower defense game
@@ -49,7 +52,7 @@ public class PlayerImpl implements Player{
      * @param pos the position where to place it  
      */
     public void buildNewTower(Position pos) {
-        this.map.addTower(pos);
+        this.map.buildTower(pos, null);;
     }
 
     /**
@@ -61,7 +64,7 @@ public class PlayerImpl implements Player{
         final Potion selected = this.potions.stream()
                 .filter(p -> Objects.equals(p.getName(), name))
                 .findFirst().get();
-        if (selected.isReady()) {
+        if (selected.tryActivation()) {
             this.map.addPotion(selected, pos);
         }
     }
