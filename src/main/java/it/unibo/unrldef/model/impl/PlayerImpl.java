@@ -52,7 +52,7 @@ public class PlayerImpl implements Player{
      * @param pos the position where to place it  
      */
     public void buildNewTower(Position pos) {
-        this.map.buildTower(pos, null);;
+        this.map.buildTower(pos, null);
     }
 
     /**
@@ -64,7 +64,7 @@ public class PlayerImpl implements Player{
         final Potion selected = this.potions.stream()
                 .filter(p -> Objects.equals(p.getName(), name))
                 .findFirst().get();
-        if (selected.tryActivation()) {
+        if (selected.tryActivation(pos)) {
             this.map.addPotion(selected, pos);
         }
     }

@@ -25,17 +25,17 @@ public interface Potion {
     /**
      * @return the damage dealt by the potion every frame it's active
      */
-    public Double getDamagePerFrame();
+    public double getDamage();
 
     /**
      * @return the radius of the potion effect
      */
-    public Integer getRadius();
+    public double getRadius();
 
     /**
      * @return the current state the potion is currently at when recharging or being used
      */
-    public Double getState();
+    public double getState();
 
     /**
      * @return the position where the potion was thrown but it could be null in case it's recharging
