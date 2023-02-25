@@ -5,6 +5,7 @@ import it.unibo.unrldef.common.Position;
 /**
  * An entity in a game with a position and a name
  * @author danilo.maglia@studio.unibo.it
+ * @author tommaso.ceredi@studio.unibo.it
  */
 public abstract class Entity {
     private Position position; 
@@ -42,4 +43,6 @@ public abstract class Entity {
     public void setPosition(Position position) {
         this.position = position;
     }
+
+    public abstract void updateState();
 }
