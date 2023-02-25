@@ -1,6 +1,5 @@
 package it.unibo.unrldef.model.api;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import it.unibo.unrldef.common.Position;
@@ -8,6 +7,7 @@ import it.unibo.unrldef.common.Position;
 /**
  * An entity in a game with a position and a name
  * @author danilo.maglia@studio.unibo.it
+ * @author tommaso.ceredi@studio.unibo.it
  */
 public abstract class Entity {
     private Optional<Position> position; 
@@ -17,9 +17,9 @@ public abstract class Entity {
      * @param position the position to be set to the entity
      * @param name the name of the entity
      */
-    public Entity(Position position, String name) {
+    public Entity(Optional<Position> position, String name) {
         this.setPosition(position);
-        this.name = Objects.requireNonNull(name);
+        this.name = name;
     }
 
     /**
@@ -42,7 +42,12 @@ public abstract class Entity {
      * 
      * @param position the position to be set to the entity
      */
-    public void setPosition(Position position) {
-        this.position = Optional.of(position);
+    public void setPosition(Optional<Position> position) {
+        this.position = position;
     }
+
+    /**
+     * Update thr state of the object
+     */
+    public abstract void updateState();
 }
