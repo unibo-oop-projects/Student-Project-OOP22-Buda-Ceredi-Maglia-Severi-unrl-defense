@@ -1,6 +1,7 @@
 package it.unibo.unrldef.model.api;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import it.unibo.unrldef.common.Position;
 
@@ -20,7 +21,7 @@ public abstract class DefenseEntity extends Entity {
      * @param radius the radius it can deal damage from
      * @param damage the damage it inflicts to an enemy
      */
-    public DefenseEntity(Position position, String name, double radius, double damage) {
+    public DefenseEntity(Optional<Position> position, String name, double radius, double damage) {
         super(position, name);
         this.radius = Objects.requireNonNull(radius);
         this.damage = Objects.requireNonNull(damage);
@@ -39,4 +40,6 @@ public abstract class DefenseEntity extends Entity {
     public double getDamage() {
         return this.damage;
     }
+
+    
 }

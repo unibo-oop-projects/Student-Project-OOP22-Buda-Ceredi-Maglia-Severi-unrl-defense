@@ -3,13 +3,14 @@ package it.unibo.unrldef.model.impl;
 import java.util.Optional;
 
 import it.unibo.unrldef.model.common.Position;
+import it.unibo.unrldef.model.api.DefenseEntity;
 import it.unibo.unrldef.model.api.Potion;
 
 /**
  * A fireball potion used in a tower defense game
  * @author tommaso.severi2@studio.unibo.it
  */
-public class FireBall implements Potion{
+public class FireBall extends DefenseEntity implements Potion{
 
     // Placeholders
     private static final Double DMG = 30.0;
