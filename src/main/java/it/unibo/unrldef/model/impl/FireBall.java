@@ -1,5 +1,7 @@
 package it.unibo.unrldef.model.impl;
 
+import java.util.Optional;
+
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.DefenseEntity;
 import it.unibo.unrldef.model.api.Potion;
@@ -10,6 +12,9 @@ import it.unibo.unrldef.model.api.Potion;
  */
 public class FireBall extends DefenseEntity implements Potion{
 
+    private static final String NAME = "fireball";
+    private static final double DMG = 30.0;
+    private static final double RAD = 10.0;
     private final double full = 100.0;
     private final double rechargeRate = 10.0;
     private final double activationRate = 50.0;
@@ -21,7 +26,7 @@ public class FireBall extends DefenseEntity implements Potion{
      * Creates a new potion of type fireball 
      */
     public FireBall() {
-        super(null, "fireball", 10.0, 30.0);
+        super(null, FireBall.NAME, FireBall.RAD, FireBall.DMG);
         this.active = false;
         this.state = 0.0;
     }
@@ -30,7 +35,7 @@ public class FireBall extends DefenseEntity implements Potion{
     public boolean tryActivation(Position position) {
         if (!this.isActive()) {
             this.active = this.isReady();
-            super.setPosition(this.active ? position : null);
+            super.setPosition(this.active ? Optional.of(position) : null);
             return this.active;
         }
         return false;

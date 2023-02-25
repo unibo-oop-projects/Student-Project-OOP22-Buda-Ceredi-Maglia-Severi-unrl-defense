@@ -46,9 +46,4 @@ public interface Potion {
      * @return true if the potion is being used, false otherwise
      */
     public boolean isActive();
-
-    /**
-     * Informs the potion of the passage of time
-     */
-    public void updateState();
 }
