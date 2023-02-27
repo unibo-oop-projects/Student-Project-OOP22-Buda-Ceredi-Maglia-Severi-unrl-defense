@@ -2,7 +2,7 @@ package it.unibo.unrldef.model.impl;
 
 import java.util.Optional;
 
-import it.unibo.unrldef.model.common.Position;
+import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.DefenseEntity;
 import it.unibo.unrldef.model.api.Potion;
 
@@ -12,57 +12,73 @@ import it.unibo.unrldef.model.api.Potion;
  */
 public class FireBall extends DefenseEntity implements Potion{
 
-    // Placeholders
-    private static final Double DMG = 30.0;
-    private static final int RAD = 10;
-    private static final Double READY = 100.0;
-    private static final Double RCHGRATE = 10.0;
+    private static final String NAME = "fireball";
+    private static final double DMG = 30.0;
+    private static final double RAD = 10.0;
+    private final double full = 100.0;
+    private final double rechargeRate = 10.0;
+    private final double activationRate = 50.0;
 
-    private final String name;
-    private Double state;
-    private Optional<Position> position;
+    private double state;
+    private boolean active;
 
     /**
      * Creates a new potion of type fireball 
      */
     public FireBall() {
-        this.name = "fireball";
+        super(null, FireBall.NAME, FireBall.RAD, FireBall.DMG);
+        this.active = false;
         this.state = 0.0;
-        position = Optional.empty();
     }
 
     @Override
-    public String getName() {
-        return this.name;
+    public boolean tryActivation(Position position) {
+        if (!this.isActive()) {
+            this.active = this.isReady();
+            super.setPosition(this.active ? Optional.of(position) : null);
+            return this.active;
+        }
+        return false;
     }
 
-    @Override
-    public Double getDamagePerFrame() {
-        return DMG;
-    }
-
-    @Override
-    public Integer getRadius() {
-        return RAD;
-    }
-
-    @Override
-    public Double getRechargeState() {
+    public double getState() {
         return this.state;
     }
 
     @Override
-    public Optional<Position> getCurrentPosition() {
-        return this.position;
-    }
-
-    @Override
-    public boolean isReady() {
-        return this.state == READY;
+    public boolean isActive() {
+        return this.active;
     }
 
     @Override
     public void updateState() {
-        this.state = this.isReady() ? 0.0 : this.state+RCHGRATE; 
+        if (!this.isWaiting()) {
+            this.state = this.isReady() ? 0.0 : this.state+this.getRate();
+            if (this.state == 0.0 && this.isActive()) {
+                this.active = false;
+            }
+        }
+    }
+
+    /**
+     * Checks wether the potion is waiting to be used or not
+     * @return true if it's waiting, false otherwise
+     */
+    private boolean isWaiting() {
+        return this.isReady() && !this.isActive();
+    }
+
+    /**
+     * @return the right amount to add depending which state is the potion in
+     */
+    private double getRate() {
+        return this.isActive() ? this.activationRate : this.rechargeRate;
+    }
+
+    /**
+     * @return true if the potion is ready to be used or being rethrived, false otherwise
+     */
+    private boolean isReady() {
+        return this.state >= this.full;
     }
 }
