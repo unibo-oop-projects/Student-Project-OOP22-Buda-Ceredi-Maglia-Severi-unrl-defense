@@ -6,7 +6,6 @@ package it.unibo.unrldef.model.api;
  */
 public interface Enemy {
     /**
-     * 
      * @return the health of the enemy
      */
     public int getHealth();
