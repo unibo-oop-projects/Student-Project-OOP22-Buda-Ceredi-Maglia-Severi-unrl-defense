@@ -20,7 +20,7 @@ public interface Potion {
      * @param position the desired place to throw th potion at
      * @return true if the potion is ready to be used, false otherwise
      */
-    public boolean tryActivation(Position position);
+    public boolean tryActivation(final Position position);
 
     /**
      * @return the damage dealt by the potion every frame it's active
@@ -31,11 +31,6 @@ public interface Potion {
      * @return the radius of the potion effect
      */
     public double getRadius();
-
-    /**
-     * @return the current state the potion is currently at when recharging or being used
-     */
-    public double getState();
 
     /**
      * @return the position where the potion was thrown but it could be null in case it's recharging
