@@ -27,7 +27,7 @@ public abstract class DefenseEntity extends Entity {
      * @param damage the damage it inflicts to an enemy
      * @param attackRate the rate at which it attacks
      */
-    public DefenseEntity(Optional<Position> position, String name, double radius, double damage, double attackRate) {
+    public DefenseEntity(final Optional<Position> position, final String name, final double radius, final double damage, final double attackRate) {
         super(position, name);
         this.radius = Objects.requireNonNull(radius);
         this.damage = Objects.requireNonNull(damage);
@@ -66,7 +66,14 @@ public abstract class DefenseEntity extends Entity {
     /**
      * Sets the enemies in range
      */
-    public void setEnemiesInRange(List<Enemy> enemies){
+    public void setEnemiesInRange(final List<Enemy> enemies){
         this.targetedEnemies = enemies;
     }
+
+    /**
+     * Gets the enemies in range
+     * @return the targeted enemies
+     */
+    public List<Enemy> getTargetedEnemies() {
+        return this.targetedEnemies;
 }
