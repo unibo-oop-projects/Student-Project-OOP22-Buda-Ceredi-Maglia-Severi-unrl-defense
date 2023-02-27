@@ -8,6 +8,7 @@ import it.unibo.unrldef.common.*;
 /**
  * the world of a tower defense game
  * @author francesco.buda3@studio.unibo.it
+ * 
  */
 public interface World {
     void startGame();
