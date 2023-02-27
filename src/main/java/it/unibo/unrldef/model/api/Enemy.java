@@ -11,10 +11,15 @@ public interface Enemy {
     public int getHealth();
 
     /**
+     * @return the speed of the enemy
+     */
+    public int getSpeed();
+
+    /**
      * Method that reduces the health of the enemy
      * @param amount the amount of health to reduce
      */
-    public void reduceHealth(int amount);
+    public void reduceHealth(final int amount);
 
     /**
      * @return true if the enemy is dead, false otherwise
