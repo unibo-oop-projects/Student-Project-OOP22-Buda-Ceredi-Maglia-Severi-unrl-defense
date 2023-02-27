@@ -70,5 +70,10 @@ public class WorldImpl implements World{
     public Path getPath() {
         return this.path;
     }
+
+	@Override
+	public List<Enemy> sorroundingEnemies(Tower tower) {
+		// TODO Auto-generated method stub
+	}
     
 }
