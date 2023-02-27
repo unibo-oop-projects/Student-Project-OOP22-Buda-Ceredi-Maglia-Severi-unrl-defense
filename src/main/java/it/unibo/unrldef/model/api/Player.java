@@ -15,7 +15,7 @@ public interface Player {
      * Sets the map where the player will be playing
      * @param map the next map
      */
-    public void setGameMap(World map);
+    public void setGameMap(final World map);
 
     /**
      * @return the map where the player is currently playing

@@ -26,7 +26,7 @@ public class PlayerImpl implements Player{
      * @param name its name
      * @param map where he begins to play
      */
-    public PlayerImpl(String name, World map) {
+    public PlayerImpl(final String name, final World map) {
         this.map = Objects.requireNonNull(map);
         this.name = Objects.requireNonNull(name);
         this.potions.add(new FireBall());
@@ -38,7 +38,7 @@ public class PlayerImpl implements Player{
     }
 
     @Override
-    public void setGameMap(World map) {
+    public void setGameMap(final World map) {
         this.map = Objects.requireNonNull(map);
     }
 
@@ -51,7 +51,7 @@ public class PlayerImpl implements Player{
      * Places a new tower on the world map
      * @param pos the position where to place it  
      */
-    public void buildNewTower(Position pos) {
+    public void buildNewTower(final Position pos) {
         this.map.buildTower(pos, null);
     }
 
@@ -60,7 +60,7 @@ public class PlayerImpl implements Player{
      * @param name its name
      * @param pos its position
      */
-    public void throwPotion(String name, Position pos) {
+    public void throwPotion(final String name, final Position pos) {
         final Potion selected = this.potions.stream()
                 .filter(p -> Objects.equals(p.getName(), name))
                 .findFirst().get();
