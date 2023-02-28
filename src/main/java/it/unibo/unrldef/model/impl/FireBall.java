@@ -1,69 +1,23 @@
 package it.unibo.unrldef.model.impl;
 
-import java.util.Optional;
-
-import it.unibo.unrldef.common.Position;
-import it.unibo.unrldef.model.api.Potion;
+import it.unibo.unrldef.model.api.World;
 
 /**
  * A fireball potion used in a tower defense game
  * @author tommaso.severi2@studio.unibo.it
  */
-public class FireBall extends DefenseEntity implements Potion{
+public class FireBall extends PotionImpl {
 
     private static final String NAME = "fireball";
     private static final double ATTACK_RATE = 0.0;
     private static final double DMG = 30.0;
     private static final double RAD = 10.0;
-    private final double ready = 10.0;
-    private boolean active;
+    private static final double WAIT_TIME = 10.0;
 
     /**
      * Creates a new potion of type fireball 
      */
-    public FireBall() {
-        super(null, FireBall.NAME, FireBall.RAD, FireBall.DMG, FireBall.ATTACK_RATE);
-        this.active = false;
-    }
-
-    @Override
-    public boolean tryActivation(final Position position) {
-        if (!this.isActive() && this.isReady()) {
-            this.active = true;
-            super.setPosition(Optional.of(position));
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isActive() {
-        return this.active;
-    }
-
-    @Override
-    protected void attack() {
-        if (this.isActive()) {
-            for (final Enemy e : this.getTargetedEnemies()) {
-                if (e.getHealth() > 0) {
-                    e.rreduceHealth(this.getDamage());
-                }
-            }
-        }
-    }
-
-    @Override
-    public void updateState() {
-        this.updateTimer();
-        if (this.isActive()) {
-            this.checkAttack();
-        }
-    }
-
-    /**
-     * @return true if the potion is ready to be used, false otherwise
-     */
-    private boolean isReady() {
-        return this.getTimer() >= this.ready;
+    public FireBall(final World parentWorld) {
+        super(NAME, parentWorld, RAD, DMG, ATTACK_RATE, WAIT_TIME);
     }
 }
