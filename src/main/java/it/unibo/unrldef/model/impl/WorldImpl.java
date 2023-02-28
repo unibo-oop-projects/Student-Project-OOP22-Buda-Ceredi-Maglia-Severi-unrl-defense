@@ -12,22 +12,32 @@ import it.unibo.unrldef.model.api.*;
 public class WorldImpl implements World{
 
     final String name;
-    final Integrity CastleIntegrity;
+    final Integrity castleIntegrity;
     //final Bank bank;
-    //final Path path;
-    //final List<Wave> Waves;
+    final Path path;
+    final List<Wave> waves;
+    int waveCounter;
     final Map<Position, Optional<Tower>> placedTowers;
     final Set<Tower> availableTowers;
     final List<Enemy> livingEnemies;
 
 
 
-    WorldImpl(WorldBuilder builder){
-        // TODO
+    private WorldImpl(String name, Integrity castleIntegrity, Path path, List<Wave> waves, Set<Tower> availableTowers){
+        this.name = name;
+        this.castleIntegrity = castleIntegrity;
+        this.path = path;
+        this.waves = waves;
+        this.availableTowers = availableTowers;
+    }
+
+    public void updateState(long time){
+        this.livingEnemies.stream().forEach(x -> x.updateState(time));
+        this.placedTowers.values().stream().filter(Optional::isPresent).forEach(x -> x.get().updateState(time));
     }
 
     public void startGame(){
-        // TODO
+        this.waves.get(0).getNextHorde();
     }
 
     @Override
@@ -35,6 +45,8 @@ public class WorldImpl implements World{
         // TODO Auto-generated method stub
         
     }
+
+
 
     @Override
     public void buildTower(Position pos, Tower tower) {
@@ -74,6 +86,5 @@ public class WorldImpl implements World{
 	@Override
 	public List<Enemy> sorroundingEnemies(Position center, float radius) {
 		// TODO Auto-generated method stub
-	}
-    
+	}    
 }
