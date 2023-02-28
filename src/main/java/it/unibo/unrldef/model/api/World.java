@@ -9,6 +9,7 @@ import it.unibo.unrldef.model.impl.Entity;
 /**
  * the world of a tower defense game
  * @author francesco.buda3@studio.unibo.it
+ * 
  */
 public interface World {
     void startGame();
@@ -17,5 +18,6 @@ public interface World {
     Integrity getCastleIntegrity();
     int getMoney();
     Set<Tower> getAvailableTowers();
+    List<Enemy> sorroundingEnemies(Position center, float radius);
     Path getPath();
 }

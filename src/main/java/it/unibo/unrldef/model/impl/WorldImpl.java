@@ -1,5 +1,6 @@
 package it.unibo.unrldef.model.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,11 +13,13 @@ public class WorldImpl implements World{
 
     final String name;
     final Integrity CastleIntegrity;
-    final Bank bank;
-    final Path path;
-    final List<Wave> Waves;
+    //final Bank bank;
+    //final Path path;
+    //final List<Wave> Waves;
     final Map<Position, Optional<Tower>> placedTowers;
-    final Set<Tower> availableTowers;  
+    final Set<Tower> availableTowers;
+    final List<Enemy> livingEnemies;
+
 
 
     WorldImpl(WorldBuilder builder){
@@ -41,8 +44,10 @@ public class WorldImpl implements World{
 
     @Override
     public List<Entity> getSceneEntities() {
-        // TODO Auto-generated method stub
-        return null;
+        List<Entity> ret = new ArrayList<Entity>();
+        ret.addAll(this.availableTowers);
+        ret.addAll(this.livingEnemies);
+        return ret;
     }
 
     @Override
@@ -65,5 +70,10 @@ public class WorldImpl implements World{
     public Path getPath() {
         return this.path;
     }
+
+	@Override
+	public List<Enemy> sorroundingEnemies(Position center, float radius) {
+		// TODO Auto-generated method stub
+	}
     
 }
