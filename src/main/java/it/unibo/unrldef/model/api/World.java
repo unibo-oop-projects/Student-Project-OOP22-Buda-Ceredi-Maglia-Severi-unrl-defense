@@ -17,6 +17,6 @@ public interface World {
     Integrity getCastleIntegrity();
     int getMoney();
     Set<Tower> getAvailableTowers();
-    List<Enemy> sorroundingEnemies(Tower tower);
+    List<Enemy> sorroundingEnemies(Position center, float radius);
     Path getPath();
 }
