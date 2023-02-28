@@ -72,7 +72,7 @@ public class WorldImpl implements World{
     }
 
 	@Override
-	public List<Enemy> sorroundingEnemies(Tower tower) {
+	public List<Enemy> sorroundingEnemies(Position center, float radius) {
 		// TODO Auto-generated method stub
 	}
     
