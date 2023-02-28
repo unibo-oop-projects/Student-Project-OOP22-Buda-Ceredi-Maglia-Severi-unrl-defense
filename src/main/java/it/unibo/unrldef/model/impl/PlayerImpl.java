@@ -2,7 +2,6 @@ package it.unibo.unrldef.model.impl;
 
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 import it.unibo.unrldef.common.Position;
@@ -16,7 +15,7 @@ import it.unibo.unrldef.model.api.World;
  */
 public class PlayerImpl implements Player{
 
-    private World map;
+    private World currentWorld;
     private final String name;
     private final Set<Potion> potions = new HashSet<>();
 
@@ -25,10 +24,11 @@ public class PlayerImpl implements Player{
      * @param name its name
      * @param map where he begins to play
      */
-    public PlayerImpl(final String name, final World map) {
-        this.map = Objects.requireNonNull(map);
+    public PlayerImpl(final String name, final World world) {
+        this.setGameMap(world);
         this.name = Objects.requireNonNull(name);
-        this.potions.add(new FireBall());
+        this.potions.add(new FireBall(world));
+        this.potions.add(new Arrows(world));
     }
 
     @Override
@@ -37,13 +37,13 @@ public class PlayerImpl implements Player{
     }
 
     @Override
-    public void setGameMap(final World map) {
-        this.map = Objects.requireNonNull(map);
+    public void setGameMap(final World world) {
+        this.currentWorld = Objects.requireNonNull(world);
     }
 
     @Override
     public World getGameWorld() {
-        return this.map;
+        return this.currentWorld;
     }
     
     /**
@@ -51,7 +51,7 @@ public class PlayerImpl implements Player{
      * @param pos the position where to place it  
      */
     public void buildNewTower(final Position pos) {
-        this.map.buildTower(pos, null);
+        this.currentWorld.buildTower(pos, null);
     }
 
     /**
@@ -64,7 +64,7 @@ public class PlayerImpl implements Player{
                 .filter(p -> Objects.equals(p.getName(), name))
                 .findFirst().get();
         if (selected.tryActivation(pos)) {
-            this.map.addPotion(selected, pos);
+            // this.currentWorld.addPotion(selected, pos);
         }
     }
 }
