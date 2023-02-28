@@ -14,11 +14,11 @@ import it.unibo.unrldef.model.api.World;
  */
 public class EnemyImpl extends Entity implements Enemy {
     private double health;
-    private final int speed;
+    private final double speed;
     private int currentDirectionIndex;
     private Pair<Path.Direction, Double> currentDirection;
     
-    public EnemyImpl(final Optional<Position> position, final String name, final World parentWorld, final double startingHealth, final int speed) {
+    public EnemyImpl(final Optional<Position> position, final String name, final World parentWorld, final double startingHealth, final double speed) {
         super(position, name, parentWorld);
         this.health = startingHealth;
         this.speed = speed;
@@ -33,7 +33,7 @@ public class EnemyImpl extends Entity implements Enemy {
     }
 
     @Override
-    public int getSpeed() {
+    public double getSpeed() {
         return this.speed;
     }
 

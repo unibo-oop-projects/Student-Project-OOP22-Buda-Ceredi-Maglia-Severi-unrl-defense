@@ -13,7 +13,7 @@ public interface Enemy {
     /**
      * @return the speed of the enemy
      */
-    public int getSpeed();
+    public double getSpeed();
 
     /**
      * Method that reduces the health of the enemy
