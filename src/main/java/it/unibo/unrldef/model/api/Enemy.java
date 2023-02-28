@@ -26,5 +26,14 @@ public interface Enemy {
      */
     public boolean isDead();
 
-    
+    /**
+     * 
+     * @return true if the enemy has reached the end of the path, false otherwise
+     */
+    public boolean hasReachedEndOfPath();
+
+    /**
+     * @return a copy of the enemy
+     */
+    public Enemy copy();
 }
