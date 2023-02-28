@@ -6,7 +6,7 @@ package it.unibo.unrldef.common;
  */
 public final class Position {
 
-    private final double x, y;
+    private double x, y;
 
     Position(final double x, final double y) {
         this.x = x;
@@ -29,6 +29,21 @@ public final class Position {
         return this.y;
     } 
 
+    /**
+     * 
+     * @param x the new x value
+     */
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    /**
+     * 
+     * @param y the new y value
+     */
+    public void setY(double y) {
+        this.y = y;
+    }
 
     @Override
     public int hashCode() {
