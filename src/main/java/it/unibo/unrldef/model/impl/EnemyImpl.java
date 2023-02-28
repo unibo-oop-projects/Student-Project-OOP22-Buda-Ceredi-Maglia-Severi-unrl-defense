@@ -17,7 +17,6 @@ public class EnemyImpl extends Entity implements Enemy {
     private int health;
     private final int speed;
     private int currentDirectionIndex;
-    private World parentWorld;
     private Pair<Path.Direction, Double> currentDirection;
     
     public EnemyImpl(final Optional<Position> position, final String name, final World parentWorld, final int startingHealth, final int speed) {
@@ -62,7 +61,7 @@ public class EnemyImpl extends Entity implements Enemy {
 
             if(units <= 0) {
                 this.currentDirectionIndex++;
-                this.currentDirection = this.parentWorld.getPath().getDirection(this.currentDirectionIndex);
+                this.currentDirection = this.getParentWorld().getPath().getDirection(this.currentDirectionIndex);
                 direction = this.currentDirection.getFirst();
                 units = this.currentDirection.getSecond();
             }
