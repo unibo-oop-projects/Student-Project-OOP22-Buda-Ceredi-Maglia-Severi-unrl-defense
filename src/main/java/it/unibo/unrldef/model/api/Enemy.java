@@ -8,7 +8,7 @@ public interface Enemy {
     /**
      * @return the health of the enemy
      */
-    public int getHealth();
+    public double getHealth();
 
     /**
      * @return the speed of the enemy
@@ -19,7 +19,7 @@ public interface Enemy {
      * Method that reduces the health of the enemy
      * @param amount the amount of health to reduce
      */
-    public void reduceHealth(final int amount);
+    public void reduceHealth(final double amount);
 
     /**
      * @return true if the enemy is dead, false otherwise
@@ -31,6 +31,12 @@ public interface Enemy {
      * @return true if the enemy has reached the end of the path, false otherwise
      */
     public boolean hasReachedEndOfPath();
+
+    /**
+     * Method that moves the enemy following the path
+     * 
+     */
+    public void move(long time);
 
     /**
      * @return a copy of the enemy

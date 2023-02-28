@@ -1,8 +1,9 @@
-package it.unibo.unrldef.model.api;
+package it.unibo.unrldef.model.impl;
 
 import java.util.Optional;
 
 import it.unibo.unrldef.common.Position;
+import it.unibo.unrldef.model.api.World;
 
 /**
  * An entity in a game with a position and a name
@@ -11,7 +12,6 @@ import it.unibo.unrldef.common.Position;
  */
 public abstract class Entity {
     private Optional<Position> position; 
-    private long timeSinceLastAction;
     private final String name;
     private final World parentWorld;
     
@@ -24,7 +24,6 @@ public abstract class Entity {
         this.setPosition(position);
         this.name = name;
         this.parentWorld = parentWorld;
-        this.timeSinceLastAction = 0;
     }
 
     /**
@@ -56,30 +55,8 @@ public abstract class Entity {
     }
 
     /**
-     * 
-     * @return the time elapsed since the last action of the entity was performed in milliseconds
-     */
-    public long getTimeSinceLastAction() {
-        return this.timeSinceLastAction;
-    }
-
-    /**
-     * 
-     * @param amount increase the time elapsed in milliseconds since the last action
-     */
-    public void incrementTime(long amount) {
-        this.timeSinceLastAction += amount;
-    }
-
-    /**
-     * Reset elapsed time
-     */
-    public void resetElapsedTime() {
-        this.timeSinceLastAction = 0;
-    }
-
-    /**
      * Update the state of the object
+     * @param time the amount of time to add to the internal timer
      */
-    public abstract void updateState();
+    public abstract void updateState(long time);
 }

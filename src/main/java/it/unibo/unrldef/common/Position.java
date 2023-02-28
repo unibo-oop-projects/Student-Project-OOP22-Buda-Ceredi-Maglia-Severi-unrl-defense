@@ -82,4 +82,8 @@ public final class Position {
     public String toString() {
         return "[" + x + ", " + y + "]";
     } 
+
+    public Position copy() {
+        return new Position(x, y);
+    }
 }

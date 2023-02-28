@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import it.unibo.unrldef.common.Position;
-import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.Potion;
 import it.unibo.unrldef.model.api.World;

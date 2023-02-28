@@ -7,6 +7,10 @@ import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Path;
 
+/**
+ * Implementation of a path in the game Unreal Defense
+ * @author danilo.maglia@studio.unibo.it
+ */
 public class PathImpl implements Path{
     private List<Pair<Path.Direction, Double>> path;
     private Position spawingPoint;
@@ -18,7 +22,7 @@ public class PathImpl implements Path{
 
     @Override
     public Pair<Direction, Double> getDirection(int index) throws IndexOutOfBoundsException{
-        return path.get(index);
+        return path.get(index).copy();
     }
 
     @Override
@@ -28,8 +32,7 @@ public class PathImpl implements Path{
 
     @Override
     public Position getSpawningPoint() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.spawingPoint;
     }
     
 }
