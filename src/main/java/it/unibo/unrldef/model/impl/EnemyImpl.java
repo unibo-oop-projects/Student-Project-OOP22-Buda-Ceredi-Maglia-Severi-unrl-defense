@@ -12,7 +12,7 @@ import it.unibo.unrldef.model.api.World;
  * Implementation of an Enemy in the game Unreal Defense
  * @author danilo.maglia@studio.unibo.it
  */
-public class EnemyImpl extends Entity implements Enemy {
+public class EnemyImpl extends EntityImpl implements Enemy {
     private double health;
     private final double speed;
     private int currentDirectionIndex;
@@ -68,26 +68,27 @@ public class EnemyImpl extends Entity implements Enemy {
     public void move(long time) {
         Path.Direction direction = this.currentDirection.getFirst();
         Double units = this.currentDirection.getSecond();
-        double currentX = this.getPosition().get().getX();
-        double currentY = this.getPosition().get().getY();
+        double x = this.getPosition().get().getX();
+        double y = this.getPosition().get().getY();
         double actualSpeed = this.speed * (time/1000.0);
         double stepSize = (units - actualSpeed) < 0 ? units : actualSpeed; // This prevents the enemy from stepping out of bounds
         switch(direction) {
             case DOWN:
-                this.getPosition().get().setY(currentY + stepSize);
+                y += stepSize;
                 break;
             case UP:
-                this.getPosition().get().setY(currentY - stepSize);
+                y -= stepSize;
                 break;
             case LEFT:
-                this.getPosition().get().setX(currentX - stepSize);
+                x -= stepSize;
                 break;
             case RIGHT:
-                this.getPosition().get().setX(currentX + stepSize);
+                x += stepSize;
                 break;
             default:
                 break;
         }
+        this.setPosition(x, y);
         this.currentDirection.setSecondElement(units - stepSize);
     }
 

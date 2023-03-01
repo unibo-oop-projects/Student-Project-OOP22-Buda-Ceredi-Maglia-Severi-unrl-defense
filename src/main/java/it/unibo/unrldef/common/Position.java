@@ -8,7 +8,7 @@ public final class Position {
 
     private double x, y;
 
-    Position(final double x, final double y) {
+    public Position(final double x, final double y) {
         this.x = x;
         this.y = y;
     }

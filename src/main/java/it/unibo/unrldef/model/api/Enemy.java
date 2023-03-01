@@ -4,7 +4,7 @@ package it.unibo.unrldef.model.api;
  * An enemy in a strategic game
  * @author danilo.maglia@studio.unibo.it
  */
-public interface Enemy {
+public interface Enemy extends Entity{
     /**
      * @return the health of the enemy
      */

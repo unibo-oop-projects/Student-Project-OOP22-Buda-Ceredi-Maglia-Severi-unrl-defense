@@ -13,7 +13,7 @@ import it.unibo.unrldef.model.api.World;
  * @author tommaso.severi2@studio.unibo.it
  * @author tommaso.ceredi@studio.unibo.it
  */
-public abstract class DefenseEntity extends Entity {
+public abstract class DefenseEntity extends EntityImpl {
 
     private final double radius;
     private final double damage;

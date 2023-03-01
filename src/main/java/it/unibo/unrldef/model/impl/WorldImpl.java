@@ -40,7 +40,7 @@ public class WorldImpl implements World{
     }
 
     @Override
-    public List<Entity> getSceneEntities() {
+    public List<EntityImpl> getSceneEntities() {
         // TODO Auto-generated method stub
         return null;
     }

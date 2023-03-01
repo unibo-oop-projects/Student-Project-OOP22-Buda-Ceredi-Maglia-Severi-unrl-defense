@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import it.unibo.unrldef.common.*;
-import it.unibo.unrldef.model.impl.Entity;
+import it.unibo.unrldef.model.impl.EntityImpl;
 
 /**
  * the world of a tower defense game
@@ -13,7 +13,7 @@ import it.unibo.unrldef.model.impl.Entity;
 public interface World {
     void startGame();
     void buildTower(Position pos, Tower tower);
-    List<Entity> getSceneEntities();
+    List<EntityImpl> getSceneEntities();
     Integrity getCastleIntegrity();
     int getMoney();
     Set<Tower> getAvailableTowers();
