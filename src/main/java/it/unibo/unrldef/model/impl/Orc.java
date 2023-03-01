@@ -9,7 +9,8 @@ public class Orc extends EnemyImpl{
     private static final String NAME = "orc";
     private static final double SPEED = 5.0;
     public static final double HEALTH = 80.0;
+    
     public Orc(Optional<Position> position, World parentWorld) {
-        super(position, NAME, parentWorld, HEALTH, SPEED);
+        super(position, Orc.NAME, parentWorld, Orc.HEALTH, Orc.SPEED);
     }
 }

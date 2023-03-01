@@ -11,6 +11,6 @@ public class Goblin extends EnemyImpl{
     public static final double HEALTH = 40.0;
     
     public Goblin(Optional<Position> position, World parentWorld) {
-        super(position, NAME, parentWorld, HEALTH, SPEED);
+        super(position, Goblin.NAME, parentWorld, Goblin.HEALTH, Goblin.SPEED);
     }
 }

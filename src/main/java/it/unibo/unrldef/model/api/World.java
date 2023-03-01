@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 
 import it.unibo.unrldef.common.*;
-import it.unibo.unrldef.model.impl.Entity;
 
 /**
  * the world of a tower defense game

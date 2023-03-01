@@ -26,7 +26,7 @@ public class PotionImpl extends DefenseEntity implements Potion {
     public boolean tryActivation(final Position position) {
         if (!this.isActive() && this.isReady()) {
             this.active = true;
-            super.setPosition(Optional.of(position));
+            super.setPosition(position.getX(), position.getY());
             return true;
         }
         return false;
