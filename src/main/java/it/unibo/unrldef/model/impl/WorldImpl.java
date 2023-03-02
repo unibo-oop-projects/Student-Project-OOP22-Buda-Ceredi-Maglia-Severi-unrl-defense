@@ -1,5 +1,6 @@
 package it.unibo.unrldef.model.impl;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 
 import it.unibo.unrldef.common.Position;
@@ -14,15 +16,21 @@ import it.unibo.unrldef.model.api.*;
 
 public class WorldImpl implements World{
 
-    final String name;
-    final Integrity castleIntegrity;
-    //final Bank bank;
-    final Path path;
-    final List<Wave> waves;
-    int waveCounter;
-    final Map<Position, Optional<Tower>> placedTowers = new HashMap<>();
-    final Set<Tower> availableTowers;
-    final List<Enemy> livingEnemies = new ArrayList<>();
+    private final static long SPAUNING_TIME = 1;
+
+    private final String name;
+    private final Integrity castleIntegrity;
+    //private final Bank bank;
+    private final Path path;
+    private final List<Wave> waves;
+    private int waveCounter;
+    private final Map<Position, Optional<Tower>> placedTowers;
+    private final Set<Tower> availableTowers;
+    private final List<Enemy> livingEnemies;
+    private final Queue<Enemy> spawningQueue;
+    private long timeSinceLastWaveStarted;
+    private long timeSinceLastSpawn;
+
 
 
 
@@ -32,14 +40,17 @@ public class WorldImpl implements World{
         this.path = path;
         this.waves = waves;
         this.availableTowers = availableTowers;
+        this.placedTowers = new HashMap<>();
+        this.livingEnemies = new ArrayList<>();
+        this.spawningQueue = new LinkedList<>();
+        this.timeSinceLastWaveStarted = 0;
+        this.timeSinceLastSpawn = 0; 
     }
 
     public void updateState(long time){
         this.livingEnemies.stream().forEach(x -> x.updateState(time));
         this.placedTowers.values().stream().filter(Optional::isPresent).forEach(x -> x.get().updateState(time));
-        if (this.waves.get(waveCounter).isFinished()) {
-            this.waveCounter++;
-        }
+        // controlla se è da cominciare una nuova wave
     }
 
     public void startGame(){
@@ -97,5 +108,11 @@ public class WorldImpl implements World{
     
     private double distance( Position a, Position b ) {
         return Math.sqrt(Math.pow((a.getX() - b.getX()), 2) + Math.pow((a.getY() - b.getY()), 2));
+    }
+
+    @Override
+    public boolean isGameOver() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isGameOver'");
     }
 }

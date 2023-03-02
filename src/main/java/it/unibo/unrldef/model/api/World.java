@@ -19,4 +19,5 @@ public interface World {
     Set<Tower> getAvailableTowers();
     List<Enemy> sorroundingEnemies(Position center, double radius);
     Path getPath();
+    boolean isGameOver();
 }
