@@ -1,6 +1,9 @@
 package it.unibo.unrldef.model.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,9 +20,9 @@ public class WorldImpl implements World{
     final Path path;
     final List<Wave> waves;
     int waveCounter;
-    final Map<Position, Optional<Tower>> placedTowers;
+    final Map<Position, Optional<Tower>> placedTowers = new HashMap<>();
     final Set<Tower> availableTowers;
-    final List<Enemy> livingEnemies;
+    final List<Enemy> livingEnemies = new ArrayList<>();
 
 
 
@@ -34,6 +37,9 @@ public class WorldImpl implements World{
     public void updateState(long time){
         this.livingEnemies.stream().forEach(x -> x.updateState(time));
         this.placedTowers.values().stream().filter(Optional::isPresent).forEach(x -> x.get().updateState(time));
+        if (this.waves.get(waveCounter).isFinished()) {
+            this.waveCounter++;
+        }
     }
 
     public void startGame(){
@@ -67,11 +73,12 @@ public class WorldImpl implements World{
         return this.CastleIntegrity;
     }
 
+     
     @Override
     public int getMoney() {
         // TODO Auto-generated method stub
         return 0;
-    }
+    } 
 
     @Override
     public Set<Tower> getAvailableTowers() {
@@ -84,7 +91,11 @@ public class WorldImpl implements World{
     }
 
 	@Override
-	public List<Enemy> sorroundingEnemies(Position center, float radius) {
-		// TODO Auto-generated method stub
-	}    
+	public List<Enemy> sorroundingEnemies(Position center, double radius) {
+		return this.livingEnemies.stream().filter(x -> (distance(center, x.getPosition().get()) <= radius )).toList();
+	}  
+    
+    private double distance( Position a, Position b ) {
+        return Math.sqrt(Math.pow((a.getX() - b.getX()), 2) + Math.pow((a.getY() - b.getY()), 2));
+    }
 }
