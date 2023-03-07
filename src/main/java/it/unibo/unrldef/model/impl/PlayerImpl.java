@@ -63,8 +63,6 @@ public class PlayerImpl implements Player{
         final Spell selected = this.potions.stream()
                 .filter(p -> Objects.equals(p.getName(), name))
                 .findFirst().get();
-        if (selected.tryActivation(pos)) {
-            // this.currentWorld.addPotion(selected, pos);
-        }
+        selected.tryActivation(pos);
     }
 }
