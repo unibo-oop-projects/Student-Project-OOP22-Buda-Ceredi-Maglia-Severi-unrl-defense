@@ -33,7 +33,7 @@ public class GameEngine {
 
     public void GameLoop() {
         long previousFrameStartTime = System.currentTimeMillis();
-        while (!this.currentWorld.GameOver()) {
+        while (!this.currentWorld.isGameOver()) {
             final long currentFrameStartTime = System.currentTimeMillis();
             final long elapsed = currentFrameStartTime-previousFrameStartTime;
             processInput();
@@ -60,7 +60,7 @@ public class GameEngine {
     }
 
     private void update(final long elapsed) {
-        this.currentWorld.update(elapsed);
+        this.currentWorld.updateState(elapsed);
     }
 
     private void render() {
