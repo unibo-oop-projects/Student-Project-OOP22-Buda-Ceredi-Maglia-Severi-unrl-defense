@@ -20,5 +20,10 @@ public interface Wave {
      */
     public void addHorde(Horde horde, long secondsToSpawn);
 
+    /**
+     * 
+     * @return true if there is another horde, false otherwise
+     */
+    public boolean isWaveOver();
 
 }
