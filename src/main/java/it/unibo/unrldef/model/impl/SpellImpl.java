@@ -7,7 +7,7 @@ import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
 
-public class PotionImpl extends DefenseEntity implements Spell {
+public class SpellImpl extends DefenseEntity implements Spell {
 
     private final double waitTime;
     private boolean active;
@@ -15,7 +15,7 @@ public class PotionImpl extends DefenseEntity implements Spell {
     /**
      * Creates a new potion of type fireball 
      */
-    public PotionImpl(final String name, final World parentWorld, final double radius,
+    public SpellImpl(final String name, final World parentWorld, final double radius,
             final double damage, final double attackRate, final double waitTime) {
         super(Optional.empty(), name, parentWorld, radius, damage, attackRate);
         this.waitTime = waitTime;
@@ -40,10 +40,8 @@ public class PotionImpl extends DefenseEntity implements Spell {
     @Override
     protected void attack() {
         if (this.isActive()) {
-            for (final Enemy e : this.getTargetedEnemies()) {
-                if (e.getHealth() > 0) {
-                    e.reduceHealth(this.getDamage());
-                }
+            for (final Enemy e : this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius())) {
+                e.reduceHealth(this.getDamage());
             }
         }
     }

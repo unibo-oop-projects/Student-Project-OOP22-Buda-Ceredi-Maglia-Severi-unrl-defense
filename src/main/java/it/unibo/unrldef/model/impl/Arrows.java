@@ -2,7 +2,7 @@ package it.unibo.unrldef.model.impl;
 
 import it.unibo.unrldef.model.api.World;
 
-public class Arrows extends PotionImpl {
+public class Arrows extends SpellImpl {
     
     private static final String NAME = "arrows";
     private static final double ATTACK_RATE = 0.0;

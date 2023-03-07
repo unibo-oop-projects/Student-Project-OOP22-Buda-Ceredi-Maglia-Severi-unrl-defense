@@ -6,7 +6,7 @@ import it.unibo.unrldef.model.api.World;
  * A fireball potion used in a tower defense game
  * @author tommaso.severi2@studio.unibo.it
  */
-public class FireBall extends PotionImpl {
+public class FireBall extends SpellImpl {
 
     private static final String NAME = "fireball";
     private static final double ATTACK_RATE = 0.0;
