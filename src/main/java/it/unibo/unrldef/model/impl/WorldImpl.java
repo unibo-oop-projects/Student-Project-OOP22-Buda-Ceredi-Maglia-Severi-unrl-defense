@@ -133,6 +133,6 @@ public class WorldImpl implements World{
 
     @Override
     public boolean isGameOver() {
-        return this.waveCounter == this.waves.size() && this.waves.get(this.waveCounter).getNextHorde().isEmpty()
+        //TODO
     }
 }
