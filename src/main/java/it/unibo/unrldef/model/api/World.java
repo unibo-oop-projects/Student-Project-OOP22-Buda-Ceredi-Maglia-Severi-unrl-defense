@@ -20,4 +20,5 @@ public interface World {
     List<Enemy> sorroundingEnemies(Position center, double radius);
     Path getPath();
     boolean isGameOver();
+    void updateState(long time);
 }
