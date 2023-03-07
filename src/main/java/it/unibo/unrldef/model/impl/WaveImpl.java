@@ -30,5 +30,10 @@ public class WaveImpl implements Wave{
     public void addHorde(Horde horde, long secondsToSpawn) {
         this.hordesQueue.add(new Pair<Horde,Long>(horde, secondsToSpawn));
     }
+
+    @Override
+    public boolean isWaveOver() {
+        return this.hordesQueue.size() == 0;
+    }
     
 }
