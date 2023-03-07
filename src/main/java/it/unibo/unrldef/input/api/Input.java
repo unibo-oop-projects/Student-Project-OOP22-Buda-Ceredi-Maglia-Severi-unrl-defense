@@ -16,4 +16,6 @@ public interface Input {
     public Pair<Position, Input.HitType> getLastHit();
 
     public Optional<String> getSelectedName();
+
+    public void resetName();
 }
