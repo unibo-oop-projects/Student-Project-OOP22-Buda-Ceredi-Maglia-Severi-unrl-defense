@@ -6,7 +6,7 @@ import java.util.Set;
 
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Player;
-import it.unibo.unrldef.model.api.Potion;
+import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
 
 /**
@@ -17,7 +17,7 @@ public class PlayerImpl implements Player{
 
     private World currentWorld;
     private final String name;
-    private final Set<Potion> potions = new HashSet<>();
+    private final Set<Spell> potions = new HashSet<>();
 
     /**
      * Crates a new Player
@@ -60,7 +60,7 @@ public class PlayerImpl implements Player{
      * @param pos its position
      */
     public void throwPotion(final String name, final Position pos) {
-        final Potion selected = this.potions.stream()
+        final Spell selected = this.potions.stream()
                 .filter(p -> Objects.equals(p.getName(), name))
                 .findFirst().get();
         if (selected.tryActivation(pos)) {

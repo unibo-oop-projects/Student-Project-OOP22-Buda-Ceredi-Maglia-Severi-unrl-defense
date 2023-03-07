@@ -51,7 +51,7 @@ public class GameEngine {
                     this.player.buildNewTower(selectedPosition);
                 }
                 break;
-            case PLACE_POTION:
+            case PLACE_SPELL:
                 this.player.throwPotion(this.input.getSelectedName().get(), selectedPosition);
                 break;
             case NULL:

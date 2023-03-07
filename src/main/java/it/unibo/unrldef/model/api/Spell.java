@@ -8,7 +8,7 @@ import it.unibo.unrldef.common.Position;
  * A potion that can be trown by a player in a strategic game
  * @author tommaso.severi2@studio.unibo.it
  */
-public interface Potion {
+public interface Spell {
     
     /**
      * @return the name of the potion

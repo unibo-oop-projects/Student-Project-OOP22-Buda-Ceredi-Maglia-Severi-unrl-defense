@@ -4,10 +4,10 @@ import java.util.Optional;
 
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
-import it.unibo.unrldef.model.api.Potion;
+import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
 
-public class PotionImpl extends DefenseEntity implements Potion {
+public class PotionImpl extends DefenseEntity implements Spell {
 
     private final double waitTime;
     private boolean active;
