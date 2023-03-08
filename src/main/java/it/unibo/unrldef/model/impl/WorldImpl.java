@@ -56,11 +56,10 @@ public class WorldImpl implements World{
         this.livingEnemies.stream().forEach(x -> x.updateState(time));
         this.placedTowers.values().stream().filter(Optional::isPresent).forEach(x -> x.get().updateState(time));
         if (timeToNextHorde == 0) {
-            Optional<Pair<Horde, Long>> nextHorde = this.waves.get(this.waveCounter).getNextHorde();
-            if (!nextHorde.isPresent()) {
+            if (this.waves.get(this.waveCounter).isWaveOver()) {
                 this.waveCounter++;
-                nextHorde = this.waves.get(this.waveCounter).getNextHorde();
             }
+            Optional<Pair<Horde, Long>> nextHorde = this.waves.get(this.waveCounter).getNextHorde();
             this.timeToNextHorde = nextHorde.get().getSecond();
             this.addToQueue(nextHorde.get().getFirst().getEnemies());
         }
@@ -133,6 +132,9 @@ public class WorldImpl implements World{
 
     @Override
     public boolean isGameOver() {
-        //TODO
+        return ((this.waves.size()-1 == this.waveCounter && 
+               this.waves.get(this.waveCounter).isWaveOver() &&
+               this.livingEnemies.size() == 0) ||
+               this.castleIntegrity.getValue() == 0);
     }
 }
