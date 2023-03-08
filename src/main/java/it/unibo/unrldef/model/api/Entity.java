@@ -19,6 +19,11 @@ public interface Entity {
     public String getName();
     /**
      * 
+     * @return the parent world of the entity
+     */
+    public World getParentWorld();
+    /**
+     * 
      * @param x the x position to be set to the entity
      * @param y the y position to be set to the entity
      */

@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import it.unibo.unrldef.common.Position;
+import it.unibo.unrldef.model.api.World;
 
 /**
  * A model of a defensive type entity in a strategic game
@@ -25,9 +26,8 @@ public abstract class DefenseEntity extends EntityImpl {
      * @param damage the damage it inflicts to an enemy
      * @param attackRate the rate at which it attacks
      */
-    public DefenseEntity(final Optional<Position> position, final String name, 
-            final double radius, final double damage, final double attackRate) {
-        super(position, name);
+    public DefenseEntity(final Optional<Position> position, final String name, final World parentWorld, final double radius, final double damage, final double attackRate) {
+        super(position, name, parentWorld);
         this.radius = Objects.requireNonNull(radius);
         this.damage = Objects.requireNonNull(damage);
         this.attackRate = Objects.requireNonNull(attackRate);
