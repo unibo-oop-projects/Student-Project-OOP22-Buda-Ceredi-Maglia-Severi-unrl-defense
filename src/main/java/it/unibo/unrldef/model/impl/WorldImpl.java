@@ -1,10 +1,9 @@
 package it.unibo.unrldef.model.impl;
 
-import java.util.ArrayDeque;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,7 @@ public class WorldImpl implements World{
 
 
 
-    private WorldImpl(String name, Integrity castleIntegrity, Path path, List<Wave> waves, Set<Tower> availableTowers){
+    public WorldImpl(String name, Integrity castleIntegrity, Path path, List<Wave> waves, Set<Tower> availableTowers){
         this.name = name;
         this.castleIntegrity = castleIntegrity;
         this.path = path;
@@ -80,10 +79,6 @@ public class WorldImpl implements World{
     public void startGame(){
         this.waves.get(0).getNextHorde();
     }
-
-   
-
-
 
     @Override
     public void buildTower(Position pos, Tower tower) {
@@ -136,5 +131,9 @@ public class WorldImpl implements World{
                this.waves.get(this.waveCounter).isWaveOver() &&
                this.livingEnemies.size() == 0) ||
                this.castleIntegrity.getValue() == 0);
+    }
+
+    public String getName() {
+        return this.name;
     }
 }
