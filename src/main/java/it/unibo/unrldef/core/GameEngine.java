@@ -1,9 +1,8 @@
 package it.unibo.unrldef.core;
 
-import java.util.List;
-import java.util.LinkedList;
-
 import it.unibo.unrldef.common.Position;
+import it.unibo.unrldef.graphics.api.View;
+import it.unibo.unrldef.graphics.impl.ViewImpl;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.input.impl.PlayerInput;
 import it.unibo.unrldef.model.api.*;
@@ -11,19 +10,19 @@ import it.unibo.unrldef.model.impl.*;
 
 public class GameEngine {
 
-    private final PlayerImpl player;
-    private final World currentWorld;
+    private PlayerImpl player;
+    private World currentWorld;
     private final Input input;
-    private final View view; 
+    private View view; 
 
 
     public GameEngine() {
         this.input = new PlayerInput();
     }
 
-    public void initGame(final String playerName) {
-        this.player = new PlayerImpl(playerName, null);
-        this.view = new GameView();
+    public void initGame(final String playerName, final World world) {
+        this.player = new PlayerImpl(playerName, world);
+        this.view = new ViewImpl(world);
     }
 
     public void setGameWorld(final World world) {
