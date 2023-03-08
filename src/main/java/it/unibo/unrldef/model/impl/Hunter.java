@@ -1,7 +1,5 @@
 package it.unibo.unrldef.model.impl;
 
-import java.util.Optional;
-
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.World;
 
@@ -17,7 +15,7 @@ public class Hunter extends TowerImpl {
     final private static String NAME = "sdrogo hunter";
     final private static double RADIOUS = 8;
 
-    public Hunter(final Optional<Position> hunterPosition, final World parentWorld) {
+    public Hunter(final Position hunterPosition, final World parentWorld) {
         super(hunterPosition, NAME, parentWorld, RADIOUS, DAMAGE, ATTACK_FOR_SECOND, COST);
     }
 }

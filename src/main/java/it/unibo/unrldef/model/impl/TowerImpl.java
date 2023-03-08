@@ -1,8 +1,10 @@
 package it.unibo.unrldef.model.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import it.unibo.unrldef.common.Position;
+import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
 
@@ -13,10 +15,11 @@ import it.unibo.unrldef.model.api.World;
 public class TowerImpl extends DefenseEntity implements Tower {
 
     private final int cost;
+    private Enemy target;
 
-    public TowerImpl(Optional<Position> position, String name, World parentWorld, double radius, double damage,
+    public TowerImpl(Position position, String name, World parentWorld, double radius, double damage,
             double attackRate, final int cost) {
-        super(position, name, parentWorld, radius, damage, attackRate);
+        super(Optional.of(position), name, parentWorld, radius, damage, attackRate);
         this.cost = cost;
     }
 
@@ -27,9 +30,12 @@ public class TowerImpl extends DefenseEntity implements Tower {
 
     @Override
     protected void attack() {
-        this.getTargetedEnemies().get(0).reduceHealth(this.getDamage());
-        if (this.getTargetedEnemies().size() >= 1) {
-            this.getTargetedEnemies().get(1).reduceHealth(this.getDamage());
+        final List<Enemy> enemiesInRange = this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius());
+        if (!enemiesInRange.contains(this.target)) {
+            this.target = enemiesInRange.get(0);
+        }
+        if (!enemiesInRange.isEmpty()) {
+            this.target.reduceHealth(this.getDamage());
         }
     }
 

@@ -1,7 +1,5 @@
 package it.unibo.unrldef.model.impl;
 
-import java.util.Optional;
-
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.World;
 
@@ -17,7 +15,7 @@ public class Cannon extends TowerImpl {
     final private static String NAME = "sdrogo cannon";
     final private static double RADIOUS = 5;
     
-    public Cannon(final Optional<Position> cannonPosition, final World parentWorld) {
+    public Cannon(final Position cannonPosition, final World parentWorld) {
         super(cannonPosition, NAME, parentWorld, RADIOUS, DAMAGE, ATTACK_FOR_SECOND, COST);
     }
 }
