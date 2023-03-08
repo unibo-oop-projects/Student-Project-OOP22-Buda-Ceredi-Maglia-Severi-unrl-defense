@@ -31,9 +31,4 @@ public class PlayerInput implements Input{
     public Optional<String> getSelectedName() {
         return this.selectedName;
     }
-
-    @Override
-    public void resetName() {
-        this.selectedName = Optional.empty();
-    }
 }

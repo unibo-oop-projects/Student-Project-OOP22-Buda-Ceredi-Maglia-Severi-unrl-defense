@@ -1,5 +1,7 @@
 package it.unibo.unrldef.core;
 
+import java.util.Optional;
+
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.graphics.api.View;
 import it.unibo.unrldef.graphics.impl.ViewImpl;
@@ -44,16 +46,15 @@ public class GameEngine {
 
     private void processInput() {
         final Position selectedPosition = this.input.getLastHit().getFirst();
+        final Optional<String> selectedName = this.input.getSelectedName();
         switch(this.input.getLastHit().getSecond()) {
-            case TOWER:
-                if (this.input.getSelectedName().isPresent()) {
-                    this.player.buildNewTower(selectedPosition);
-                }
+            case PLACE_TOWER:
+                this.player.buildNewTower(selectedPosition, selectedName.get());
                 break;
             case PLACE_SPELL:
-                this.player.throwPotion(this.input.getSelectedName().get(), selectedPosition);
+                this.player.throwSpell(selectedName.get(), selectedPosition);
                 break;
-            case NULL:
+            case SELECTION:
                 break;
         }
     }
