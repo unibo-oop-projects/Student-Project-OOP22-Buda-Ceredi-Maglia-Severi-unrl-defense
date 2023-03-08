@@ -32,7 +32,7 @@ public class GameEngine {
         this.player.setGameMap(world);
     }
 
-    public void GameLoop() {
+    public void gameLoop() {
         long previousFrameStartTime = System.currentTimeMillis();
         while (!this.currentWorld.isGameOver()) {
             final long currentFrameStartTime = System.currentTimeMillis();
