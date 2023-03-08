@@ -17,7 +17,7 @@ public class PlayerImpl implements Player{
 
     private World currentWorld;
     private final String name;
-    private final Set<Spell> potions = new HashSet<>();
+    private final Set<Spell> spells = new HashSet<>();
 
     /**
      * Crates a new Player
@@ -27,8 +27,8 @@ public class PlayerImpl implements Player{
     public PlayerImpl(final String name, final World world) {
         this.setGameMap(world);
         this.name = Objects.requireNonNull(name);
-        this.potions.add(new FireBall(world));
-        this.potions.add(new Arrows(world));
+        this.spells.add(new FireBall(world));
+        this.spells.add(new Arrows(world));
     }
 
     @Override
@@ -48,19 +48,20 @@ public class PlayerImpl implements Player{
     
     /**
      * Places a new tower on the world map
-     * @param pos the position where to place it  
+     * @param pos the position where to place it
+     * @param towerName the type of tower to build
      */
-    public void buildNewTower(final Position pos) {
-        this.currentWorld.buildTower(pos, null);
+    public void buildNewTower(final Position pos, final String towerName) {
+        this.currentWorld.buildTower(pos, towerName);
     }
 
     /**
-     * Places a new potion on the world map deling damage to enemies
+     * Places a new spell on the world map deling damage to enemies
      * @param name its name
      * @param pos its position
      */
-    public void throwPotion(final String name, final Position pos) {
-        final Spell selected = this.potions.stream()
+    public void throwSpell(final String name, final Position pos) {
+        final Spell selected = this.spells.stream()
                 .filter(p -> Objects.equals(p.getName(), name))
                 .findFirst().get();
         selected.tryActivation(pos);
