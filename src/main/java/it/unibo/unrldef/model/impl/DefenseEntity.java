@@ -18,7 +18,6 @@ public abstract class DefenseEntity extends EntityImpl {
     private final double radius;
     private final double damage;
     private final double attackRate;
-    private List<Enemy> targetedEnemies;
     private long timeSinceLastAction;
 
     /**
@@ -78,7 +77,7 @@ public abstract class DefenseEntity extends EntityImpl {
      * checks if the entity can attack
      */
     public void checkAttack(){
-        if (this.getTimeSinceLastAction() >= this.attackRate && !this.targetedEnemies.isEmpty()){
+        if (this.getTimeSinceLastAction() >= this.attackRate){
             this.resetElapsedTime();
             this.attack();
         }
@@ -88,19 +87,4 @@ public abstract class DefenseEntity extends EntityImpl {
      * this method is called when is time to attack
      */
     protected abstract void attack();
-    
-    /**
-     * Sets the enemies in range
-     */
-    public void setEnemiesInRange(final List<Enemy> enemies){
-        this.targetedEnemies = enemies;
-    }
-
-    /**
-     * Gets the enemies in range
-     * @return the targeted enemies
-     */
-    public List<Enemy> getTargetedEnemies() {
-        return this.targetedEnemies;
-    }
 }
