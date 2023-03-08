@@ -5,40 +5,40 @@ import java.util.Optional;
 import it.unibo.unrldef.common.Position;
 
 /**
- * A potion that can be trown by a player in a strategic game
+ * A spell that can be trown by a player in a strategic game
  * @author tommaso.severi2@studio.unibo.it
  */
-public interface Spell {
+public interface Spell extends Entity {
     
     /**
-     * @return the name of the potion
+     * @return the name of the spell
      */
     public String getName();
 
     /**
-     * Sets the potion in its activation state dealing damage
-     * @param position the desired place to throw th potion at
-     * @return true if the potion is ready to be used, false otherwise
+     * Tries to set the spell in its activation state dealing damage
+     * @param position the desired place to throw th spell at
+     * @return true if the spell is ready to be used, false otherwise
      */
     public boolean tryActivation(final Position position);
 
     /**
-     * @return the damage dealt by the potion every frame it's active
+     * @return the damage dealt by the spell every frame it's active
      */
     public double getDamage();
 
     /**
-     * @return the radius of the potion effect
+     * @return the radius of the spell effect
      */
     public double getRadius();
 
     /**
-     * @return the position where the potion was thrown but it could be null in case it's recharging
+     * @return the position where the spell was thrown but it could be null in case it's recharging
      */
     public Optional<Position> getPosition();
 
     /**
-     * @return true if the potion is being used, false otherwise
+     * @return true if the spell is being used, false otherwise
      */
     public boolean isActive();
 }

@@ -13,7 +13,7 @@ public class SpellImpl extends DefenseEntity implements Spell {
     private boolean active;
 
     /**
-     * Creates a new potion of type fireball 
+     * Creates a new spell 
      */
     public SpellImpl(final String name, final World parentWorld, final double radius,
             final double damage, final double attackRate, final double waitTime) {
@@ -55,7 +55,7 @@ public class SpellImpl extends DefenseEntity implements Spell {
     }
 
     /**
-     * @return true if the potion is ready to be used, false otherwise
+     * @return true if the spell is ready to be used, false otherwise
      */
     private boolean isReady() {
         return this.getTimeSinceLastAction() >= this.waitTime;

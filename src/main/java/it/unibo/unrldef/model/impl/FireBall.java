@@ -3,7 +3,7 @@ package it.unibo.unrldef.model.impl;
 import it.unibo.unrldef.model.api.World;
 
 /**
- * A fireball potion used in a tower defense game
+ * A fireball spell used in a tower defense game
  * @author tommaso.severi2@studio.unibo.it
  */
 public class FireBall extends SpellImpl {
@@ -15,7 +15,7 @@ public class FireBall extends SpellImpl {
     private static final double WAIT_TIME = 10.0;
 
     /**
-     * Creates a new potion of type fireball 
+     * Creates a new spell of type fireball 
      */
     public FireBall(final World parentWorld) {
         super(NAME, parentWorld, RAD, DMG, ATTACK_RATE, WAIT_TIME);
