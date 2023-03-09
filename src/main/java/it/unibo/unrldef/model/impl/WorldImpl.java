@@ -4,6 +4,7 @@ package it.unibo.unrldef.model.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,13 +12,17 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 
+import org.jooq.lambda.tuple.Range;
+
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.*;
+import it.unibo.unrldef.model.api.Path.Direction;
 
 public class WorldImpl implements World{
 
     private final static long SPAWNING_TIME = 1;
+    private final static int ENEMY_POWER = 1;
 
     private final String name;
     private final Player player;
@@ -56,6 +61,9 @@ public class WorldImpl implements World{
     public void updateState(long time){
         this.timeToNextHorde = (this.timeToNextHorde - time < 0) ? 0 : (this.timeToNextHorde - time);
         this.timeToNextSpawn = (this.timeToNextSpawn - time < 0) ? 0 : (this.timeToNextSpawn - time);
+        this.livingEnemies.removeAll(this.livingEnemies.stream().filter(Enemy::isDead).toList());
+        this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath).forEach(x -> this.castleIntegrity.damage(ENEMY_POWER));
+        this.livingEnemies.removeAll(this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath).toList());
         this.getSceneEntities().forEach(x -> x.updateState(time));
         this.player.uptatePotions();
         if (timeToNextHorde == 0 && !this.areWavesEnded()) {
@@ -72,8 +80,7 @@ public class WorldImpl implements World{
             Position spawningPoint = this.path.getSpawningPoint();
             newEnemy.setPosition(spawningPoint.getX(), spawningPoint.getY());
             this.livingEnemies.add(newEnemy);
-        }
-        
+        }   
     }
     private Boolean areWavesEnded() {
         return (this.waveCounter == this.waves.size()-1  &&
@@ -142,14 +149,76 @@ public class WorldImpl implements World{
 
     @Override
     public boolean isGameOver() {
-        return ((this.waves.size()-1 == this.waveCounter && 
-               this.waves.get(this.waveCounter).isWaveOver() &&
-               this.livingEnemies.size() == 0) ||
-               this.castleIntegrity.getValue() == 0);
+        return (this.areWavesEnded() && this.livingEnemies.size() == 0) || this.castleIntegrity.isCompromised();
     }
 
     public String getName() {
         return this.name;
     }
 
+    public static class Builder {
+        private String name;
+        private Player player;
+        private Integrity castleIntegrity;
+        private Path path;
+        private List<List<Pair<Horde, Long>>> wavesTemp;
+        private Map<String, Tower> availableTowers;
+        private Set<Position> validTowersPositions;
+
+        public Builder(String worldName, Player player, Position spawnPoint, int castleHearts) {
+            this.name = worldName;
+            this.player = player;
+            this.path = new PathImpl(spawnPoint);
+            this.wavesTemp = new ArrayList<>();
+            this.castleIntegrity = new IntegrityImpl(castleHearts);
+            this.availableTowers = new HashMap<>();
+            this.validTowersPositions = new HashSet<>();
+        }
+
+        void addPathSegment(Direction direction, double Lenght) {
+            this.path.addDirection(direction, Lenght);
+        }
+
+        void addWave() {
+            this.wavesTemp.add(new ArrayList<>());
+        }
+
+        void addHordeToWave (int waveIndex, long hordeDuration) throws IndexOutOfBoundsException{
+            this.wavesTemp.get(waveIndex).add(new Pair<Horde,Long>(new HordeImpl(), hordeDuration));
+        }
+
+        void addEnemyToHorde (int waveIndex, int hordeIndex, Enemy enemy) throws IndexOutOfBoundsException{
+            this.wavesTemp.get(waveIndex).get(hordeIndex).getFirst().addEnemy(enemy);
+        }
+
+        void addMultipleEnemiesToHorde (int waveIndex, int hordeIndex, Enemy enemy, short numberOfEnemies) throws IndexOutOfBoundsException {
+            this.wavesTemp.get(waveIndex).get(hordeIndex).getFirst().addMultipleEnemies(enemy, numberOfEnemies);
+        }
+
+        void addAvailableTower( String name, Tower tower ) {
+            this.availableTowers.put(name, tower);
+        }
+
+        void addTowerBuildingSpace (double x, double y) {
+            this.validTowersPositions.add(new Position(x, y));
+        }
+
+
+        WorldImpl build() throws IllegalStateException {
+            if (this.name == null || this.player == null || this.castleIntegrity == null || 
+                this.path == null) {
+                    throw new IllegalStateException("some fields are not initialized");
+            }
+            List<Wave> waves = new ArrayList<>();
+
+            this.wavesTemp.forEach(x -> waves.add(new WaveImpl()));
+            for (int i = 0; i < this.wavesTemp.size(); i++) {
+                for (Pair<Horde, Long> horde : this.wavesTemp.get(i)) {
+                    waves.get(i).addHorde(horde.getFirst(), horde.getSecond());
+                }
+            }
+
+            return new WorldImpl(this.name, this.player, this.castleIntegrity, this.path, waves, this.availableTowers, this.validTowersPositions);
+        }
+    }
 }
