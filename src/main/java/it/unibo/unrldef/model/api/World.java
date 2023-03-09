@@ -12,7 +12,7 @@ import it.unibo.unrldef.common.*;
  */
 public interface World {
     void startGame();
-    void buildTower(Position pos, String towerName);
+    Boolean tryBuildTower(Position pos, String towerName);
     List<Entity> getSceneEntities();
     Integrity getCastleIntegrity();
     int getMoney();

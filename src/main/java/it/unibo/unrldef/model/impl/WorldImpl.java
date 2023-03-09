@@ -28,6 +28,7 @@ public class WorldImpl implements World{
     private int waveCounter;
     private final List<Tower> placedTowers;
     private final Map<String, Tower> availableTowers;
+    private final Set<Position> validPositions;
     private final List<Enemy> livingEnemies;
     private final Queue<Enemy> spawningQueue;
     private long timeToNextHorde;
@@ -36,7 +37,7 @@ public class WorldImpl implements World{
 
 
 
-    public WorldImpl(String name, Player player, Integrity castleIntegrity, Path path, List<Wave> waves, Map<String, Tower> availableTowers){
+    public WorldImpl(String name, Player player, Integrity castleIntegrity, Path path, List<Wave> waves, Map<String, Tower> availableTowers, Set<Position> validPositions){
         this.name = name;
         this.player = player;
         this.castleIntegrity = castleIntegrity;
@@ -46,6 +47,7 @@ public class WorldImpl implements World{
         this.placedTowers = new ArrayList<>();
         this.livingEnemies = new ArrayList<>();
         this.spawningQueue = new LinkedList<>();
+        this.validPositions = validPositions;
         this.timeToNextHorde = 0;
         this.timeToNextSpawn = 0;
         this.waveCounter = 0; 
@@ -87,11 +89,16 @@ public class WorldImpl implements World{
     }
 
     @Override
-    public void buildTower(Position pos, String towerName) {
-        Tower newTower = this.availableTowers.get(towerName).copy();
-        this.placedTowers.add(newTower);
-        newTower.setWorld(this);
-        newTower.setPosition(pos.getX(), pos.getY());
+    public Boolean tryBuildTower(Position pos, String towerName) {
+        if(this.validPositions.contains(pos)) {
+            this.validPositions.remove(pos);
+            Tower newTower = this.availableTowers.get(towerName).copy();
+            this.placedTowers.add(newTower);
+            newTower.setWorld(this);
+            newTower.setPosition(pos.getX(), pos.getY());
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -144,4 +151,5 @@ public class WorldImpl implements World{
     public String getName() {
         return this.name;
     }
+
 }
