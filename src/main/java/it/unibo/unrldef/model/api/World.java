@@ -1,7 +1,7 @@
 package it.unibo.unrldef.model.api;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import it.unibo.unrldef.common.*;
 
@@ -12,11 +12,11 @@ import it.unibo.unrldef.common.*;
  */
 public interface World {
     void startGame();
-    void buildTower(Position pos, Tower tower);
+    void buildTower(Position pos, String towerName);
     List<Entity> getSceneEntities();
     Integrity getCastleIntegrity();
     int getMoney();
-    Set<Tower> getAvailableTowers();
+    Map<String, Tower> getAvailableTowers();
     List<Enemy> sorroundingEnemies(Position center, double radius);
     Path getPath();
     boolean isGameOver();

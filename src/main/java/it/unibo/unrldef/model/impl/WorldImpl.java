@@ -20,13 +20,14 @@ public class WorldImpl implements World{
     private final static long SPAWNING_TIME = 1;
 
     private final String name;
+    private final Player player;
     private final Integrity castleIntegrity;
     //private final Bank bank;
     private final Path path;
     private final List<Wave> waves;
     private int waveCounter;
-    private final Map<Position, Optional<Tower>> placedTowers;
-    private final Set<Tower> availableTowers;
+    private final List<Tower> placedTowers;
+    private final Map<String, Tower> availableTowers;
     private final List<Enemy> livingEnemies;
     private final Queue<Enemy> spawningQueue;
     private long timeToNextHorde;
@@ -35,13 +36,14 @@ public class WorldImpl implements World{
 
 
 
-    public WorldImpl(String name, Integrity castleIntegrity, Path path, List<Wave> waves, Set<Tower> availableTowers){
+    public WorldImpl(String name, Player player, Integrity castleIntegrity, Path path, List<Wave> waves, Map<String, Tower> availableTowers){
         this.name = name;
+        this.player = player;
         this.castleIntegrity = castleIntegrity;
         this.path = path;
         this.waves = waves;
         this.availableTowers = availableTowers;
-        this.placedTowers = new HashMap<>();
+        this.placedTowers = new ArrayList<>();
         this.livingEnemies = new ArrayList<>();
         this.spawningQueue = new LinkedList<>();
         this.timeToNextHorde = 0;
@@ -52,15 +54,15 @@ public class WorldImpl implements World{
     public void updateState(long time){
         this.timeToNextHorde = (this.timeToNextHorde - time < 0) ? 0 : (this.timeToNextHorde - time);
         this.timeToNextSpawn = (this.timeToNextSpawn - time < 0) ? 0 : (this.timeToNextSpawn - time);
-        this.livingEnemies.stream().forEach(x -> x.updateState(time));
-        this.placedTowers.values().stream().filter(Optional::isPresent).forEach(x -> x.get().updateState(time));
-        if (timeToNextHorde == 0) {
+        this.getSceneEntities().forEach(x -> x.updateState(time));
+        this.player.uptatePotions();
+        if (timeToNextHorde == 0 && !this.areWavesEnded()) {
             if (this.waves.get(this.waveCounter).isWaveOver()) {
                 this.waveCounter++;
             }
-            Optional<Pair<Horde, Long>> nextHorde = this.waves.get(this.waveCounter).getNextHorde();
-            this.timeToNextHorde = nextHorde.get().getSecond();
-            this.addToQueue(nextHorde.get().getFirst().getEnemies());
+            Pair<Horde, Long> nextHorde = this.waves.get(this.waveCounter).getNextHorde().get();
+            this.timeToNextHorde = nextHorde.getSecond();
+            this.addToQueue(nextHorde.getFirst().getEnemies());
         }
         if (timeToNextSpawn == 0 && !this.spawningQueue.isEmpty()) {
             timeToNextSpawn = SPAWNING_TIME;
@@ -71,8 +73,12 @@ public class WorldImpl implements World{
         }
         
     }
+    private Boolean areWavesEnded() {
+        return (this.waveCounter == this.waves.size()-1  &&
+                this.waves.get(this.waveCounter).isWaveOver());
+    }
 
-    private void addToQueue(Collection<Enemy> Enemies) {
+    private void addToQueue(List<Enemy> Enemies) {
         this.spawningQueue.addAll(Enemies);
     }
 
@@ -81,15 +87,17 @@ public class WorldImpl implements World{
     }
 
     @Override
-    public void buildTower(Position pos, Tower tower) {
-        this.placedTowers.put(pos, Optional.of(tower));
-        
+    public void buildTower(Position pos, String towerName) {
+        Tower newTower = this.availableTowers.get(towerName).copy();
+        this.placedTowers.add(newTower);
+        newTower.setWorld(this);
+        newTower.setPosition(pos.getX(), pos.getY());
     }
 
     @Override
     public List<Entity> getSceneEntities() {
         List<Entity> ret = new ArrayList<Entity>();
-        ret.addAll(this.placedTowers.entrySet().stream().map(x -> x.getValue()).filter(Optional::isPresent).map(x -> x.get()).toList());
+        ret.addAll(this.placedTowers);
         ret.addAll(this.livingEnemies);
         return ret;
     }
@@ -107,7 +115,7 @@ public class WorldImpl implements World{
     } 
 
     @Override
-    public Set<Tower> getAvailableTowers() {
+    public Map<String, Tower> getAvailableTowers() {
         return this.availableTowers;
     }
 

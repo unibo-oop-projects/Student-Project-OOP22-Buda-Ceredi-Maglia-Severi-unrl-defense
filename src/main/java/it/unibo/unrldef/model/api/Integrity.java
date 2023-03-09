@@ -7,4 +7,5 @@ package it.unibo.unrldef.model.api;
 public interface Integrity {
     int getValue();
     void damage(int val);
+    Boolean isCompromised();
 }
