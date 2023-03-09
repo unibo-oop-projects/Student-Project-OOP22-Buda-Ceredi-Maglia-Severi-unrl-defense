@@ -5,6 +5,7 @@ package it.unibo.unrldef.model.api;
  * @author francesco.buda3@studio.unibo.it
  */
 public interface Integrity {
-    int getValue();
-    void damage(int val);
+    int getHearts();
+    void damage(int hearts);
+    Boolean isCompromised();
 }

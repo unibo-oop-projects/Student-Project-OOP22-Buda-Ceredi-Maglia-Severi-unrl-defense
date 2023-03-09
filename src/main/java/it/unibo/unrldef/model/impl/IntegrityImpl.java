@@ -5,17 +5,26 @@ import it.unibo.unrldef.model.api.Integrity;
 
 public class IntegrityImpl implements Integrity{
 
-    private int value;
+    private int hearts;
+
+    public IntegrityImpl(int value) {
+        this.hearts = value;
+    }
 
     @Override
-    public int getValue() {
-        return this.value;
+    public int getHearts() {
+        return this.hearts;
     }
 
     @Override
     public void damage(int val) {
-        int tmp = this.value-val;
-        this.value = tmp > 0 ? tmp : 0;        
+        int tmp = this.hearts-val;
+        this.hearts = tmp > 0 ? tmp : 0;        
+    }
+
+    @Override
+    public Boolean isCompromised() {
+        return this.hearts == 0;
     }
     
 }
