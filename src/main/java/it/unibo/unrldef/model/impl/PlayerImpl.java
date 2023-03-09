@@ -66,4 +66,12 @@ public class PlayerImpl implements Player{
                 .findFirst().get();
         selected.tryActivation(pos);
     }
+
+    /**
+     * Updates the state of the spells
+     * @param elapsed time passed since last frame
+     */
+    public void updateSpellState(final long elapsed) {
+        this.spells.forEach(sp -> sp.updateState(elapsed));
+    }
 }
