@@ -37,6 +37,7 @@ public class GamePanel extends JPanel {
     private Image goblinImage;
     private Image fireballImage;
     private Image arrowsImage;
+    private Image map;
 
     private enum ViewState {
         IDLE,
@@ -54,6 +55,7 @@ public class GamePanel extends JPanel {
             this.arrowsImage = ImageIO.read(new File("assets\\arrows.png"));
             this.orcImage = ImageIO.read(new File("assets\\orc.png"));
             //this.goblinImage = ImageIO.read(new File("assets\\goblin.png"));
+            this.map = ImageIO.read(new File("assets\\debugMap.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -226,5 +228,9 @@ public class GamePanel extends JPanel {
                 break;
         }
         graphic.drawImage(asset, (int)spell.getPosition().get().getX(), (int)spell.getPosition().get().getY(), null);
+    }
+
+    private void renderMap(final Graphics2D graphic) {
+        graphic.drawImage(this.map, 0, 0, null);
     }
 }
