@@ -7,19 +7,29 @@ import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
 
+/**
+ * Implememntation of a generic spell in a tower defense game
+ * @author tommaso.severi2@studio.unibo.it
+ */
 public class SpellImpl extends DefenseEntity implements Spell {
 
     private final double waitTime;
     private boolean active;
+    private final int lingeringDamage;
+    private int damageDealt;
 
     /**
      * Creates a new spell 
+     * @param waitTime is the time the player have to wait before being able to use the spell again
+     * @param lingeringDamage the number of times the spell deals its damage before fading away
      */
     public SpellImpl(final String name, final World parentWorld, final double radius,
-            final double damage, final double attackRate, final double waitTime) {
+            final double damage, final long attackRate, final long waitTime, final int lingeringDamage) {
         super(Optional.empty(), name, parentWorld, radius, damage, attackRate);
         this.waitTime = waitTime;
         this.active = false;
+        this.lingeringDamage = lingeringDamage;
+        this.damageDealt = 0;
     }
 
     @Override
@@ -39,10 +49,13 @@ public class SpellImpl extends DefenseEntity implements Spell {
 
     @Override
     protected void attack() {
-        if (this.isActive()) {
+        if (this.damageDealt < this.lingeringDamage) {
             for (final Enemy e : this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius())) {
                 e.reduceHealth(this.getDamage());
             }
+            this.damageDealt++;
+        } else {
+            this.deactivate();
         }
     }
 
@@ -59,5 +72,13 @@ public class SpellImpl extends DefenseEntity implements Spell {
      */
     private boolean isReady() {
         return this.getTimeSinceLastAction() >= this.waitTime;
+    }
+
+    /**
+     * Sets the spell back to its waiting state after dealing damage
+     */
+    private void deactivate() {
+        this.active = false;
+        this.damageDealt = 0;
     }
 }

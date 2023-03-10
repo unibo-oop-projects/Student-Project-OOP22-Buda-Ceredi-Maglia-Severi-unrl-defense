@@ -21,6 +21,8 @@ import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.Orc;
+import it.unibo.unrldef.model.impl.Arrows;
+import it.unibo.unrldef.model.impl.FireBall;
 import it.unibo.unrldef.model.impl.Goblin;
 
 import java.awt.Image;
@@ -213,10 +215,15 @@ public class GamePanel extends JPanel {
 
     private void renderSpell(final Graphics2D graphic, final Entity spell) {
         Image asset = null;
-        if(spell.getName().equals("fireball")) {
-            asset = this.fireballImage;
-        } else if(spell.getName().equals("arrows")) {
-            asset = this.arrowsImage;
+        switch (spell.getName()) {
+            case FireBall.NAME:
+                asset = this.fireballImage;
+                break;
+            case Arrows.NAME:
+                asset = this.arrowsImage;
+                break;
+            default:
+                break;
         }
         graphic.drawImage(asset, (int)spell.getPosition().get().getX(), (int)spell.getPosition().get().getY(), null);
     }

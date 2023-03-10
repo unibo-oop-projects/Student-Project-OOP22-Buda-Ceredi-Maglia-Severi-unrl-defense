@@ -15,7 +15,7 @@ public abstract class DefenseEntity extends EntityImpl {
 
     private final double radius;
     private final double damage;
-    private final double attackRate;
+    private final long attackRate;
     private long timeSinceLastAction;
 
     /**
@@ -24,9 +24,10 @@ public abstract class DefenseEntity extends EntityImpl {
      * @param name its name
      * @param radius the radius it can deal damage from
      * @param damage the damage it inflicts to an enemy
-     * @param attackRate the rate at which it attacks
+     * @param attackRate the rate at which it deals damage
      */
-    public DefenseEntity(final Optional<Position> position, final String name, final World parentWorld, final double radius, final double damage, final double attackRate) {
+    public DefenseEntity(final Optional<Position> position, final String name, final World parentWorld, final double radius, 
+            final double damage, final long attackRate) {
         super(position, name, parentWorld);
         this.radius = Objects.requireNonNull(radius);
         this.damage = Objects.requireNonNull(damage);

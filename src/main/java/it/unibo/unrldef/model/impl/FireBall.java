@@ -8,16 +8,18 @@ import it.unibo.unrldef.model.api.World;
  */
 public class FireBall extends SpellImpl {
 
-    private static final String NAME = "fireball";
-    private static final double ATTACK_RATE = 0.0;
+    public static final String NAME = "fireball";
+    private static final long ATTACK_RATE = 1 * 1000;
     private static final double DMG = 30.0;
     private static final double RAD = 10.0;
-    private static final double WAIT_TIME = 10.0;
+    private static final long WAIT_TIME = 8 * 1000;
+    private static final int LINGERING_DAMAGE = 5;
 
     /**
-     * Creates a new spell of type fireball 
+     * Creates a new spell of type fireball
+     * @param parentWorld the world where it'll be having effect
      */
     public FireBall(final World parentWorld) {
-        super(NAME, parentWorld, RAD, DMG, ATTACK_RATE, WAIT_TIME);
+        super(NAME, parentWorld, RAD, DMG, ATTACK_RATE, WAIT_TIME, LINGERING_DAMAGE);
     }
 }
