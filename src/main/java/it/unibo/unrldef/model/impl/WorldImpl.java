@@ -33,7 +33,7 @@ public class WorldImpl implements World{
     private int waveCounter;
     private final List<Tower> placedTowers;
     private final Map<String, Tower> availableTowers;
-    private final Set<Position> validPositions;
+    private final Set<Position> availablePositions;
     private final List<Enemy> livingEnemies;
     private final Queue<Enemy> spawningQueue;
     private long timeToNextHorde;
@@ -52,7 +52,7 @@ public class WorldImpl implements World{
         this.placedTowers = new ArrayList<>();
         this.livingEnemies = new ArrayList<>();
         this.spawningQueue = new LinkedList<>();
-        this.validPositions = validPositions;
+        this.availablePositions = validPositions;
         this.timeToNextHorde = 0;
         this.timeToNextSpawn = 0;
         this.waveCounter = 0; 
@@ -97,8 +97,8 @@ public class WorldImpl implements World{
 
     @Override
     public Boolean tryBuildTower(Position pos, String towerName) {
-        if(this.validPositions.contains(pos)) {
-            this.validPositions.remove(pos);
+        if(this.availablePositions.contains(pos)) {
+            this.availablePositions.remove(pos);
             Tower newTower = this.availableTowers.get(towerName).copy();
             this.placedTowers.add(newTower);
             newTower.setWorld(this);
@@ -220,5 +220,10 @@ public class WorldImpl implements World{
 
             return new WorldImpl(this.name, this.player, this.castleIntegrity, this.path, waves, this.availableTowers, this.validTowersPositions);
         }
+    }
+
+    @Override
+    public Set<Position> getAvailablePositions() {
+        return this.availablePositions;
     }
 }
