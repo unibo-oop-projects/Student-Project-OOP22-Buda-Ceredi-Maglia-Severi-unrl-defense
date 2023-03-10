@@ -2,6 +2,7 @@ package it.unibo.unrldef.model.api;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import it.unibo.unrldef.common.*;
 
@@ -15,6 +16,7 @@ public interface World {
     Boolean tryBuildTower(Position pos, String towerName);
     List<Entity> getSceneEntities();
     Integrity getCastleIntegrity();
+    Set<Position> getAvailablePositions();
     int getMoney();
     Map<String, Tower> getAvailableTowers();
     List<Enemy> sorroundingEnemies(Position center, double radius);
