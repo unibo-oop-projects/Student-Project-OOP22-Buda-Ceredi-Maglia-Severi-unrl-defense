@@ -52,7 +52,7 @@ public class PlayerImpl implements Player{
      * @param towerName the type of tower to build
      */
     public void buildNewTower(final Position pos, final String towerName) {
-        this.currentWorld.buildTower(pos, towerName);
+        this.currentWorld.tryBuildTower(pos, towerName);
     }
 
     /**
