@@ -54,7 +54,7 @@ public class GamePanel extends JPanel {
             this.fireballImage = ImageIO.read(new File("assets\\fireball.png"));
             this.arrowsImage = ImageIO.read(new File("assets\\arrows.png"));
             this.orcImage = ImageIO.read(new File("assets\\orc.png"));
-            //this.goblinImage = ImageIO.read(new File("assets\\goblin.png"));
+            this.goblinImage = ImageIO.read(new File("assets\\goblin.png"));
             this.map = ImageIO.read(new File("assets\\debugMap.png"));
         } catch (IOException e) {
             e.printStackTrace();
