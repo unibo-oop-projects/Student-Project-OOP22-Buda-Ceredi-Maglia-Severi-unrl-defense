@@ -10,5 +10,15 @@ public interface Tower extends Entity {
      * @return the cost of the tower
      */
     public int getCost();
+
+    /**
+     * @return a copy of the tower
+     */
+    public Tower copy();
+
+    /**
+     * @param world the world where the tower is placed
+     */
+    public void setParentWorld(final World world);
     
 }
