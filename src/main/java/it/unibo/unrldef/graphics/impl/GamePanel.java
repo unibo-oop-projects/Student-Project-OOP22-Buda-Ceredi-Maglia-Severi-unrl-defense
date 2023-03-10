@@ -8,21 +8,25 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
-import it.unibo.unrldef.common.Position;
+import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
+import it.unibo.unrldef.model.impl.Orc;
+import it.unibo.unrldef.model.impl.Goblin;
 
 import java.awt.Image;
 
 public class GamePanel extends JPanel {
+    private String selectedEntity;
 
     private World gameWorld;
     private ViewState viewState;
@@ -38,7 +42,7 @@ public class GamePanel extends JPanel {
         SPELL_SELECTED
     }
 
-    public GamePanel(World gameWorld) {
+    public GamePanel(World gameWorld, Input inputHandler) {
         super();
 
         this.viewState = ViewState.IDLE;
@@ -57,17 +61,19 @@ public class GamePanel extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                Position pos = new Position(e.getX(), e.getY());
+                int x = e.getX();
+                int y = e.getY();
                 switch (viewState) {
                     case IDLE:
                         break;
                     case TOWER_SELECTED:
-                        //TODO: send position to World
+                        inputHandler.setLastHit(x, y, Input.HitType.PLACE_TOWER, Optional.of(selectedEntity));
                         break;
                     case SPELL_SELECTED:
-                        //TODO: send position to World
+                        inputHandler.setLastHit(x, y, Input.HitType.PLACE_SPELL, Optional.of(selectedEntity));
                         break;
                 }
+                viewState = ViewState.IDLE; // reset the view state every time the mouse is clicked
             }
 
             @Override
@@ -102,15 +108,57 @@ public class GamePanel extends JPanel {
             }
             
         });
+
+        // TODO: Create a class to avoid code repetition
+
         JButton cannon = new JButton("CANNON");
         cannon.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 viewState = ViewState.TOWER_SELECTED;
+                selectedEntity = "cannon";
             }
             
         });
+
+        JButton hunter = new JButton("HUNTER");
+        hunter.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewState = ViewState.TOWER_SELECTED;
+                selectedEntity = "hunter";
+            }
+            
+        });
+
+        JButton fireBall = new JButton("FIREBALL");
+        fireBall.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewState = ViewState.SPELL_SELECTED;
+                selectedEntity = "fireball";
+            }
+            
+        });
+
+        JButton arrows = new JButton("ARROWS");
+        arrows.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewState = ViewState.SPELL_SELECTED;
+                selectedEntity = "arrows";
+            }
+            
+        });
+
+        this.add(cannon);
+        this.add(hunter);
+        this.add(fireBall);
+        this.add(arrows);
     }
 
     @Override
@@ -127,6 +175,7 @@ public class GamePanel extends JPanel {
         
         if(viewState == ViewState.TOWER_SELECTED) {
             // TODO: get available positions from world and render them as rectangles
+            // List<Position> availablePosition = this.gameWorld.getAvailablePosition();
             // graphic.setColor(java.awt.Color.GREEN);
             // for (Position p: availablePosition) {
             //     graphic.drawRect((int)p.getX(), (int)p.getY(), 50, 50);
@@ -149,10 +198,10 @@ public class GamePanel extends JPanel {
         Image asset = null;
 
         switch(enemy.getName()) {
-            case "orc":
+            case Orc.NAME:
                 asset = orcImage;
                 break;
-            case "goblin":
+            case Goblin.NAME:
                 asset = goblinImage;
                 break;
             default:

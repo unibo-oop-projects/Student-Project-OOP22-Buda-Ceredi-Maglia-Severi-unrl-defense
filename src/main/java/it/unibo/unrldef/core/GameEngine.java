@@ -24,7 +24,7 @@ public class GameEngine {
 
     public void initGame(final String playerName, final World world) {
         this.player = new PlayerImpl(playerName, world);
-        this.view = new ViewImpl(world);
+        this.view = new ViewImpl(world, this.input);
     }
 
     public void setGameWorld(final World world) {
