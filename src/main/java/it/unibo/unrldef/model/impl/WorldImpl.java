@@ -176,32 +176,39 @@ public class WorldImpl implements World{
             this.validTowersPositions = new HashSet<>();
         }
 
-        public void addPathSegment(Direction direction, double Lenght) {
+        public Builder addPathSegment(Direction direction, double Lenght) {
             this.path.addDirection(direction, Lenght);
+            return this;
         }
 
-        public void addWave() {
+        public Builder addWave() {
             this.wavesTemp.add(new ArrayList<>());
+            return this;
         }
 
-        public void addHordeToWave (int waveIndex, long hordeDuration) throws IndexOutOfBoundsException{
+        public Builder addHordeToWave (int waveIndex, long hordeDuration) throws IndexOutOfBoundsException{
             this.wavesTemp.get(waveIndex).add(new Pair<Horde,Long>(new HordeImpl(), hordeDuration));
+            return this;
         }
 
-        public void addEnemyToHorde (int waveIndex, int hordeIndex, Enemy enemy) throws IndexOutOfBoundsException{
+        public Builder addEnemyToHorde (int waveIndex, int hordeIndex, Enemy enemy) throws IndexOutOfBoundsException{
             this.wavesTemp.get(waveIndex).get(hordeIndex).getFirst().addEnemy(enemy);
+            return this;
         }
 
-        public void addMultipleEnemiesToHorde (int waveIndex, int hordeIndex, Enemy enemy, short numberOfEnemies) throws IndexOutOfBoundsException {
+        public Builder addMultipleEnemiesToHorde (int waveIndex, int hordeIndex, Enemy enemy, short numberOfEnemies) throws IndexOutOfBoundsException {
             this.wavesTemp.get(waveIndex).get(hordeIndex).getFirst().addMultipleEnemies(enemy, numberOfEnemies);
+            return this;
         }
 
-        public void addAvailableTower( String name, Tower tower ) {
+        public Builder addAvailableTower( String name, Tower tower ) {
             this.availableTowers.put(name, tower);
+            return this;
         }
 
-        public void addTowerBuildingSpace (double x, double y) {
+        public Builder addTowerBuildingSpace (double x, double y) {
             this.validTowersPositions.add(new Position(x, y));
+            return this;
         }
 
 
