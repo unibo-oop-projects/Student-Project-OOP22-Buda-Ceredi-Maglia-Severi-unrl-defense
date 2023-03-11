@@ -15,17 +15,22 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Spell;
+import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.Orc;
 import it.unibo.unrldef.model.impl.Arrows;
 import it.unibo.unrldef.model.impl.FireBall;
 import it.unibo.unrldef.model.impl.Goblin;
+import it.unibo.unrldef.model.impl.Cannon;
+import it.unibo.unrldef.model.impl.Hunter;
 
 import java.awt.Image;
 
@@ -40,16 +45,23 @@ public class GamePanel extends JPanel {
     private Image fireballImage;
     private Image arrowsImage;
     private Image map;
+    private Image cannonImage;
+    private Image hunterImage;
 
-    private enum ViewState {
+    public enum ViewState {
         IDLE,
         TOWER_SELECTED,
         SPELL_SELECTED
     }
 
-    public GamePanel(World gameWorld, Input inputHandler) {
-        super();
+    @Override
+    public Dimension getPreferredSize() {
+        // TODO Auto-generated method stub
+        return new Dimension(600, 600);
+    }
 
+    public GamePanel(World gameWorld, Input inputHandler) {
+        super(new BorderLayout());
         this.viewState = ViewState.IDLE;
         //TODO: load assets
         try {
@@ -58,6 +70,8 @@ public class GamePanel extends JPanel {
             this.orcImage = ImageIO.read(new File("assets\\orc.png"));
             this.goblinImage = ImageIO.read(new File("assets\\goblin.png"));
             this.map = ImageIO.read(new File("assets\\debugMap.png"));
+            this.hunterImage = ImageIO.read(new File("assets\\horse.png"));
+            this.cannonImage = ImageIO.read(new File("assets\\cannon.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -114,57 +128,14 @@ public class GamePanel extends JPanel {
             }
             
         });
+    }
 
-        // TODO: Create a class to avoid code repetition
+    public void setState(ViewState state) {
+        this.viewState = state;
+    }
 
-        JButton cannon = new JButton("CANNON");
-        cannon.addActionListener(new ActionListener(){
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                viewState = ViewState.TOWER_SELECTED;
-                selectedEntity = "cannon";
-            }
-            
-        });
-
-        JButton hunter = new JButton("HUNTER");
-        hunter.addActionListener(new ActionListener(){
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                viewState = ViewState.TOWER_SELECTED;
-                selectedEntity = "hunter";
-            }
-            
-        });
-
-        JButton fireBall = new JButton("FIREBALL");
-        fireBall.addActionListener(new ActionListener(){
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                viewState = ViewState.SPELL_SELECTED;
-                selectedEntity = "fireball";
-            }
-            
-        });
-
-        JButton arrows = new JButton("ARROWS");
-        arrows.addActionListener(new ActionListener(){
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                viewState = ViewState.SPELL_SELECTED;
-                selectedEntity = "arrows";
-            }
-            
-        });
-
-        this.add(cannon);
-        this.add(hunter);
-        this.add(fireBall);
-        this.add(arrows);
+    public void setSelectedEntity(String entity) {
+        this.selectedEntity = entity;
     }
 
     @Override
@@ -179,6 +150,8 @@ public class GamePanel extends JPanel {
         for (Entity entity : gameWorld.getSceneEntities()) {
             renderEntity(graphic, entity);
         }
+
+        
         
         if(viewState == ViewState.TOWER_SELECTED) {
             // TODO: get available positions from world and render them as rectangles
@@ -197,10 +170,28 @@ public class GamePanel extends JPanel {
         if (entity instanceof Enemy) {
             renderEnemy(graphic, entity);
         } else if (entity instanceof Spell) {
+            
             this.renderSpell(graphic, entity);
+        } else if (entity instanceof Tower) {
+            this.renderTower(graphic, entity);
         }
     }   
     
+    private void renderTower(Graphics2D graphic, Entity entity) {
+        Image asset = null;
+        switch(entity.getName()) {
+            case Cannon.NAME:
+                asset = cannonImage;
+                break;
+            case Hunter.NAME:
+                asset = hunterImage;
+                break;
+            default:
+                break;
+        }
+        graphic.drawImage(asset, (int)entity.getPosition().get().getX(), (int)entity.getPosition().get().getY(), 50, 50, null);
+    }
+
     private void renderEnemy(Graphics2D graphic, Entity enemy) {
         Image asset = null;
 
@@ -215,7 +206,7 @@ public class GamePanel extends JPanel {
                 break;
         }
 
-        graphic.drawImage(asset, (int)enemy.getPosition().get().getX(), (int)enemy.getPosition().get().getY(), null);
+        graphic.drawImage(asset, (int)enemy.getPosition().get().getX(), (int)enemy.getPosition().get().getY(), 40, 40, null);
     }
 
     private void renderSpell(final Graphics2D graphic, final Entity spell) {
@@ -230,10 +221,10 @@ public class GamePanel extends JPanel {
             default:
                 break;
         }
-        graphic.drawImage(asset, (int)spell.getPosition().get().getX(), (int)spell.getPosition().get().getY(), this.getWidth(), this.getHeight(), null);
+        graphic.drawImage(asset, (int)spell.getPosition().get().getX(), (int)spell.getPosition().get().getY(), 40, 40,  null);
     }
 
     private void renderMap(final Graphics2D graphic) {
-        graphic.drawImage(this.map, 0, 0, null);
+        graphic.drawImage(this.map, 0, 0, this.getWidth(), this.getHeight(), null);
     }
 }

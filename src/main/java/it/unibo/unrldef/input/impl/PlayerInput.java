@@ -18,6 +18,7 @@ public class PlayerInput implements Input{
 
     @Override
     public void setLastHit(final int x, final int y, final HitType hit, final Optional<String> selected) {
+        System.out.println("PlayerInput: setLastHit(" + x + ", " + y + ", " + hit + ", " + selected + ")");
         this.lastHit = new Pair<Position,Input.HitType>(new Position(x, y), hit);
         this.selectedName = selected;
     }

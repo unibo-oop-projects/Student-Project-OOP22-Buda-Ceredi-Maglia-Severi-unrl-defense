@@ -114,6 +114,7 @@ public class WorldImpl implements World{
         List<Entity> ret = new ArrayList<Entity>();
         ret.addAll(this.placedTowers);
         ret.addAll(this.livingEnemies);
+        ret.addAll(this.player.getSpells());
         return ret;
     }
 

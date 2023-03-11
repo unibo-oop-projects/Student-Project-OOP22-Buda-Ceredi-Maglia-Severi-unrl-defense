@@ -32,5 +32,6 @@ public abstract class TowerImpl extends DefenseEntity implements Tower {
     @Override
     public void updateState(final long time) {
         this.incrementTime(time);
+        this.checkAttack();
     }
 }

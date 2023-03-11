@@ -25,7 +25,7 @@ public class Hunter extends TowerImpl {
 
     @Override
     public Tower copy() {
-        return new Hunter(this.getPosition().get());
+        return new Hunter(null);
     }
 
     @Override

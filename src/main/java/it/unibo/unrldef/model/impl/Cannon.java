@@ -14,9 +14,9 @@ public class Cannon extends TowerImpl {
 
     final private static int COST = 100;
     final private static long ATTACK_FOR_SECOND = 1000;
-    final private static int DAMAGE = 10;
+    final private static int DAMAGE = 5;
     final public static String NAME = "sdrogo cannon";
-    final private static double RADIOUS = 5;
+    final private static double RADIOUS = 1000;
     final private static double EXPLOSION_RADIUS = 2;
     private Enemy target;
     
@@ -26,19 +26,22 @@ public class Cannon extends TowerImpl {
 
     @Override
     public Tower copy() {
-        return new Hunter(this.getPosition().get());
+        return new Cannon(null);
     }
 
     @Override
     protected void attack() {
+        System.out.println("Cannon attack");
         final List<Enemy> enemiesInRange = this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius());
         if (!enemiesInRange.contains(this.target)) {
             this.target = enemiesInRange.get(0);
+            System.out.println("Cannon target: " + this.target);
         }
         if (!enemiesInRange.isEmpty()) {
             this.target.reduceHealth(this.getDamage());
             for (Enemy enemy : this.getParentWorld().sorroundingEnemies(this.target.getPosition().get(), EXPLOSION_RADIUS)) {
                 enemy.reduceHealth(this.getDamage());
+                System.out.println("Enemy health: " + enemy.getHealth());
             }
         }
     }
