@@ -176,36 +176,36 @@ public class WorldImpl implements World{
             this.validTowersPositions = new HashSet<>();
         }
 
-        void addPathSegment(Direction direction, double Lenght) {
+        public void addPathSegment(Direction direction, double Lenght) {
             this.path.addDirection(direction, Lenght);
         }
 
-        void addWave() {
+        public void addWave() {
             this.wavesTemp.add(new ArrayList<>());
         }
 
-        void addHordeToWave (int waveIndex, long hordeDuration) throws IndexOutOfBoundsException{
+        public void addHordeToWave (int waveIndex, long hordeDuration) throws IndexOutOfBoundsException{
             this.wavesTemp.get(waveIndex).add(new Pair<Horde,Long>(new HordeImpl(), hordeDuration));
         }
 
-        void addEnemyToHorde (int waveIndex, int hordeIndex, Enemy enemy) throws IndexOutOfBoundsException{
+        public void addEnemyToHorde (int waveIndex, int hordeIndex, Enemy enemy) throws IndexOutOfBoundsException{
             this.wavesTemp.get(waveIndex).get(hordeIndex).getFirst().addEnemy(enemy);
         }
 
-        void addMultipleEnemiesToHorde (int waveIndex, int hordeIndex, Enemy enemy, short numberOfEnemies) throws IndexOutOfBoundsException {
+        public void addMultipleEnemiesToHorde (int waveIndex, int hordeIndex, Enemy enemy, short numberOfEnemies) throws IndexOutOfBoundsException {
             this.wavesTemp.get(waveIndex).get(hordeIndex).getFirst().addMultipleEnemies(enemy, numberOfEnemies);
         }
 
-        void addAvailableTower( String name, Tower tower ) {
+        public void addAvailableTower( String name, Tower tower ) {
             this.availableTowers.put(name, tower);
         }
 
-        void addTowerBuildingSpace (double x, double y) {
+        public void addTowerBuildingSpace (double x, double y) {
             this.validTowersPositions.add(new Position(x, y));
         }
 
 
-        WorldImpl build() throws IllegalStateException {
+        public WorldImpl build() throws IllegalStateException {
             if (this.name == null || this.player == null || this.castleIntegrity == null || 
                 this.path == null) {
                     throw new IllegalStateException("some fields are not initialized");
