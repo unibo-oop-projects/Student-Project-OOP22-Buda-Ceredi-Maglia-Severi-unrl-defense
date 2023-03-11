@@ -102,7 +102,7 @@ public class WorldImpl implements World{
             this.availablePositions.remove(pos);
             Tower newTower = this.availableTowers.get(towerName).copy();
             this.placedTowers.add(newTower);
-            //newTower.setWorld(this);
+            newTower.setParentWorld(this);
             newTower.setPosition(pos.getX(), pos.getY());
             return true;
         }
