@@ -2,17 +2,14 @@ package it.unibo.unrldef.model.impl;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 
-import org.jooq.lambda.tuple.Range;
 
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
@@ -65,7 +62,11 @@ public class WorldImpl implements World{
         this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath).forEach(x -> this.castleIntegrity.damage(ENEMY_POWER));
         this.livingEnemies.removeAll(this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath).toList());
         this.getSceneEntities().forEach(x -> x.updateState(time));
-        this.player.uptatePotions();
+        //this.player.uptatePotions();
+        //this is temporary (
+        PlayerImpl tmp = (PlayerImpl) this.player;
+        tmp.updateSpellState(time);
+        // )
         if (timeToNextHorde == 0 && !this.areWavesEnded()) {
             if (this.waves.get(this.waveCounter).isWaveOver()) {
                 this.waveCounter++;
@@ -101,7 +102,7 @@ public class WorldImpl implements World{
             this.availablePositions.remove(pos);
             Tower newTower = this.availableTowers.get(towerName).copy();
             this.placedTowers.add(newTower);
-            newTower.setWorld(this);
+            //newTower.setWorld(this);
             newTower.setPosition(pos.getX(), pos.getY());
             return true;
         }
