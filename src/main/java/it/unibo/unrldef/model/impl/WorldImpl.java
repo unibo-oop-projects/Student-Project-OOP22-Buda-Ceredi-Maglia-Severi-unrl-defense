@@ -18,7 +18,7 @@ import it.unibo.unrldef.model.api.Path.Direction;
 
 public class WorldImpl implements World{
 
-    private final static long SPAWNING_TIME = 1;
+    private final static long SPAWNING_TIME = 1000;
     private final static int ENEMY_POWER = 1;
 
     private final String name;

@@ -16,7 +16,7 @@ public abstract class TowerImpl extends DefenseEntity implements Tower {
     private static World PARENT_WORLD;
 
     public TowerImpl(Position position, String name, double radius, double damage,
-            double attackRate, final int cost) {
+            long attackRate, final int cost) {
         super(Optional.of(position), name, PARENT_WORLD, radius, damage, attackRate);
         this.cost = cost;
     }

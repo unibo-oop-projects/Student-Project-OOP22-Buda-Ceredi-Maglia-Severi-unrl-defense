@@ -13,7 +13,7 @@ import it.unibo.unrldef.model.api.Tower;
 public class Cannon extends TowerImpl {
 
     final private static int COST = 100;
-    final private static double ATTACK_FOR_SECOND = 1.5;
+    final private static long ATTACK_FOR_SECOND = 1000;
     final private static int DAMAGE = 10;
     final public static String NAME = "sdrogo cannon";
     final private static double RADIOUS = 5;

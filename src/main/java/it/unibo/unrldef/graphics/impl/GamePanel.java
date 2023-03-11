@@ -9,12 +9,14 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
+import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Entity;
@@ -173,19 +175,20 @@ public class GamePanel extends JPanel {
         graphic.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         graphic.clearRect(0,0,this.getWidth(),this.getHeight());
         // TODO: render the game world
+        renderMap(graphic);
         for (Entity entity : gameWorld.getSceneEntities()) {
             renderEntity(graphic, entity);
         }
         
         if(viewState == ViewState.TOWER_SELECTED) {
             // TODO: get available positions from world and render them as rectangles
-            // List<Position> availablePosition = this.gameWorld.getAvailablePosition();
-            // graphic.setColor(java.awt.Color.GREEN);
-            // for (Position p: availablePosition) {
-            //     graphic.drawRect((int)p.getX(), (int)p.getY(), 50, 50);
-            //     graphic.fillRect((int)p.getX(), (int)p.getY(), 50, 50);
-            // }
-            // graphic.setColor(java.awt.Color.BLACK);
+            Set<Position> availablePosition = this.gameWorld.getAvailablePositions();
+            graphic.setColor(java.awt.Color.GREEN);
+            for (Position p: availablePosition) {
+                graphic.drawRect((int)p.getX(), (int)p.getY(), 50, 50);
+                graphic.fillRect((int)p.getX(), (int)p.getY(), 50, 50);
+            }
+            graphic.setColor(java.awt.Color.BLACK);
         }
 
     }

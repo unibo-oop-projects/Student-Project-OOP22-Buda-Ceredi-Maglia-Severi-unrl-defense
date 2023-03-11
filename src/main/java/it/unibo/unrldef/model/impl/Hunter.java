@@ -13,7 +13,7 @@ import it.unibo.unrldef.model.api.Tower;
 public class Hunter extends TowerImpl {
 
     final private static int COST = 80;
-    final private static double ATTACK_FOR_SECOND = 0.7;
+    final private static long ATTACK_FOR_SECOND = 1000;
     final private static int DAMAGE = 7;
     final public static String NAME = "sdrogo hunter";
     final private static double RADIOUS = 8;
