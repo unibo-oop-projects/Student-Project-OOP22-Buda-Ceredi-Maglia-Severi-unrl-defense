@@ -45,17 +45,19 @@ public class GameEngine {
     }
 
     private void processInput() {
-        final Position selectedPosition = this.input.getLastHit().getFirst();
-        final Optional<String> selectedName = this.input.getSelectedName();
-        switch(this.input.getLastHit().getSecond()) {
-            case PLACE_TOWER:
-                this.player.buildNewTower(selectedPosition, selectedName.get());
-                break;
-            case PLACE_SPELL:
-                this.player.throwSpell(selectedName.get(), selectedPosition);
-                break;
-            case SELECTION:
-                break;
+        if (input.getLastHit() != null) {
+            final Position selectedPosition = this.input.getLastHit().getFirst();
+            final Optional<String> selectedName = this.input.getSelectedName();
+            switch(this.input.getLastHit().getSecond()) {
+                case PLACE_TOWER:
+                    this.player.buildNewTower(selectedPosition, selectedName.get());
+                    break;
+                case PLACE_SPELL:
+                    this.player.throwSpell(selectedName.get(), selectedPosition);
+                    break;
+                case SELECTION:
+                    break;
+            }
         }
     }
 
