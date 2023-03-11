@@ -46,20 +46,12 @@ public class PlayerImpl implements Player{
         return this.currentWorld;
     }
     
-    /**
-     * Places a new tower on the world map
-     * @param pos the position where to place it
-     * @param towerName the type of tower to build
-     */
+    @Override
     public void buildNewTower(final Position pos, final String towerName) {
         this.currentWorld.tryBuildTower(pos, towerName);
     }
 
-    /**
-     * Places a new spell on the world map deling damage to enemies
-     * @param name its name
-     * @param pos its position
-     */
+    @Override
     public void throwSpell(final String name, final Position pos) {
         final Spell selected = this.spells.stream()
                 .filter(p -> Objects.equals(p.getName(), name))
@@ -67,10 +59,7 @@ public class PlayerImpl implements Player{
         selected.tryActivation(pos);
     }
 
-    /**
-     * Updates the state of the spells
-     * @param elapsed time passed since last frame
-     */
+    @Override
     public void updateSpellState(final long elapsed) {
         this.spells.forEach(sp -> sp.updateState(elapsed));
     }
