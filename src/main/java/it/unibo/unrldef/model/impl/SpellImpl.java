@@ -25,11 +25,12 @@ public class SpellImpl extends DefenseEntity implements Spell {
      */
     public SpellImpl(final String name, final World parentWorld, final double radius,
             final double damage, final long attackRate, final long waitTime, final int lingeringDamage) {
-        super(Optional.empty(), name, parentWorld, radius, damage, attackRate);
+        super(Optional.empty(), name, radius, damage, attackRate);
         this.waitTime = waitTime;
         this.active = false;
         this.lingeringDamage = lingeringDamage;
         this.damageDealt = 0;
+        this.setParentWorld(parentWorld);
     }
 
     @Override

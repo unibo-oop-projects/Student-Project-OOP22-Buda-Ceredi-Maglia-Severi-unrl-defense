@@ -6,7 +6,6 @@ import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Path;
-import it.unibo.unrldef.model.api.World;
 
 /**
  * Implementation of an Enemy in the game Unreal Defense
@@ -18,8 +17,8 @@ public class EnemyImpl extends EntityImpl implements Enemy {
     private int currentDirectionIndex;
     private Pair<Path.Direction, Double> currentDirection;
     
-    public EnemyImpl(final Optional<Position> position, final String name, final World parentWorld, final double startingHealth, final double speed) {
-        super(position, name, parentWorld);
+    public EnemyImpl(final Optional<Position> position, final String name, final double startingHealth, final double speed) {
+        super(position, name);
         this.health = startingHealth;
         this.speed = speed;
         this.currentDirectionIndex = 0;
@@ -94,7 +93,9 @@ public class EnemyImpl extends EntityImpl implements Enemy {
 
     @Override
     public Enemy copy() {
-        return new EnemyImpl(Optional.of(this.getPosition().get().copy()), this.getName(), this.getParentWorld(), health, speed);
+        EnemyImpl enemy = new EnemyImpl(Optional.of(this.getPosition().get().copy()), this.getName(), health, speed);
+        enemy.setParentWorld(this.getParentWorld());
+        return enemy;
     }
 
 

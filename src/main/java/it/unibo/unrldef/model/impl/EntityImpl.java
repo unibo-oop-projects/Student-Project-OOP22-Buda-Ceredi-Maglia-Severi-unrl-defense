@@ -14,7 +14,7 @@ import it.unibo.unrldef.model.api.World;
 public abstract class EntityImpl implements Entity  {
     private Optional<Position> position; 
     private final String name;
-    private final World parentWorld;
+    private World parentWorld;
     
 
     /**
@@ -22,10 +22,13 @@ public abstract class EntityImpl implements Entity  {
      * @param name the name of the entity
      * @param parentWorld the parent world of the entity
      */
-    public EntityImpl(final Optional<Position> position, final String name, final World parentWorld) {
+    public EntityImpl(final Optional<Position> position, final String name) {
         this.position = position;
         this.name = name;
-        this.parentWorld = parentWorld;
+    }
+
+    public void setParentWorld(final World world) {
+        this.parentWorld = world;
     }
 
     public Optional<Position> getPosition() {

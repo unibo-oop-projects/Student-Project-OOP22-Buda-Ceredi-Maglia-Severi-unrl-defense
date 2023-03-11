@@ -19,7 +19,8 @@ public class UnrealDefense {
 
 	public static void main(String[] args) {
 		GameEngine engine = new GameEngine();
-		Player p = new PlayerImpl("io", null);
+		Player p = new PlayerImpl("io");
+
 		World world = new WorldImpl.Builder("mondo1", p, new Position(30, 0), 20)
 		.addPathSegment(Path.Direction.DOWN, 7)
 		.addPathSegment(Path.Direction.LEFT, 25)
@@ -35,7 +36,7 @@ public class UnrealDefense {
 
 		.build();
 		p.setGameMap(world);
-		engine.initGame("Regina Elisabetta dello sdrogo");
+		engine.initGame("Regina Elisabetta dello sdrogo", world);
 		engine.GameLoop();
 	}
 

@@ -13,16 +13,13 @@ import it.unibo.unrldef.model.api.World;
 public abstract class TowerImpl extends DefenseEntity implements Tower {
 
     private final int cost;
-    private static World PARENT_WORLD;
+    private World parentWorld;
 
     public TowerImpl(Position position, String name, double radius, double damage,
             long attackRate, final int cost) {
-        super(Optional.of(position), name, PARENT_WORLD, radius, damage, attackRate);
+        super(Optional.of(position), name, radius, damage, attackRate);
         this.cost = cost;
-    }
-
-    public void setParentWorld(final World world) {
-        PARENT_WORLD = world;
+        this.setParentWorld(parentWorld);
     }
 
     public abstract Tower copy();
