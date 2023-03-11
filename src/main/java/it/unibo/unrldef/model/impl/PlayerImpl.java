@@ -24,11 +24,8 @@ public class PlayerImpl implements Player{
      * @param name its name
      * @param map where he begins to play
      */
-    public PlayerImpl(final String name, final World world) {
-        this.setGameMap(world);
+    public PlayerImpl(final String name) {
         this.name = Objects.requireNonNull(name);
-        this.spells.add(new FireBall(world));
-        this.spells.add(new Arrows(world));
     }
 
     @Override
@@ -39,6 +36,8 @@ public class PlayerImpl implements Player{
     @Override
     public void setGameMap(final World world) {
         this.currentWorld = Objects.requireNonNull(world);
+        this.spells.add(new FireBall(world));
+        this.spells.add(new Arrows(world));
     }
 
     @Override
