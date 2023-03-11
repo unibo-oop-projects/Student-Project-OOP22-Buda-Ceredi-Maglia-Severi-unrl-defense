@@ -8,11 +8,10 @@ import it.unibo.unrldef.graphics.impl.ViewImpl;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.input.impl.PlayerInput;
 import it.unibo.unrldef.model.api.*;
-import it.unibo.unrldef.model.impl.*;
 
 public class GameEngine {
 
-    private PlayerImpl player;
+    private Player player;
     private World currentWorld;
     private final Input input;
     private View view; 
@@ -22,9 +21,10 @@ public class GameEngine {
         this.input = new PlayerInput();
     }
 
-    public void initGame(final String playerName, final World world) {
-        this.player = new PlayerImpl(playerName, world);
+    public void initGame(final Player player, final World world) {
+        this.player = player;
         this.view = new ViewImpl(world, this.input);
+        this.setGameWorld(world);
     }
 
     public void setGameWorld(final World world) {
