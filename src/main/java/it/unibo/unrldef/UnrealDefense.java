@@ -57,7 +57,7 @@ public class UnrealDefense {
 		.addTowerBuildingSpace(23, 38)
 		.addTowerBuildingSpace(33, 38)
 		.build();
-		engine.initGame("io", world);
+		engine.initGame(p, world);
 		engine.GameLoop();
 	}
 

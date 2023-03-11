@@ -230,7 +230,7 @@ public class GamePanel extends JPanel {
             default:
                 break;
         }
-        graphic.drawImage(asset, (int)spell.getPosition().get().getX(), (int)spell.getPosition().get().getY(), null);
+        graphic.drawImage(asset, (int)spell.getPosition().get().getX(), (int)spell.getPosition().get().getY(), this.getWidth(), this.getHeight(), null);
     }
 
     private void renderMap(final Graphics2D graphic) {
