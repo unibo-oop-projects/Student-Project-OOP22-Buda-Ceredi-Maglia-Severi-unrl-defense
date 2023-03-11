@@ -17,6 +17,13 @@ public interface Entity {
      * @return the name of the entity
      */
     public String getName();
+
+    /**
+     * 
+     * @return
+     */
+    public void setParentWorld(World world);
+
     /**
      * 
      * @return the parent world of the entity
