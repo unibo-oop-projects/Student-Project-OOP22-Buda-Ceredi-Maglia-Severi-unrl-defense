@@ -213,6 +213,7 @@ public class WorldImpl implements World{
 
 
         public WorldImpl build() throws IllegalStateException {
+            
             if (this.name == null || this.player == null || this.castleIntegrity == null || 
                 this.path == null) {
                     throw new IllegalStateException("some fields are not initialized");
@@ -226,7 +227,14 @@ public class WorldImpl implements World{
                 }
             }
 
-            return new WorldImpl(this.name, this.player, this.castleIntegrity, this.path, waves, this.availableTowers, this.validTowersPositions);
+            WorldImpl ret = new WorldImpl(this.name, this.player, this.castleIntegrity, this.path, waves, this.availableTowers, this.validTowersPositions);
+            for (int i = 0; i < this.wavesTemp.size(); i++) {
+                for (Pair<Horde, Long> horde : this.wavesTemp.get(i)) {
+                    horde.getFirst().getEnemies().forEach(x -> x.setParentWorld(ret));
+                }
+            }
+
+            return ret;
         }
     }
 
