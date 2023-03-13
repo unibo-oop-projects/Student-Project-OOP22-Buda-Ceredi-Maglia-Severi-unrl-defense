@@ -1,6 +1,7 @@
 package it.unibo.unrldef.model.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
@@ -25,7 +26,7 @@ public class Hunter extends TowerImpl {
 
     @Override
     public Tower copy() {
-        return new Hunter(this.getPosition().get());
+        return new Hunter(null);
     }
 
     @Override
@@ -39,5 +40,7 @@ public class Hunter extends TowerImpl {
         }
     }
 
-    
+    public Optional<Enemy> getTarget() {
+        return this.isAttacking() ? Optional.of(this.target) : Optional.empty();
+    }
 }
