@@ -64,7 +64,10 @@ public class PlayerImpl implements Player{
         this.spells.forEach(sp -> sp.updateState(elapsed));
     }
 
-    public Set<Spell> getSpells() {
-        return new HashSet<Spell>(this.spells.stream().filter(Spell::isActive).toList());
+    @Override
+    public Set<Spell> getActiveSpells() {
+        return new HashSet<Spell>(this.spells.stream()
+                .filter(sp -> sp.isActive())
+                .toList());
     }
 }

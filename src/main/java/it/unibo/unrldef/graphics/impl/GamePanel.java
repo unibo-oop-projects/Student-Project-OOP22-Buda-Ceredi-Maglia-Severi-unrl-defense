@@ -17,7 +17,11 @@ import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.geom.Point2D;
+import java.awt.Color;
+import java.awt.BasicStroke;
 
+import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Enemy;
@@ -47,6 +51,8 @@ public class GamePanel extends JPanel {
     private Image map;
     private Image cannonImage;
     private Image hunterImage;
+    private Image shootingCannon;
+    private Image shootingHunter;
 
     public enum ViewState {
         IDLE,
@@ -65,13 +71,15 @@ public class GamePanel extends JPanel {
         this.viewState = ViewState.IDLE;
         //TODO: load assets
         try {
-            this.fireballImage = ImageIO.read(new File("assets\\fireball.png"));
-            this.arrowsImage = ImageIO.read(new File("assets\\arrows.png"));
-            this.orcImage = ImageIO.read(new File("assets\\orc.png"));
-            this.goblinImage = ImageIO.read(new File("assets\\goblin.png"));
-            this.map = ImageIO.read(new File("assets\\debugMap.png"));
-            this.hunterImage = ImageIO.read(new File("assets\\horse.png"));
-            this.cannonImage = ImageIO.read(new File("assets\\cannon.png"));
+            this.fireballImage = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
+            this.arrowsImage = ImageIO.read(new File("assets"+File.separator+"arrows.png"));
+            this.orcImage = ImageIO.read(new File("assets"+File.separator+"orc.png"));
+            this.goblinImage = ImageIO.read(new File("assets"+File.separator+"goblin.png"));
+            this.map = ImageIO.read(new File("assets"+File.separator+"debugMap.png"));
+            this.hunterImage = ImageIO.read(new File("assets"+File.separator+"horse.png"));
+            this.cannonImage = ImageIO.read(new File("assets"+File.separator+"cannon.png"));
+            this.shootingCannon = ImageIO.read(new File("assets"+File.separator+"shootingCannon.png"));
+            this.shootingHunter = ImageIO.read(new File("assets"+File.separator+"shootingHunter.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -177,19 +185,32 @@ public class GamePanel extends JPanel {
         }
     }   
     
-    private void renderTower(Graphics2D graphic, Entity entity) {
-        Image asset = null;
-        switch(entity.getName()) {
+    private void renderTower(Graphics2D graphic, Entity tower) {
+        Image towerAsset = null;
+        Enemy target = ((Hunter)tower).getTarget().get();
+        switch(tower.getName()) {
             case Cannon.NAME:
-                asset = cannonImage;
+                if (target != null) {
+                    towerAsset = shootingCannon;
+                    // center of the tower
+                    Point2D.Double towerCenter = new Point2D.Double(tower.getPosition().get().getX() + 25, tower.getPosition().get().getY() + 25);
+                    // center of the target
+                    Point2D.Double targetCenter = new Point2D.Double(target.getPosition().get().getX() + 20, target.getPosition().get().getY() + 20);
+                    // render
+                    graphic.setColor(Color.RED);
+                    graphic.setStroke(new BasicStroke(3));
+                    graphic.drawLine((int)towerCenter.getX(), (int)towerCenter.getY(), (int)targetCenter.getX(), (int)targetCenter.getY());
+                } else {
+                    towerAsset = cannonImage;
+                }
                 break;
             case Hunter.NAME:
-                asset = hunterImage;
+                towerAsset = hunterImage;
                 break;
             default:
                 break;
         }
-        graphic.drawImage(asset, (int)entity.getPosition().get().getX(), (int)entity.getPosition().get().getY(), 50, 50, null);
+        graphic.drawImage(towerAsset, (int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), 50, 50, null);
     }
 
     private void renderEnemy(Graphics2D graphic, Entity enemy) {

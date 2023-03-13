@@ -1,11 +1,9 @@
 package it.unibo.unrldef.model.api;
 
-import java.util.Set;
-
 import it.unibo.unrldef.common.Position;
 
 /**
- * A player in a strategic game where his position is irrelevant
+ * A player in a strategic game where his position is irrelevant and spells can be used
  * @author tommaso.severi2@studio.unibo.it
  */
 public interface Player {
@@ -45,6 +43,4 @@ public interface Player {
      * @param elapsed time passed since last frame
      */
     public void updateSpellState(final long elapsed);
-
-    public Set<Spell> getSpells();
 }

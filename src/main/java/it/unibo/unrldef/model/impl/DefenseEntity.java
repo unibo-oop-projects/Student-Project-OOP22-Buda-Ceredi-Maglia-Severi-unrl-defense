@@ -16,6 +16,7 @@ public abstract class DefenseEntity extends EntityImpl {
     private final double damage;
     private final long attackRate;
     private long timeSinceLastAction;
+    private boolean isAttacking = false;
 
     /**
      * Crates a new defensive entinty
@@ -78,6 +79,9 @@ public abstract class DefenseEntity extends EntityImpl {
         if (this.getTimeSinceLastAction() >= this.attackRate){
             this.resetElapsedTime();
             this.attack();
+            this.isAttacking = true;
+        } else {
+            this.isAttacking = false;
         }
     }
 
@@ -85,4 +89,8 @@ public abstract class DefenseEntity extends EntityImpl {
      * this method is called when is time to attack
      */
     protected abstract void attack();
+
+    protected boolean isAttacking() {
+        return this.isAttacking;
+    }
 }
