@@ -35,7 +35,8 @@ public class GamePanel extends JPanel {
     
     private Image orcImage;
     private Image goblinImage;
-    private Image fireballImage;
+    private Image fireballFalling;
+    private Image fireballOnGround;
     private Image arrowsImage;
     private Image map;
 
@@ -50,7 +51,8 @@ public class GamePanel extends JPanel {
         this.viewState = ViewState.IDLE;
         //TODO: load assets
         try {
-            this.fireballImage = ImageIO.read(new File("assets\\fireball.png"));
+            this.fireballFalling = ImageIO.read(new File("assets\\fireball.png"));
+            this.fireballOnGround = ImageIO.read(new File("assets\\fireball_ground.png"));
             this.arrowsImage = ImageIO.read(new File("assets\\arrows.png"));
             this.orcImage = ImageIO.read(new File("assets\\orc.png"));
             this.goblinImage = ImageIO.read(new File("assets\\goblin.png"));
@@ -176,7 +178,7 @@ public class GamePanel extends JPanel {
         Image asset = null;
         switch (spell.getName()) {
             case FireBall.NAME:
-                asset = this.fireballImage;
+                asset = this.fireballFalling;
                 break;
             case Arrows.NAME:
                 asset = this.arrowsImage;
