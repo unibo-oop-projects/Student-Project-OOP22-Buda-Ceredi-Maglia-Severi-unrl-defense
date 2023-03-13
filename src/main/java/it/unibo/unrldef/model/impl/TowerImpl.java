@@ -17,7 +17,7 @@ public abstract class TowerImpl extends DefenseEntity implements Tower {
 
     public TowerImpl(Position position, String name, double radius, double damage,
             long attackRate, final int cost) {
-        super(Optional.of(position), name, radius, damage, attackRate);
+        super(Optional.ofNullable(position), name, radius, damage, attackRate);
         this.cost = cost;
         this.setParentWorld(parentWorld);
     }
@@ -32,5 +32,7 @@ public abstract class TowerImpl extends DefenseEntity implements Tower {
     @Override
     public void updateState(final long time) {
         this.incrementTime(time);
+        this.checkAttack();
     }
+    
 }
