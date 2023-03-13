@@ -3,7 +3,6 @@ package it.unibo.unrldef.model.impl;
 import java.util.Optional;
 
 import it.unibo.unrldef.common.Position;
-import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
 

@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -30,7 +31,7 @@ public class ViewImpl implements View{
         this.world = world;
         this.frame = new JFrame("Unreal Defense");
 		this.frame.setSize(1280,720);
-		//this.frame.setMinimumSize(new Dimension(1280,720));
+		this.frame.setMinimumSize(new Dimension(1280,720));
 		this.frame.setResizable(true);
 		// frame.setUndecorated(true); // Remove title bar
 		//TODO: resize handler with scale on GamePanel
