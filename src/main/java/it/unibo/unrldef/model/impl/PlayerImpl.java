@@ -69,4 +69,9 @@ public class PlayerImpl implements Player{
                 .filter(sp -> sp.isActive())
                 .toList());
     }
+
+    @Override
+    public Set<Spell> getSpells() {
+        return Set.copyOf(this.spells);
+    }
 }

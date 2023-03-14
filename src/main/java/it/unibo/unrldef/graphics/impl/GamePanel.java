@@ -3,19 +3,16 @@ package it.unibo.unrldef.graphics.impl;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.BorderLayout;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.awt.Color;
@@ -47,7 +44,8 @@ public class GamePanel extends JPanel {
     
     private Image orcImage;
     private Image goblinImage;
-    private Image fireballImage;
+    private Image fireballFalling;
+    private Image fireballOnGround;
     private Image arrowsImage;
     private Image map;
     private Image cannonImage;
@@ -72,7 +70,8 @@ public class GamePanel extends JPanel {
         this.viewState = ViewState.IDLE;
         //TODO: load assets
         try {
-            this.fireballImage = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
+            this.fireballFalling = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
+            this.fireballOnGround = ImageIO.read(new File("assets"+File.separator+"fireball_ground.png"));
             this.arrowsImage = ImageIO.read(new File("assets"+File.separator+"arrows.png"));
             this.orcImage = ImageIO.read(new File("assets"+File.separator+"orc.png"));
             this.goblinImage = ImageIO.read(new File("assets"+File.separator+"goblin.png"));
@@ -239,7 +238,7 @@ public class GamePanel extends JPanel {
         Image asset = null;
         switch (spell.getName()) {
             case FireBall.NAME:
-                asset = this.fireballImage;
+                asset = this.fireballFalling;
                 break;
             case Arrows.NAME:
                 asset = this.arrowsImage;

@@ -6,12 +6,18 @@ import javax.swing.JPanel;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import it.unibo.unrldef.graphics.api.View;
 import it.unibo.unrldef.input.api.Input;
+import it.unibo.unrldef.model.api.Player;
+import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
+import it.unibo.unrldef.model.impl.FireBall;
+import it.unibo.unrldef.model.impl.Arrows;
+import it.unibo.unrldef.model.impl.SpellImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,8 +25,12 @@ public class ViewImpl implements View{
 
     private final GamePanel gamePanel;
     private final JFrame frame;
+    private final Player player;
+    private final JButton fireBall;
+    private final JButton arrows;
 
-    public ViewImpl(World world, Input inputHandler){
+    public ViewImpl(Player player, World world, Input inputHandler){
+        this.player = player;
         this.frame = new JFrame("Unreal Defense");
 		this.frame.setSize(1280,720);
 		//this.frame.setMinimumSize(new Dimension(1280,720));
@@ -53,7 +63,8 @@ public class ViewImpl implements View{
             
         });
 
-        JButton fireBall = new JButton("FIREBALL");
+        this.fireBall = new JButton("FIREBALL");
+        fireBall.setEnabled(false);
         fireBall.addActionListener(new ActionListener(){
 
             @Override
@@ -66,7 +77,8 @@ public class ViewImpl implements View{
             
         });
 
-        JButton arrows = new JButton("ARROWS");
+        this.arrows = new JButton("ARROWS");
+        arrows.setEnabled(false);
         arrows.addActionListener(new ActionListener(){
 
             @Override
@@ -98,7 +110,22 @@ public class ViewImpl implements View{
 
     @Override
     public void render() {
+        this.updateButtons();
         this.gamePanel.repaint();
     }
-    
+
+    private void updateButtons() {
+        for (Spell spell : player.getSpells()) {
+            switch (spell.getName()) {
+                case FireBall.NAME:
+                    this.fireBall.setEnabled(((SpellImpl)spell).isReady());
+                    break;
+                case Arrows.NAME:
+                    this.arrows.setEnabled(((SpellImpl)spell).isReady());
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
