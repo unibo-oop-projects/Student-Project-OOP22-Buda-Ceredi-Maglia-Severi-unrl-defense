@@ -118,15 +118,12 @@ public class ViewImpl implements View{
         for (Spell spell : player.getSpells()) {
             switch (spell.getName()) {
                 case FireBall.NAME:
-                    System.out.println(((SpellImpl)spell).isReady());
                     this.fireBall.setEnabled(((SpellImpl)spell).isReady());
                     break;
                 case Arrows.NAME:
-                    System.out.println(((SpellImpl)spell).isReady());
                     this.arrows.setEnabled(((SpellImpl)spell).isReady());
                     break;
                 default:
-                    System.out.println(spell.getName());
                     break;
             }
         }
