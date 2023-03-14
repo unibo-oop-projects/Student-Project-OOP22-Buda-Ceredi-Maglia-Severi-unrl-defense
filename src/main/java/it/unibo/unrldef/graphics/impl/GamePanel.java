@@ -13,17 +13,26 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
+import java.awt.Dimension;
+import java.awt.geom.Point2D;
+import java.awt.Color;
+import java.awt.BasicStroke;
 
+import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Spell;
+import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.Orc;
+import it.unibo.unrldef.model.impl.TowerImpl;
 import it.unibo.unrldef.model.impl.Arrows;
 import it.unibo.unrldef.model.impl.FireBall;
 import it.unibo.unrldef.model.impl.Goblin;
+import it.unibo.unrldef.model.impl.Cannon;
+import it.unibo.unrldef.model.impl.Hunter;
 
 import java.awt.Image;
 
@@ -39,6 +48,10 @@ public class GamePanel extends JPanel {
     private Image fireballOnGround;
     private Image arrowsImage;
     private Image map;
+    private Image cannonImage;
+    private Image hunterImage;
+    private Image shootingCannon;
+    private Image shootingHunter;
 
     public enum ViewState {
         IDLE,
@@ -46,17 +59,27 @@ public class GamePanel extends JPanel {
         SPELL_SELECTED
     }
 
+    @Override
+    public Dimension getPreferredSize() {
+        // TODO Auto-generated method stub
+        return new Dimension(600, 600);
+    }
+
     public GamePanel(World gameWorld, Input inputHandler) {
         super(new BorderLayout());
         this.viewState = ViewState.IDLE;
         //TODO: load assets
         try {
-            this.fireballFalling = ImageIO.read(new File("assets\\fireball.png"));
-            this.fireballOnGround = ImageIO.read(new File("assets\\fireball_ground.png"));
-            this.arrowsImage = ImageIO.read(new File("assets\\arrows.png"));
-            this.orcImage = ImageIO.read(new File("assets\\orc.png"));
-            this.goblinImage = ImageIO.read(new File("assets\\goblin.png"));
-            this.map = ImageIO.read(new File("assets\\debugMap.png"));
+            this.fireballFalling = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
+            this.fireballOnGround = ImageIO.read(new File("assets"+File.separator+"fireball_ground.png"));
+            this.arrowsImage = ImageIO.read(new File("assets"+File.separator+"arrows.png"));
+            this.orcImage = ImageIO.read(new File("assets"+File.separator+"orc.png"));
+            this.goblinImage = ImageIO.read(new File("assets"+File.separator+"goblin.png"));
+            this.map = ImageIO.read(new File("assets"+File.separator+"debugMap.png"));
+            this.hunterImage = ImageIO.read(new File("assets"+File.separator+"horse.png"));
+            this.cannonImage = ImageIO.read(new File("assets"+File.separator+"cannon.png"));
+            this.shootingCannon = ImageIO.read(new File("assets"+File.separator+"shootingCannon.png"));
+            this.shootingHunter = ImageIO.read(new File("assets"+File.separator+"shootingHunter.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -141,22 +164,59 @@ public class GamePanel extends JPanel {
             Set<Position> availablePosition = this.gameWorld.getAvailablePositions();
             graphic.setColor(java.awt.Color.GREEN);
             for (Position p: availablePosition) {
-                graphic.drawRect((int)p.getX(), (int)p.getY(), 50, 50);
-                graphic.fillRect((int)p.getX(), (int)p.getY(), 50, 50);
+                graphic.drawRect((int)p.getX(), (int)p.getY(), 1, 1);
+                graphic.fillRect((int)p.getX(), (int)p.getY(), 1, 1);
             }
             graphic.setColor(java.awt.Color.BLACK);
         }
-
     }
 
     private void renderEntity(Graphics2D graphic, Entity entity) {
         if (entity instanceof Enemy) {
             renderEnemy(graphic, entity);
         } else if (entity instanceof Spell) {
+            
             this.renderSpell(graphic, entity);
+        } else if (entity instanceof Tower) {
+            this.renderTower(graphic, entity);
         }
     }   
     
+    private void renderTower(Graphics2D graphic, Entity tower) {
+        Image towerAsset = null;
+        Optional<Enemy> target = ((Tower)tower).getTarget();
+       // System.out.println("ĀAAAAAAAAAAA: " + tower);
+       // System.out.println("Tower has target: " + target);
+        switch(tower.getName()) {
+            case Cannon.NAME:
+               // System.out.println("Cannon has target: " + target);
+                if (target.isPresent()) {
+                 //   System.out.println("VIEW Cannon has target: " + target);
+                    towerAsset = shootingCannon;
+                    // render
+                    graphic.setColor(Color.RED);
+                    graphic.setStroke(new BasicStroke(20));
+                    System.out.println("Drawing line from " + tower.getPosition().get() + " to " + target.get().getPosition().get());
+                    graphic.drawLine((int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), (int)target.get().getPosition().get().getX(), (int)target.get().getPosition().get().getY());
+                } else {
+                    towerAsset = cannonImage;
+                }
+                break;
+            case Hunter.NAME:
+          //  System.out.println("Hunter has target: " + target);
+                if (target.isPresent()) {
+                    towerAsset = shootingHunter;
+                } else {
+                    towerAsset = hunterImage;
+                }
+                break;
+            default:
+                System.out.println("Drawing default");
+                break;
+        }
+        graphic.drawImage(towerAsset, (int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), 50, 50, null);
+    }
+
     private void renderEnemy(Graphics2D graphic, Entity enemy) {
         Image asset = null;
 
@@ -171,7 +231,7 @@ public class GamePanel extends JPanel {
                 break;
         }
 
-        graphic.drawImage(asset, (int)enemy.getPosition().get().getX(), (int)enemy.getPosition().get().getY(), null);
+        graphic.drawImage(asset, (int)enemy.getPosition().get().getX(), (int)enemy.getPosition().get().getY(), 40, 40, null);
     }
 
     private void renderSpell(final Graphics2D graphic, final Entity spell) {
@@ -186,10 +246,10 @@ public class GamePanel extends JPanel {
             default:
                 break;
         }
-        graphic.drawImage(asset, (int)spell.getPosition().get().getX(), (int)spell.getPosition().get().getY(), null);
+        graphic.drawImage(asset, (int)spell.getPosition().get().getX(), (int)spell.getPosition().get().getY(), 40, 40,  null);
     }
 
     private void renderMap(final Graphics2D graphic) {
-        graphic.drawImage(this.map, 0, 0, null);
+        graphic.drawImage(this.map, 0, 0, this.getWidth(), this.getHeight(), null);
     }
 }

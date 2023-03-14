@@ -71,7 +71,7 @@ public class SpellImpl extends DefenseEntity implements Spell {
     /**
      * @return true if the spell is ready to be used, false otherwise
      */
-    public boolean isReady() {
+    private boolean isReady() {
         return this.getTimeSinceLastAction() >= this.waitTime;
     }
 

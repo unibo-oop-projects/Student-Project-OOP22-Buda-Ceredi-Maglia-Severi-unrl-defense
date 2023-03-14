@@ -1,6 +1,7 @@
 package it.unibo.unrldef.model.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -63,7 +64,6 @@ public class PlayerImpl implements Player{
         this.spells.forEach(sp -> sp.updateState(elapsed));
     }
 
-    @Override
     public Set<Spell> getActiveSpells() {
         return new HashSet<Spell>(this.spells.stream()
                 .filter(sp -> sp.isActive())

@@ -12,11 +12,11 @@ import it.unibo.unrldef.model.api.*;
 
 public class GameEngine {
 
-    private final long period = 30;
     private Player player;
     private World currentWorld;
     private final Input input;
-    private View view;
+    private View view; 
+
 
     public GameEngine() {
         this.input = new PlayerInput();
@@ -24,7 +24,7 @@ public class GameEngine {
 
     public void initGame(final Player player, final World world) {
         this.player = player;
-        this.view = new ViewImpl(player, world, this.input);
+        this.view = new ViewImpl(world, this.input);
         this.setGameWorld(world);
     }
 
@@ -35,23 +35,30 @@ public class GameEngine {
 
     public void GameLoop() {
         long previousFrameStartTime = System.currentTimeMillis();
+        long frames = 0;
+        long p = 0;
         while (!this.currentWorld.isGameOver()) {
             final long currentFrameStartTime = System.currentTimeMillis();
             final long elapsed = currentFrameStartTime-previousFrameStartTime;
             processInput();
             update(elapsed);
             render();
-            this.waitForNextFrame(currentFrameStartTime);
-            previousFrameStartTime = currentFrameStartTime;
-        }
-    }
-
-    private void waitForNextFrame(long cycleStartTime) {
-        final long elapsed = System.currentTimeMillis() - cycleStartTime;
-        if (elapsed < this.period) {
+            
+            frames++;
+            p += elapsed;
             try {
-				Thread.sleep(period - elapsed);
-			} catch (Exception ex){}
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            previousFrameStartTime = currentFrameStartTime;
+            //System.out.println(elapsed);
+            if (p >= 1000) {
+                //System.out.println("FPS: " + frames);
+                frames = 0;
+                p = 0;
+            }
         }
     }
 

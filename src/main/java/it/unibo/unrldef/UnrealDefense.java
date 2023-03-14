@@ -18,7 +18,7 @@ import it.unibo.unrldef.model.impl.WorldImpl;
  * @author tommaso.ceredi@studio.unibo.it
  * @author tommaso.severi2@studio.unibo.it
  * @author francesco.buda3@studio.uniboit
- * @author danilo.maglia@pirla.gardena.it
+ * @author danilo.maglia@studio.unibo.it
  */
 public class UnrealDefense {
 

@@ -33,7 +33,7 @@ public class ViewImpl implements View{
         this.player = player;
         this.frame = new JFrame("Unreal Defense");
 		this.frame.setSize(1280,720);
-		this.frame.setMinimumSize(new Dimension(1280,720));
+		//this.frame.setMinimumSize(new Dimension(1280,720));
 		this.frame.setResizable(true);
 		// frame.setUndecorated(true); // Remove title bar
 		//TODO: resize handler with scale on GamePanel
