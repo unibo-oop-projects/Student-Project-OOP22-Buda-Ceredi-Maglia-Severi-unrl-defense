@@ -55,7 +55,6 @@ public abstract class DefenseEntity extends EntityImpl {
      * Reset elapsed time
      */
     public void resetElapsedTime() {
-        System.out.println("Resetting time");
         this.timeSinceLastAction = 0;
     }
 
@@ -77,10 +76,7 @@ public abstract class DefenseEntity extends EntityImpl {
      * checks if the entity can attack
      */
     public void checkAttack(){
-        System.out.println("AttackRate: " + this.attackRate);
         if (this.getTimeSinceLastAction() >= this.attackRate){
-            System.out.println("Attack!");
-            System.out.println();
             this.resetElapsedTime();
             this.attack();
             this.isAttacking = true;

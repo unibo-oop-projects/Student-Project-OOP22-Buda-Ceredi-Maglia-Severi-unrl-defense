@@ -12,7 +12,7 @@ public class PlayerInput implements Input{
     private Optional<String> selectedName;
 
     public PlayerInput() {
-        this.lastHit = null;
+        this.lastHit = Optional.empty();
         this.selectedName = Optional.empty();
     }
 
