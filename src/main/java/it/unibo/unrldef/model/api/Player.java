@@ -50,4 +50,9 @@ public interface Player {
      * @return a set of only the spells that have been activated
      */
     public Set<Spell> getActiveSpells();
+
+    /**
+     * @return a set of all the spells the player can use
+     */
+    public Set<Spell> getSpells();
 }

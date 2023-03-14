@@ -23,7 +23,7 @@ public class GameEngine {
 
     public void initGame(final Player player, final World world) {
         this.player = player;
-        this.view = new ViewImpl(world, this.input);
+        this.view = new ViewImpl(player, world, this.input);
         this.setGameWorld(world);
     }
 

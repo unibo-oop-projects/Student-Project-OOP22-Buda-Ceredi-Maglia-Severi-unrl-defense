@@ -12,10 +12,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import it.unibo.unrldef.graphics.api.View;
 import it.unibo.unrldef.input.api.Input;
-import it.unibo.unrldef.model.api.Entity;
+import it.unibo.unrldef.model.api.Player;
+import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.FireBall;
 import it.unibo.unrldef.model.impl.Arrows;
+import it.unibo.unrldef.model.impl.SpellImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,12 +25,12 @@ public class ViewImpl implements View{
 
     private final GamePanel gamePanel;
     private final JFrame frame;
-    private final World world;
+    private final Player player;
     private final JButton fireBall;
     private final JButton arrows;
 
-    public ViewImpl(World world, Input inputHandler){
-        this.world = world;
+    public ViewImpl(Player player, World world, Input inputHandler){
+        this.player = player;
         this.frame = new JFrame("Unreal Defense");
 		this.frame.setSize(1280,720);
 		this.frame.setMinimumSize(new Dimension(1280,720));
@@ -108,20 +110,23 @@ public class ViewImpl implements View{
 
     @Override
     public void render() {
-        this.gamePanel.repaint();
         this.updateButtons();
+        this.gamePanel.repaint();
     }
 
     private void updateButtons() {
-        for (Entity entity : world.getSceneEntities()) {
-            switch (entity.getName()) {
+        for (Spell spell : player.getSpells()) {
+            switch (spell.getName()) {
                 case FireBall.NAME:
-                    this.fireBall.setEnabled(((FireBall)entity).isReady());
+                    System.out.println(((SpellImpl)spell).isReady());
+                    this.fireBall.setEnabled(((SpellImpl)spell).isReady());
                     break;
                 case Arrows.NAME:
-                    this.arrows.setEnabled(((Arrows)entity).isReady());
+                    System.out.println(((SpellImpl)spell).isReady());
+                    this.arrows.setEnabled(((SpellImpl)spell).isReady());
                     break;
                 default:
+                    System.out.println(spell.getName());
                     break;
             }
         }
