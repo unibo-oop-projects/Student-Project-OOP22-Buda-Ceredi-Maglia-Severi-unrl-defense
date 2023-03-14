@@ -14,10 +14,10 @@ import it.unibo.unrldef.model.api.Tower;
 public class Hunter extends TowerImpl {
 
     final private static int COST = 80;
-    final private static long ATTACK_FOR_SECOND = 1000;
-    final private static int DAMAGE = 7;
+    final private static long ATTACK_FOR_SECOND = 10000;
+    final private static int DAMAGE = 1;
     final public static String NAME = "sdrogo hunter";
-    final private static double RADIOUS = 8;
+    final private static double RADIOUS = 1000;
     private Enemy target;
 
     public Hunter(final Position hunterPosition) {
@@ -32,15 +32,20 @@ public class Hunter extends TowerImpl {
     @Override
     protected void attack() {
         final List<Enemy> enemiesInRange = this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius());
-        if (!enemiesInRange.contains(this.target)) {
-            this.target = enemiesInRange.get(0);
-        }
+        //System.out.println("enemiesInRange: " + enemiesInRange);
         if (!enemiesInRange.isEmpty()) {
+            //System.out.println("C'È QUALCUNO");
+            if (!enemiesInRange.contains(this.target)) {
+              //  System.out.println("HO SETTATO IL TARGET, WUUUUUUUU");
+                this.target = enemiesInRange.get(0);
+            }
             this.target.reduceHealth(this.getDamage());
         }
     }
 
+    @Override
     public Optional<Enemy> getTarget() {
-        return this.isAttacking() ? Optional.of(this.target) : Optional.empty();
+       // System.out.println("target: " + this.target);
+        return this.isAttacking() ? Optional.ofNullable(this.target) : Optional.empty();
     }
 }

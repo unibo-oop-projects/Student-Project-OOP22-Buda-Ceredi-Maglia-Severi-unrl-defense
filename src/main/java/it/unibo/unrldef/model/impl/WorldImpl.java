@@ -99,14 +99,14 @@ public class WorldImpl implements World{
     @Override
     public Boolean tryBuildTower(Position pos, String towerName) {
         //if(this.availablePositions.contains(pos)) {
-            //this.availablePositions.remove(pos);
+          //  this.availablePositions.remove(pos);
             Tower newTower = this.availableTowers.get(towerName).copy();
             this.placedTowers.add(newTower);
             newTower.setParentWorld(this);
             newTower.setPosition(pos.getX(), pos.getY());
             return true;
         //}
-        return false;
+        //return false;
     }
 
     @Override
@@ -114,7 +114,7 @@ public class WorldImpl implements World{
         List<Entity> ret = new ArrayList<Entity>();
         ret.addAll(this.placedTowers);
         ret.addAll(this.livingEnemies);
-        ret.addAll(this.player.getSpells());
+        ret.addAll(((PlayerImpl) this.player).getActiveSpells());
         return ret;
     }
 

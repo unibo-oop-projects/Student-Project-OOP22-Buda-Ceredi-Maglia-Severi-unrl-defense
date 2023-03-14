@@ -30,6 +30,7 @@ import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.Orc;
+import it.unibo.unrldef.model.impl.TowerImpl;
 import it.unibo.unrldef.model.impl.Arrows;
 import it.unibo.unrldef.model.impl.FireBall;
 import it.unibo.unrldef.model.impl.Goblin;
@@ -158,20 +159,17 @@ public class GamePanel extends JPanel {
         for (Entity entity : gameWorld.getSceneEntities()) {
             renderEntity(graphic, entity);
         }
-
-        
         
         if(viewState == ViewState.TOWER_SELECTED) {
             // TODO: get available positions from world and render them as rectangles
             Set<Position> availablePosition = this.gameWorld.getAvailablePositions();
             graphic.setColor(java.awt.Color.GREEN);
             for (Position p: availablePosition) {
-                graphic.drawRect((int)p.getX(), (int)p.getY(), 50, 50);
-                graphic.fillRect((int)p.getX(), (int)p.getY(), 50, 50);
+                graphic.drawRect((int)p.getX(), (int)p.getY(), 1, 1);
+                graphic.fillRect((int)p.getX(), (int)p.getY(), 1, 1);
             }
             graphic.setColor(java.awt.Color.BLACK);
         }
-
     }
 
     private void renderEntity(Graphics2D graphic, Entity entity) {
@@ -187,27 +185,34 @@ public class GamePanel extends JPanel {
     
     private void renderTower(Graphics2D graphic, Entity tower) {
         Image towerAsset = null;
-        Enemy target = ((Hunter)tower).getTarget().get();
+        Optional<Enemy> target = ((Tower)tower).getTarget();
+       // System.out.println("ĀAAAAAAAAAAA: " + tower);
+       // System.out.println("Tower has target: " + target);
         switch(tower.getName()) {
             case Cannon.NAME:
-                if (target != null) {
+               // System.out.println("Cannon has target: " + target);
+                if (target.isPresent()) {
+                 //   System.out.println("VIEW Cannon has target: " + target);
                     towerAsset = shootingCannon;
-                    // center of the tower
-                    Point2D.Double towerCenter = new Point2D.Double(tower.getPosition().get().getX() + 25, tower.getPosition().get().getY() + 25);
-                    // center of the target
-                    Point2D.Double targetCenter = new Point2D.Double(target.getPosition().get().getX() + 20, target.getPosition().get().getY() + 20);
                     // render
                     graphic.setColor(Color.RED);
-                    graphic.setStroke(new BasicStroke(3));
-                    graphic.drawLine((int)towerCenter.getX(), (int)towerCenter.getY(), (int)targetCenter.getX(), (int)targetCenter.getY());
+                    graphic.setStroke(new BasicStroke(20));
+                    System.out.println("Drawing line from " + tower.getPosition().get() + " to " + target.get().getPosition().get());
+                    graphic.drawLine((int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), (int)target.get().getPosition().get().getX(), (int)target.get().getPosition().get().getY());
                 } else {
                     towerAsset = cannonImage;
                 }
                 break;
             case Hunter.NAME:
-                towerAsset = hunterImage;
+          //  System.out.println("Hunter has target: " + target);
+                if (target.isPresent()) {
+                    towerAsset = shootingHunter;
+                } else {
+                    towerAsset = hunterImage;
+                }
                 break;
             default:
+                System.out.println("Drawing default");
                 break;
         }
         graphic.drawImage(towerAsset, (int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), 50, 50, null);

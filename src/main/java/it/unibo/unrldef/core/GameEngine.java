@@ -34,13 +34,30 @@ public class GameEngine {
 
     public void GameLoop() {
         long previousFrameStartTime = System.currentTimeMillis();
+        long frames = 0;
+        long p = 0;
         while (!this.currentWorld.isGameOver()) {
             final long currentFrameStartTime = System.currentTimeMillis();
             final long elapsed = currentFrameStartTime-previousFrameStartTime;
             processInput();
             update(elapsed);
             render();
+            
+            frames++;
+            p += elapsed;
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             previousFrameStartTime = currentFrameStartTime;
+            //System.out.println(elapsed);
+            if (p >= 1000) {
+                //System.out.println("FPS: " + frames);
+                frames = 0;
+                p = 0;
+            }
         }
     }
 
