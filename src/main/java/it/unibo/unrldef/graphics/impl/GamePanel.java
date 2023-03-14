@@ -175,7 +175,6 @@ public class GamePanel extends JPanel {
         if (entity instanceof Enemy) {
             renderEnemy(graphic, entity);
         } else if (entity instanceof Spell) {
-            
             this.renderSpell(graphic, entity);
         } else if (entity instanceof Tower) {
             this.renderTower(graphic, entity);
@@ -231,6 +230,7 @@ public class GamePanel extends JPanel {
 
     private void renderSpell(final Graphics2D graphic, final Entity spell) {
         Image asset = null;
+        System.out.println(spell.getName() + "is dealing damage");
         switch (spell.getName()) {
             case FireBall.NAME:
                 asset = this.fireballFalling;
