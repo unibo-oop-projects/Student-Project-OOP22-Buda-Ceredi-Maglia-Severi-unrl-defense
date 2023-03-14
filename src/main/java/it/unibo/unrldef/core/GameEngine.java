@@ -11,11 +11,11 @@ import it.unibo.unrldef.model.api.*;
 
 public class GameEngine {
 
+    private final long period = 30;
     private Player player;
     private World currentWorld;
     private final Input input;
-    private View view; 
-
+    private View view;
 
     public GameEngine() {
         this.input = new PlayerInput();
@@ -40,7 +40,17 @@ public class GameEngine {
             processInput();
             update(elapsed);
             render();
+            this.waitForNextFrame(currentFrameStartTime);
             previousFrameStartTime = currentFrameStartTime;
+        }
+    }
+
+    private void waitForNextFrame(long cycleStartTime) {
+        final long elapsed = System.currentTimeMillis() - cycleStartTime;
+        if (elapsed < this.period) {
+            try {
+				Thread.sleep(period - elapsed);
+			} catch (Exception ex){}
         }
     }
 
