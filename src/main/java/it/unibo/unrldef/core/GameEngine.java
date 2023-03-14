@@ -45,6 +45,8 @@ public class GameEngine {
             this.waitForNextFrame(currentFrameStartTime);
             previousFrameStartTime = currentFrameStartTime;
         }
+        System.out.println("Hai vinto :)");
+        System.exit(0);
     }
 
     private void waitForNextFrame(long cycleStartTime) {
