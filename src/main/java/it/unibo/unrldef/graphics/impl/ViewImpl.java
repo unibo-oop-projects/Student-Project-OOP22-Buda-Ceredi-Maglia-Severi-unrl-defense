@@ -6,7 +6,6 @@ import javax.swing.JPanel;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -71,7 +70,6 @@ public class ViewImpl implements View{
             public void actionPerformed(ActionEvent e) {
 				gamePanel.setState(GamePanel.ViewState.SPELL_SELECTED);
 				gamePanel.setSelectedEntity("fireball");
-				System.out.println("fireball");
                 
             }
             
@@ -85,7 +83,6 @@ public class ViewImpl implements View{
             public void actionPerformed(ActionEvent e) {
 				gamePanel.setState(GamePanel.ViewState.SPELL_SELECTED);
 				gamePanel.setSelectedEntity("arrows");
-				
             }
             
         });

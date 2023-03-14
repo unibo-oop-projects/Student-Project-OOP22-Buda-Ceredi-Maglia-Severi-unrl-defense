@@ -10,10 +10,10 @@ public class Arrows extends SpellImpl {
     
     public static final String NAME = "arrows";
     private static final long ATTACK_RATE = 5 * 100;
-    private static final double DMG = 15.0;
-    private static final double RAD = 20.0;
+    private static final double DMG = 2.0;
+    private static final double RAD = 200.0;
     private static final long WAIT_TIME = 5 * 1000;
-    private static final int LINGERING_DAMAGE = 2;
+    private static final int LINGERING_DAMAGE = 4;
 
     /**
      * Creates a new spell of type fireball

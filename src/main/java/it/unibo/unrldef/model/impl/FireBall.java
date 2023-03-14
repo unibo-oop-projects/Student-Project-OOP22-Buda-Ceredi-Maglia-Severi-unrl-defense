@@ -10,8 +10,8 @@ public class FireBall extends SpellImpl {
 
     public static final String NAME = "fireball";
     private static final long ATTACK_RATE = 1 * 1000;
-    private static final double DMG = 30.0;
-    private static final double RAD = 10.0;
+    private static final double DMG = 3.0;
+    private static final double RAD = 100.0;
     private static final long WAIT_TIME = 8 * 1000;
     private static final int LINGERING_DAMAGE = 5;
 

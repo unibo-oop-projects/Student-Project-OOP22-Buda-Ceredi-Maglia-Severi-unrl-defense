@@ -14,11 +14,9 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import java.awt.Dimension;
-import java.awt.geom.Point2D;
 import java.awt.Color;
 import java.awt.BasicStroke;
 
-import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Enemy;
@@ -27,7 +25,6 @@ import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.Orc;
-import it.unibo.unrldef.model.impl.TowerImpl;
 import it.unibo.unrldef.model.impl.Arrows;
 import it.unibo.unrldef.model.impl.FireBall;
 import it.unibo.unrldef.model.impl.Goblin;
@@ -44,7 +41,7 @@ public class GamePanel extends JPanel {
     
     private Image orcImage;
     private Image goblinImage;
-    private Image fireballFalling;
+    //private Image fireballFalling;
     private Image fireballOnGround;
     private Image arrowsImage;
     private Image map;
@@ -70,7 +67,7 @@ public class GamePanel extends JPanel {
         this.viewState = ViewState.IDLE;
         //TODO: load assets
         try {
-            this.fireballFalling = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
+            // this.fireballFalling = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
             this.fireballOnGround = ImageIO.read(new File("assets"+File.separator+"fireball_ground.png"));
             this.arrowsImage = ImageIO.read(new File("assets"+File.separator+"arrows.png"));
             this.orcImage = ImageIO.read(new File("assets"+File.separator+"orc.png"));
@@ -230,10 +227,13 @@ public class GamePanel extends JPanel {
 
     private void renderSpell(final Graphics2D graphic, final Entity spell) {
         Image asset = null;
-        System.out.println(spell.getName() + "is dealing damage");
+        final int h = 40;
+        final int w = 40;
+        final int x = (int)spell.getPosition().get().getX();
+        final int y = (int)spell.getPosition().get().getY();
         switch (spell.getName()) {
             case FireBall.NAME:
-                asset = this.fireballFalling;
+                asset = this.fireballOnGround;
                 break;
             case Arrows.NAME:
                 asset = this.arrowsImage;
@@ -241,7 +241,9 @@ public class GamePanel extends JPanel {
             default:
                 break;
         }
-        graphic.drawImage(asset, (int)spell.getPosition().get().getX(), (int)spell.getPosition().get().getY(), 40, 40,  null);
+        final int imageX = x-h/2;
+        final int imageY = y-w/2;
+        graphic.drawImage(asset, imageX, imageY, h, w,  null);
     }
 
     private void renderMap(final Graphics2D graphic) {
