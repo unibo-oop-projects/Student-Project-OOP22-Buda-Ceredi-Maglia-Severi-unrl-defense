@@ -8,7 +8,7 @@ import it.unibo.unrldef.input.api.Input;
 
 public class PlayerInput implements Input{
 
-    private Pair<Position, HitType> lastHit;
+    private Optional<Pair<Position, HitType>> lastHit;
     private Optional<String> selectedName;
 
     public PlayerInput() {
@@ -18,17 +18,21 @@ public class PlayerInput implements Input{
 
     @Override
     public void setLastHit(final int x, final int y, final HitType hit, final Optional<String> selected) {
-        this.lastHit = new Pair<Position,Input.HitType>(new Position(x, y), hit);
+        this.lastHit = Optional.of(new Pair<Position,Input.HitType>(new Position(x, y), hit));
         this.selectedName = selected;
     }
 
     @Override
-    public Pair<Position, Input.HitType> getLastHit() {
-        return this.lastHit;
+    public Optional<Pair<Position, Input.HitType>> getLastHit() {
+        final Optional<Pair<Position, HitType>> returnHit = this.lastHit;
+        this.lastHit = Optional.empty();
+        return returnHit;
     }
 
     @Override
     public Optional<String> getSelectedName() {
-        return this.selectedName;
+        final Optional<String> returnName = this.selectedName;
+        this.selectedName = Optional.empty();
+        return returnName;
     }
 }

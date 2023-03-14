@@ -2,6 +2,7 @@ package it.unibo.unrldef.core;
 
 import java.util.Optional;
 
+import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.graphics.api.View;
 import it.unibo.unrldef.graphics.impl.ViewImpl;
@@ -55,10 +56,11 @@ public class GameEngine {
     }
 
     private void processInput() {
-        if (input.getLastHit() != null) {
-            final Position selectedPosition = this.input.getLastHit().getFirst();
+        Optional<Pair<Position, Input.HitType>> lastHit = input.getLastHit();
+        if (lastHit.isPresent()) {
+            final Position selectedPosition = lastHit.get().getFirst();
             final Optional<String> selectedName = this.input.getSelectedName();
-            switch(this.input.getLastHit().getSecond()) {
+            switch(lastHit.get().getSecond()) {
                 case PLACE_TOWER:
                     this.player.buildNewTower(selectedPosition, selectedName.get());
                     break;

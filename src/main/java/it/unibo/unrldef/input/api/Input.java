@@ -13,7 +13,7 @@ public interface Input {
 
     public void setLastHit(int x, int y, HitType hit, Optional<String> selected);
 
-    public Pair<Position, Input.HitType> getLastHit();
+    public Optional<Pair<Position, Input.HitType>> getLastHit();
 
     public Optional<String> getSelectedName();
 }
