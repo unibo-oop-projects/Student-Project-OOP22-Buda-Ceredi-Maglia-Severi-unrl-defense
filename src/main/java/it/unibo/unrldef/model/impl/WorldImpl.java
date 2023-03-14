@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-
+import java.util.function.Function;
 
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
@@ -88,6 +88,52 @@ public class WorldImpl implements World{
                 this.waves.get(this.waveCounter).isWaveOver());
     }
 
+
+    private double distanceFromSpawn(Position pos) {
+        Position pathCur = this.path.getSpawningPoint();
+        Pair<Direction, Double> curSeg;
+        double distance = 0;
+        int i = 0;
+        boolean fownd = false;
+        boolean end = false;
+        boolean distanceIsCompatible;
+        while(!fownd && !end) {
+            curSeg = this.path.getDirection(i);
+            distanceIsCompatible = this.distance(pathCur, pos) <= curSeg.getSecond();
+            if (curSeg.getFirst() == Direction.UP) {
+                if (Double.valueOf(pathCur.getX()).equals(pos.getX()) && distanceIsCompatible && pos.getY() < pathCur.getY()) {
+                    fownd = true;
+                }
+                pathCur.setY(pathCur.getY() - curSeg.getSecond());
+            } else if (curSeg.getFirst() == Direction.DOWN) {
+                if (Double.valueOf(pathCur.getX()).equals(pos.getX()) && distanceIsCompatible && pos.getY() > pathCur.getY()) {
+                    fownd = true;
+                }
+                pathCur.setY(pathCur.getY() + curSeg.getSecond());
+            } else if (curSeg.getFirst() == Direction.LEFT) {
+                if (Double.valueOf(pathCur.getY()).equals(pos.getY()) && distanceIsCompatible && pos.getX() < pathCur.getX()) {
+                    fownd = true;
+                }
+                pathCur.setX(pathCur.getX() - curSeg.getSecond());
+            } else if (curSeg.getFirst() == Direction.RIGHT){
+                if (Double.valueOf(pathCur.getY()).equals(pos.getY()) && distanceIsCompatible && pos.getX() > pathCur.getX()) {
+                    fownd = true;
+                }
+                pathCur.setX(pathCur.getX() + curSeg.getSecond());
+            } else {
+                end = true;
+            }
+            if (!end) {
+                distance+=curSeg.getSecond();
+                i++;
+                if (fownd) {
+                    distance-=this.distance(pathCur, pos);
+                }
+            }
+        }
+        return distance;
+    }
+
     private void addToQueue(List<Enemy> Enemies) {
         this.spawningQueue.addAll(Enemies);
     }
@@ -141,7 +187,18 @@ public class WorldImpl implements World{
 
 	@Override
 	public List<Enemy> sorroundingEnemies(Position center, double radius) {
-		return this.livingEnemies.stream().filter(x -> (distance(center, x.getPosition().get()) <= radius )).toList();
+		List<Enemy> ret = this.livingEnemies.stream().filter(x -> (distance(center, x.getPosition().get()) <= radius )).toList();
+        ret.sort((a,b) -> {
+            double distanceDifference = this.distanceFromSpawn(a.getPosition().get()) - this.distanceFromSpawn(b.getPosition().get());
+            if(distanceDifference < 0) {
+                return -1;
+            } else if (distanceDifference > 0) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+        return ret;
 	}  
     
     private double distance(Position a, Position b ) {
