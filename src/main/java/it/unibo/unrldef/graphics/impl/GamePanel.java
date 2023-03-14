@@ -185,13 +185,9 @@ public class GamePanel extends JPanel {
     private void renderTower(Graphics2D graphic, Entity tower) {
         Image towerAsset = null;
         Optional<Enemy> target = ((Tower)tower).getTarget();
-       // System.out.println("ĀAAAAAAAAAAA: " + tower);
-       // System.out.println("Tower has target: " + target);
         switch(tower.getName()) {
             case Cannon.NAME:
-               // System.out.println("Cannon has target: " + target);
                 if (target.isPresent()) {
-                 //   System.out.println("VIEW Cannon has target: " + target);
                     towerAsset = shootingCannon;
                     // render
                     graphic.setColor(Color.RED);
@@ -203,7 +199,6 @@ public class GamePanel extends JPanel {
                 }
                 break;
             case Hunter.NAME:
-          //  System.out.println("Hunter has target: " + target);
                 if (target.isPresent()) {
                     towerAsset = shootingHunter;
                 } else {

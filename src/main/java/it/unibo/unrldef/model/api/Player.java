@@ -1,5 +1,7 @@
 package it.unibo.unrldef.model.api;
 
+import java.util.Set;
+
 import it.unibo.unrldef.common.Position;
 
 /**
@@ -43,4 +45,9 @@ public interface Player {
      * @param elapsed time passed since last frame
      */
     public void updateSpellState(final long elapsed);
+
+    /**
+     * @return a set containing all the spells that the player can use
+     */
+    public Set<Spell> getSpells();
 }
