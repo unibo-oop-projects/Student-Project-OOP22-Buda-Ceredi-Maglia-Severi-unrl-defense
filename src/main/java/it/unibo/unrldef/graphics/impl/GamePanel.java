@@ -4,18 +4,20 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
-import java.awt.BorderLayout;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.BasicStroke;
+import java.awt.Toolkit;
 
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
@@ -56,14 +58,8 @@ public class GamePanel extends JPanel {
         SPELL_SELECTED
     }
 
-    @Override
-    public Dimension getPreferredSize() {
-        // TODO Auto-generated method stub
-        return new Dimension(600, 600);
-    }
-
     public GamePanel(World gameWorld, Input inputHandler) {
-        super(new BorderLayout());
+        super(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
         this.viewState = ViewState.IDLE;
         //TODO: load assets
         try {
@@ -81,6 +77,17 @@ public class GamePanel extends JPanel {
             e.printStackTrace();
         }
         this.gameWorld = gameWorld;
+
+        this.add(new JLabel(new ImageIcon(map)));
+        int imageWidth = map.getWidth(null);
+        int imageHeight = map.getHeight(null);
+        this.setPreferredSize(new Dimension(imageWidth, imageHeight));
+        this.setMinimumSize(new Dimension(imageWidth / 2, imageHeight / 2));
+        int maxWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+        int maxHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+        int maxImageWidth = (int) (maxWidth * 0.8);
+        int maxImageHeight = (int) (maxHeight * 0.8);
+        this.setMaximumSize(new Dimension(maxImageWidth, maxImageHeight));
         
         this.addMouseListener(new MouseInputListener() {
 
