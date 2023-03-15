@@ -17,7 +17,7 @@ import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.FireBall;
 import it.unibo.unrldef.model.impl.Hunter;
-import it.unibo.unrldef.model.impl.Arrows;
+import it.unibo.unrldef.model.impl.IceSpell;
 import it.unibo.unrldef.model.impl.Cannon;
 import it.unibo.unrldef.model.impl.SpellImpl;
 import java.io.File;
@@ -31,7 +31,7 @@ public class ViewImpl implements View{
     private final JFrame frame;
     private final Player player;
     private PlaceDefenseButton fireBall;
-    private PlaceDefenseButton arrows;
+    private PlaceDefenseButton iceSpell;
     private double xScale = 1;
     private double yScale = 1;
     private final int DEFAULT_WIDTH = 800;
@@ -81,25 +81,25 @@ public class ViewImpl implements View{
         PlaceDefenseButton cannon = null;
         PlaceDefenseButton hunter = null;
         this.fireBall = null;
-        this.arrows = null;
+        this.iceSpell = null;
 
         try {
             cannon = new PlaceDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Cannon.NAME, gamePanel, new ImageIcon(ImageIO.read(new File("assets"+File.separator+"cannonIcon.png"))));
             hunter = new PlaceDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Hunter.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"hunterIcon.png"))));
             this.fireBall = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, FireBall.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"fireball.png"))));
-            this.arrows = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, Arrows.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"arrows.png"))));
+            this.iceSpell = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, IceSpell.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"arrows.png"))));
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        fireBall.setEnabled(false);
-        arrows.setEnabled(false);
+        this.fireBall.setEnabled(false);
+        this.iceSpell.setEnabled(false);
 
 		buttonPanel.add(cannon);
 		buttonPanel.add(hunter);
-		buttonPanel.add(fireBall);
-		buttonPanel.add(iceSpell);
+		buttonPanel.add(this.fireBall);
+		buttonPanel.add(this.iceSpell);
 		this.frame.getContentPane().add(mapPanel);
 		this.frame.getContentPane().add(buttonPanel, BorderLayout.EAST);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
