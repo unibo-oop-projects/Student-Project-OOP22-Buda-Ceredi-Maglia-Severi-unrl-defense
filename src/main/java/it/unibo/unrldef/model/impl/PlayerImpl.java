@@ -52,10 +52,10 @@ public class PlayerImpl implements Player{
 
     @Override
     public void throwSpell(final String name, final Position pos) {
-        final Spell selected = this.spells.stream()
+        this.spells.stream()
                 .filter(p -> Objects.equals(p.getName(), name))
-                .findFirst().get();
-        selected.tryActivation(pos);
+                .findFirst().get()
+                .ifPossibleActivate(pos);
     }
 
     @Override

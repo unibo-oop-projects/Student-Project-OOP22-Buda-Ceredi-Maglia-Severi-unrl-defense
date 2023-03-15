@@ -11,12 +11,10 @@ import it.unibo.unrldef.model.api.World;
  * Implememntation of a generic spell in a tower defense game
  * @author tommaso.severi2@studio.unibo.it
  */
-public class SpellImpl extends DefenseEntity implements Spell {
+public abstract class SpellImpl extends DefenseEntity implements Spell {
 
-    private final double waitTime;
     private boolean active;
-    private final int lingeringDamage;
-    private int damageDealt;
+    private final long lingeringEffect;
 
     /**
      * Creates a new spell 
@@ -24,20 +22,19 @@ public class SpellImpl extends DefenseEntity implements Spell {
      * @param lingeringDamage the number of times the spell deals its damage before fading away
      */
     public SpellImpl(final String name, final World parentWorld, final double radius,
-            final double damage, final long attackRate, final long waitTime, final int lingeringDamage) {
+            final double damage, final long attackRate, final long lingeringEffect) {
         super(Optional.empty(), name, radius, damage, attackRate);
-        this.waitTime = waitTime;
-        this.active = false;
-        this.lingeringDamage = lingeringDamage;
-        this.damageDealt = 0;
         this.setParentWorld(parentWorld);
+        this.lingeringEffect = lingeringEffect;
+        this.active = false;
     }
 
     @Override
-    public boolean tryActivation(final Position position) {
+    public boolean ifPossibleActivate(final Position position) {
         if (!this.isActive() && this.isReady()) {
             this.active = true;
             super.setPosition(position.getX(), position.getY());
+            this.checkAttack();
             return true;
         }
         return false;
@@ -50,21 +47,15 @@ public class SpellImpl extends DefenseEntity implements Spell {
 
     @Override
     protected void attack() {
-        if (this.damageDealt < this.lingeringDamage) {
-            for (final Enemy e : this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius())) {
-                e.reduceHealth(this.getDamage());
-            }
-            this.damageDealt++;
-        } else {
-            this.deactivate();
-        }
+        this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius())
+                .forEach(e -> e.reduceHealth(this.getDamage()));
     }
 
     @Override
     public void updateState(final long time) {
         this.incrementTime(time);
         if (this.isActive()) {
-            this.checkAttack();
+            this.ifPossibleApplyEffect();
         }
     }
 
@@ -72,7 +63,7 @@ public class SpellImpl extends DefenseEntity implements Spell {
      * @return true if the spell is ready to be used, false otherwise
      */
     public boolean isReady() {
-        return this.getTimeSinceLastAction() >= this.waitTime && !this.isActive();
+        return this.getTimeSinceLastAction() >= this.getAttackRate() && !this.isActive();
     }
 
     /**
@@ -80,6 +71,23 @@ public class SpellImpl extends DefenseEntity implements Spell {
      */
     private void deactivate() {
         this.active = false;
-        this.damageDealt = 0;
+        this.resetElapsedTime();
     }
+
+    /**
+     * Applies the affect of the spell to the enemies in range if possible
+     */
+    private void ifPossibleApplyEffect() {
+        if (this.getTimeSinceLastAction() <= this.lingeringEffect) {
+            this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius())
+                .forEach(e -> this.effect(e));
+        } else {
+            this.deactivate();
+        }
+    }
+
+    /**
+     * The effect of the spell while lingering
+     */
+    protected abstract void effect(final Enemy enemy);
 }
