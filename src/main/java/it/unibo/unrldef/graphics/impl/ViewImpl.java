@@ -87,7 +87,7 @@ public class ViewImpl implements View{
             cannon = new PlaceDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Cannon.NAME, gamePanel, new ImageIcon(ImageIO.read(new File("assets"+File.separator+"cannonIcon.png"))));
             hunter = new PlaceDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Hunter.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"hunterIcon.png"))));
             this.fireBall = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, FireBall.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"fireball.png"))));
-            this.iceSpell = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, IceSpell.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"arrows.png"))));
+            this.iceSpell = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, IceSpell.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"ice-spell.png"))));
 
         } catch (IOException e) {
             e.printStackTrace();
