@@ -17,7 +17,6 @@ import javax.swing.event.MouseInputListener;
 import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.BasicStroke;
-import java.awt.Toolkit;
 
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
