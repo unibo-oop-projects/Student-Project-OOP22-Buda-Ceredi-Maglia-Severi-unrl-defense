@@ -51,10 +51,10 @@ public class GamePanel extends JPanel {
     private Image hunterImage;
     private Image shootingCannon;
     private Image shootingHunter;
-    private Image ballEsplosion;
-
-    private long hunterAttack = 0;
-    private long cannonAttack = 0;
+    private double xScale = 1;
+    private double yScale = 1;
+    private final int DEFAULT_WIDTH = 600;
+    private final int DEFAULT_HEIGHT = 600;
 
     public enum ViewState {
         IDLE,
@@ -72,7 +72,7 @@ public class GamePanel extends JPanel {
             this.arrowsImage = ImageIO.read(new File("assets"+File.separator+"arrows.png"));
             this.orcImage = ImageIO.read(new File("assets"+File.separator+"orc.png"));
             this.goblinImage = ImageIO.read(new File("assets"+File.separator+"goblin.png"));
-            this.map = ImageIO.read(new File("assets"+File.separator+"debugMap.png"));
+            this.map = ImageIO.read(new File("assets"+File.separator+"debugMap.png")).getScaledInstance(DEFAULT_WIDTH, DEFAULT_HEIGHT, java.awt.Image.SCALE_SMOOTH);
             this.hunterImage = ImageIO.read(new File("assets"+File.separator+"Hunter.png"));
             this.cannonImage = ImageIO.read(new File("assets"+File.separator+"Cannon.png"));
             this.shootingCannon = ImageIO.read(new File("assets"+File.separator+"shootingCannon.png"));
@@ -84,15 +84,8 @@ public class GamePanel extends JPanel {
         this.gameWorld = gameWorld;
 
         this.add(new JLabel(new ImageIcon(map)));
-        int imageWidth = map.getWidth(null);
-        int imageHeight = map.getHeight(null);
-        this.setPreferredSize(new Dimension(imageWidth, imageHeight));
-        this.setMinimumSize(new Dimension(imageWidth / 2, imageHeight / 2));
-        int maxWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-        int maxHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-        int maxImageWidth = (int) (maxWidth * 0.8);
-        int maxImageHeight = (int) (maxHeight * 0.8);
-        this.setMaximumSize(new Dimension(maxImageWidth, maxImageHeight));
+        this.setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        this.setMinimumSize(new Dimension(DEFAULT_WIDTH,DEFAULT_HEIGHT));
         
         this.addMouseListener(new MouseInputListener() {
 
@@ -153,6 +146,12 @@ public class GamePanel extends JPanel {
 
     public void setSelectedEntity(String entity) {
         this.selectedEntity = entity;
+    }
+
+    public void setScale(double xScale, double yScale) {
+        this.xScale = xScale;
+        this.yScale = yScale;
+        this.setPreferredSize(new Dimension(DEFAULT_WIDTH*(int)xScale,(int)DEFAULT_HEIGHT*(int)yScale));
     }
 
     @Override
@@ -219,7 +218,9 @@ public class GamePanel extends JPanel {
                 System.out.println("Drawing default");
                 break;
         }
-        graphic.drawImage(towerAsset, (int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), 100, 100, null);
+        int width = (int) Math.round(100 * xScale);
+        int height = (int) Math.round(100 * yScale);
+        graphic.drawImage(towerAsset, (int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), width, height, null);
     }
 
     private void renderEnemy(Graphics2D graphic, Entity enemy) {
@@ -235,8 +236,11 @@ public class GamePanel extends JPanel {
             default:
                 break;
         }
-
-        graphic.drawImage(asset, (int)enemy.getPosition().get().getX(), (int)enemy.getPosition().get().getY(), 40, 40, null);
+        int width = (int) Math.round(40 * xScale);
+        int height = (int) Math.round(40 * yScale);
+        int x = (int)Math.round(enemy.getPosition().get().getX() * xScale );
+        int y = (int)Math.round(enemy.getPosition().get().getY() * yScale );
+        graphic.drawImage(asset, x, y, width, height, null);
     }
 
     private void renderSpell(final Graphics2D graphic, final Entity spell) {
@@ -257,7 +261,9 @@ public class GamePanel extends JPanel {
         }
         final int imageX = x-h/2;
         final int imageY = y-w/2;
-        graphic.drawImage(asset, imageX, imageY, h, w,  null);
+        int width = (int) Math.round(h * xScale);
+        int height = (int) Math.round(w * yScale);
+        graphic.drawImage(asset, imageX, imageY, width, height,  null);
     }
 
     private void renderMap(final Graphics2D graphic) {
