@@ -27,7 +27,7 @@ import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.Orc;
-import it.unibo.unrldef.model.impl.Arrows;
+import it.unibo.unrldef.model.impl.IceSpell;
 import it.unibo.unrldef.model.impl.FireBall;
 import it.unibo.unrldef.model.impl.Goblin;
 import it.unibo.unrldef.model.impl.Cannon;
@@ -43,9 +43,8 @@ public class GamePanel extends JPanel {
     
     private Image orcImage;
     private Image goblinImage;
-    //private Image fireballFalling;
-    private Image fireballOnGround;
-    private Image arrowsImage;
+    private Image fireball;
+    private Image iceSpell;
     private Image map;
     private Image cannonImage;
     private Image hunterImage;
@@ -63,9 +62,8 @@ public class GamePanel extends JPanel {
         this.viewState = ViewState.IDLE;
         //TODO: load assets
         try {
-            // this.fireballFalling = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
-            this.fireballOnGround = ImageIO.read(new File("assets"+File.separator+"fireball_ground.png"));
-            this.arrowsImage = ImageIO.read(new File("assets"+File.separator+"arrows.png"));
+            this.fireball = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
+            this.iceSpell = ImageIO.read(new File("assets"+File.separator+"ice-spell.png"));
             this.orcImage = ImageIO.read(new File("assets"+File.separator+"orc.png"));
             this.goblinImage = ImageIO.read(new File("assets"+File.separator+"goblin.png"));
             this.map = ImageIO.read(new File("assets"+File.separator+"debugMap.png"));
@@ -195,7 +193,6 @@ public class GamePanel extends JPanel {
                     // render
                     graphic.setColor(Color.RED);
                     graphic.setStroke(new BasicStroke(20));
-                    System.out.println("Drawing line from " + tower.getPosition().get() + " to " + target.get().getPosition().get());
                     graphic.drawLine((int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), (int)target.get().getPosition().get().getX(), (int)target.get().getPosition().get().getY());
                 } else {
                     towerAsset = cannonImage;
@@ -209,7 +206,6 @@ public class GamePanel extends JPanel {
                 }
                 break;
             default:
-                System.out.println("Drawing default");
                 break;
         }
         graphic.drawImage(towerAsset, (int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), 100, 100, null);
@@ -240,10 +236,10 @@ public class GamePanel extends JPanel {
         final int y = (int)spell.getPosition().get().getY();
         switch (spell.getName()) {
             case FireBall.NAME:
-                asset = this.fireballOnGround;
+                asset = this.fireball;
                 break;
-            case Arrows.NAME:
-                asset = this.arrowsImage;
+            case IceSpell.NAME:
+                asset = this.iceSpell;
                 break;
             default:
                 break;

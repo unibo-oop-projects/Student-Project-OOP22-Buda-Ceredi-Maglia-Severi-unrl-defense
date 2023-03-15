@@ -13,7 +13,7 @@ public class FireBall extends SpellImpl {
     private static final double DMG = 3.0;
     private static final double RAD = 100.0;
     private static final long WAIT_TIME = 8 * 1000;
-    private static final int LINGERING_DAMAGE = 5;
+    private static final int LINGERING_DAMAGE = 3;
 
     /**
      * Creates a new spell of type fireball

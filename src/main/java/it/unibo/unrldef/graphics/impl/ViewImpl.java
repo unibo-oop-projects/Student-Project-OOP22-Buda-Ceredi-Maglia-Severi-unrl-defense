@@ -14,7 +14,7 @@ import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.FireBall;
-import it.unibo.unrldef.model.impl.Arrows;
+import it.unibo.unrldef.model.impl.IceSpell;
 import it.unibo.unrldef.model.impl.SpellImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,7 +25,7 @@ public class ViewImpl implements View{
     private final JFrame frame;
     private final Player player;
     private final JButton fireBall;
-    private final JButton arrows;
+    private final JButton iceSpell;
 
     public ViewImpl(Player player, World world, Input inputHandler){
         this.player = player;
@@ -74,14 +74,14 @@ public class ViewImpl implements View{
             
         });
 
-        this.arrows = new JButton("ARROWS");
-        this.arrows.setEnabled(false);
-        this.arrows.addActionListener(new ActionListener(){
+        this.iceSpell = new JButton("ICE SPELL");
+        this.iceSpell.setEnabled(false);
+        this.iceSpell.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent e) {
 				gamePanel.setState(GamePanel.ViewState.SPELL_SELECTED);
-				gamePanel.setSelectedEntity("arrows");
+				gamePanel.setSelectedEntity("ice-spell");
             }
             
         });
@@ -89,7 +89,7 @@ public class ViewImpl implements View{
 		buttonPanel.add(cannon);
 		buttonPanel.add(hunter);
 		buttonPanel.add(fireBall);
-		buttonPanel.add(arrows);
+		buttonPanel.add(iceSpell);
 		this.frame.getContentPane().add(mapPanel);
 		this.frame.getContentPane().add(buttonPanel, BorderLayout.EAST);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -113,8 +113,8 @@ public class ViewImpl implements View{
                 case FireBall.NAME:
                     this.fireBall.setEnabled(((SpellImpl)spell).isReady());
                     break;
-                case Arrows.NAME:
-                    this.arrows.setEnabled(((SpellImpl)spell).isReady());
+                case IceSpell.NAME:
+                    this.iceSpell.setEnabled(((SpellImpl)spell).isReady());
                     break;
                 default:
                     break;
