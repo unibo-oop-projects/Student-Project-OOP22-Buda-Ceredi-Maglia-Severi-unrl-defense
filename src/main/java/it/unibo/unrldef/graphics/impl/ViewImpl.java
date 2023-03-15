@@ -3,10 +3,9 @@ package it.unibo.unrldef.graphics.impl;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.BorderLayout;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import it.unibo.unrldef.graphics.api.View;
@@ -31,12 +30,12 @@ public class ViewImpl implements View{
     public ViewImpl(Player player, World world, Input inputHandler){
         this.player = player;
         this.frame = new JFrame("Unreal Defense");
-		this.frame.setSize(1280,720);
-		//this.frame.setMinimumSize(new Dimension(1280,720));
-		this.frame.setResizable(true);
-		// frame.setUndecorated(true); // Remove title bar
 		//TODO: resize handler with scale on GamePanel
 		this.gamePanel = new GamePanel(world, inputHandler);
+        final Box mapPanel = Box.createVerticalBox();
+        mapPanel.add(Box.createVerticalGlue());
+        mapPanel.add(this.gamePanel);
+        mapPanel.add(Box.createVerticalGlue());
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         JButton cannon = new JButton("CANNON");
@@ -63,8 +62,8 @@ public class ViewImpl implements View{
         });
 
         this.fireBall = new JButton("FIREBALL");
-        fireBall.setEnabled(false);
-        fireBall.addActionListener(new ActionListener(){
+        this.fireBall.setEnabled(false);
+        this.fireBall.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -76,8 +75,8 @@ public class ViewImpl implements View{
         });
 
         this.arrows = new JButton("ARROWS");
-        arrows.setEnabled(false);
-        arrows.addActionListener(new ActionListener(){
+        this.arrows.setEnabled(false);
+        this.arrows.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -91,17 +90,14 @@ public class ViewImpl implements View{
 		buttonPanel.add(hunter);
 		buttonPanel.add(fireBall);
 		buttonPanel.add(arrows);
-		this.frame.getContentPane().add(this.gamePanel, BorderLayout.CENTER);
+		this.frame.getContentPane().add(mapPanel);
 		this.frame.getContentPane().add(buttonPanel, BorderLayout.EAST);
-		this.frame.addWindowListener(new WindowAdapter(){
-			public void windowClosing(WindowEvent ev){
-				System.exit(-1);
-			}
-			public void windowClosed(WindowEvent ev){
-				System.exit(-1);
-			}
-		});
+		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setMinimumSize(this.gamePanel.getMinimumSize());
+        this.frame.setMaximumSize(this.gamePanel.getMaximumSize());
+        this.frame.setPreferredSize(this.gamePanel.getPreferredSize());
 		this.frame.pack();
+        this.frame.setLocationRelativeTo(null);
 		this.frame.setVisible(true);
     }
 
