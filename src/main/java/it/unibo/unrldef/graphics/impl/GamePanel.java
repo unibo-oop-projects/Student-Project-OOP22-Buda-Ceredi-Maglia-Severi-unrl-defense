@@ -70,7 +70,7 @@ public class GamePanel extends JPanel {
             this.goblinImage = ImageIO.read(new File("assets"+File.separator+"goblin.png"));
             this.map = ImageIO.read(new File("assets"+File.separator+"debugMap.png"));
             this.hunterImage = ImageIO.read(new File("assets"+File.separator+"Hunter.png"));
-            this.cannonImage = ImageIO.read(new File("assets"+File.separator+"cannon.png"));
+            this.cannonImage = ImageIO.read(new File("assets"+File.separator+"Cannon.png"));
             this.shootingCannon = ImageIO.read(new File("assets"+File.separator+"shootingCannon.png"));
             this.shootingHunter = ImageIO.read(new File("assets"+File.separator+"shootingHunter.png"));
         } catch (IOException e) {
@@ -212,7 +212,7 @@ public class GamePanel extends JPanel {
                 System.out.println("Drawing default");
                 break;
         }
-        graphic.drawImage(towerAsset, (int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), 50, 50, null);
+        graphic.drawImage(towerAsset, (int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), 100, 100, null);
     }
 
     private void renderEnemy(Graphics2D graphic, Entity enemy) {
