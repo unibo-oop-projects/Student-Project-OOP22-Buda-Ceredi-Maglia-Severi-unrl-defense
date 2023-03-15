@@ -4,88 +4,98 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
+import javax.swing.ImageIcon;
 import it.unibo.unrldef.graphics.api.View;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.FireBall;
+import it.unibo.unrldef.model.impl.Hunter;
 import it.unibo.unrldef.model.impl.Arrows;
+import it.unibo.unrldef.model.impl.Cannon;
 import it.unibo.unrldef.model.impl.SpellImpl;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 public class ViewImpl implements View{
 
     private final GamePanel gamePanel;
     private final JFrame frame;
     private final Player player;
-    private final JButton fireBall;
-    private final JButton arrows;
+    private PlaceDefenseButton fireBall;
+    private PlaceDefenseButton arrows;
+    private double xScale = 1;
+    private double yScale = 1;
+    private final int DEFAULT_WIDTH = 800;
+    private final int DEFAULT_HEIGHT = 600;
 
     public ViewImpl(Player player, World world, Input inputHandler){
         this.player = player;
         this.frame = new JFrame("Unreal Defense");
+        this.frame.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        this.frame.setMinimumSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        this.gamePanel = new GamePanel(world, inputHandler);
+        this.frame.addComponentListener(new ComponentListener() {
+
+            @Override
+            public void componentResized(ComponentEvent e) {
+                xScale = (double)frame.getWidth() / (double)DEFAULT_WIDTH;
+                yScale = (double)frame.getHeight() / (double)DEFAULT_HEIGHT;
+                System.out.println("New Scale: " + xScale + " " + yScale);
+                System.out.println("New Size: " + frame.getWidth() + " " + frame.getHeight());
+                gamePanel.setScale(xScale, yScale);
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+            }
+            
+        });
+
+
 		//TODO: resize handler with scale on GamePanel
-		this.gamePanel = new GamePanel(world, inputHandler);
+		
         final Box mapPanel = Box.createVerticalBox();
         mapPanel.add(Box.createVerticalGlue());
         mapPanel.add(this.gamePanel);
         mapPanel.add(Box.createVerticalGlue());
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        JButton cannon = new JButton("CANNON");
-        cannon.addActionListener(new ActionListener(){
+        
+        PlaceDefenseButton cannon = null;
+        PlaceDefenseButton hunter = null;
+        this.fireBall = null;
+        this.arrows = null;
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gamePanel.setState(GamePanel.ViewState.TOWER_SELECTED);
-				gamePanel.setSelectedEntity("cannon");
-            }
-            
-        });
+        try {
+            cannon = new PlaceDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Cannon.NAME, gamePanel, new ImageIcon(ImageIO.read(new File("assets"+File.separator+"cannonIcon.png"))));
+            hunter = new PlaceDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Hunter.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"hunterIcon.png"))));
+            this.fireBall = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, FireBall.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"fireball.png"))));
+            this.arrows = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, Arrows.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"arrows.png"))));
 
-        JButton hunter = new JButton("HUNTER");
-        hunter.addActionListener(new ActionListener(){
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-				gamePanel.setState(GamePanel.ViewState.TOWER_SELECTED);
-				gamePanel.setSelectedEntity("hunter");
-                
-            }
-            
-        });
+        fireBall.setEnabled(false);
+        arrows.setEnabled(false);
 
-        this.fireBall = new JButton("FIREBALL");
-        this.fireBall.setEnabled(false);
-        this.fireBall.addActionListener(new ActionListener(){
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-				gamePanel.setState(GamePanel.ViewState.SPELL_SELECTED);
-				gamePanel.setSelectedEntity("fireball");
-                
-            }
-            
-        });
-
-        this.arrows = new JButton("ARROWS");
-        this.arrows.setEnabled(false);
-        this.arrows.addActionListener(new ActionListener(){
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-				gamePanel.setState(GamePanel.ViewState.SPELL_SELECTED);
-				gamePanel.setSelectedEntity("arrows");
-            }
-            
-        });
-		
 		buttonPanel.add(cannon);
 		buttonPanel.add(hunter);
 		buttonPanel.add(fireBall);
@@ -96,7 +106,7 @@ public class ViewImpl implements View{
         this.frame.setMinimumSize(this.gamePanel.getMinimumSize());
         this.frame.setMaximumSize(this.gamePanel.getMaximumSize());
         this.frame.setPreferredSize(this.gamePanel.getPreferredSize());
-		this.frame.pack();
+		//this.frame.pack();
         this.frame.setLocationRelativeTo(null);
 		this.frame.setVisible(true);
     }
