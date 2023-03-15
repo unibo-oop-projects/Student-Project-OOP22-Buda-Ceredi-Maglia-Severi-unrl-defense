@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
@@ -187,7 +188,7 @@ public class WorldImpl implements World{
 
 	@Override
 	public List<Enemy> sorroundingEnemies(Position center, double radius) {
-		List<Enemy> ret = this.livingEnemies.stream().filter(x -> (distance(center, x.getPosition().get()) <= radius )).toList();
+		List<Enemy> ret = this.livingEnemies.stream().filter(x -> (distance(center, x.getPosition().get()) <= radius )).collect(Collectors.toCollection(ArrayList::new));
         ret.sort((a,b) -> {
             double distanceDifference = this.distanceFromSpawn(a.getPosition().get()) - this.distanceFromSpawn(b.getPosition().get());
             if(distanceDifference < 0) {

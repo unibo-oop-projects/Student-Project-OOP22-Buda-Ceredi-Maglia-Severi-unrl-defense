@@ -73,7 +73,7 @@ public class GamePanel extends JPanel {
             this.orcImage = ImageIO.read(new File("assets"+File.separator+"orc.png"));
             this.goblinImage = ImageIO.read(new File("assets"+File.separator+"goblin.png"));
             this.map = ImageIO.read(new File("assets"+File.separator+"debugMap.png"));
-            this.hunterImage = ImageIO.read(new File("assets"+File.separator+"horse.png"));
+            this.hunterImage = ImageIO.read(new File("assets"+File.separator+"Hunter.png"));
             this.cannonImage = ImageIO.read(new File("assets"+File.separator+"cannon.png"));
             this.shootingCannon = ImageIO.read(new File("assets"+File.separator+"shootingCannon.png"));
             this.shootingHunter = ImageIO.read(new File("assets"+File.separator+"shootingHunter.png"));
