@@ -51,6 +51,10 @@ public class GamePanel extends JPanel {
     private Image hunterImage;
     private Image shootingCannon;
     private Image shootingHunter;
+    private Image ballEsplosion;
+
+    private long hunterAttack = 0;
+    private long cannonAttack = 0;
 
     public enum ViewState {
         IDLE,
@@ -73,6 +77,7 @@ public class GamePanel extends JPanel {
             this.cannonImage = ImageIO.read(new File("assets"+File.separator+"Cannon.png"));
             this.shootingCannon = ImageIO.read(new File("assets"+File.separator+"shootingCannon.png"));
             this.shootingHunter = ImageIO.read(new File("assets"+File.separator+"shootingHunter.png"));
+            this.ballEsplosion = ImageIO.read(new File("assets"+File.separator+"esplosione.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -192,11 +197,8 @@ public class GamePanel extends JPanel {
             case Cannon.NAME:
                 if (target.isPresent()) {
                     towerAsset = shootingCannon;
-                    // render
-                    graphic.setColor(Color.RED);
-                    graphic.setStroke(new BasicStroke(20));
-                    System.out.println("Drawing line from " + tower.getPosition().get() + " to " + target.get().getPosition().get());
-                    graphic.drawLine((int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), (int)target.get().getPosition().get().getX(), (int)target.get().getPosition().get().getY());
+
+                    graphic.drawImage(ballEsplosion, (int)target.get().getPosition().get().getX(), (int)target.get().getPosition().get().getY(), 100, 100, null);
                 } else {
                     towerAsset = cannonImage;
                 }
@@ -204,6 +206,11 @@ public class GamePanel extends JPanel {
             case Hunter.NAME:
                 if (target.isPresent()) {
                     towerAsset = shootingHunter;
+
+                    graphic.setColor(Color.RED);
+                    graphic.setStroke(new BasicStroke(20));
+                    System.out.println("Drawing line from " + tower.getPosition().get() + " to " + target.get().getPosition().get());
+                    graphic.drawLine((int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), (int)target.get().getPosition().get().getX(), (int)target.get().getPosition().get().getY());
                 } else {
                     towerAsset = hunterImage;
                 }
