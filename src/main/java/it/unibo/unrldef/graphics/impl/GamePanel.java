@@ -3,6 +3,8 @@ package it.unibo.unrldef.graphics.impl;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +19,7 @@ import javax.swing.event.MouseInputListener;
 import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.BasicStroke;
+import java.awt.FlowLayout;
 
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
@@ -53,6 +56,8 @@ public class GamePanel extends JPanel {
     private double yScale = 1;
     private final int DEFAULT_WIDTH = 600;
     private final int DEFAULT_HEIGHT = 600;
+    private final int MAX_WIDTH = 1000;
+    private final int MAX_HEIGHT = 1000;
 
     public enum ViewState {
         IDLE,
@@ -61,7 +66,7 @@ public class GamePanel extends JPanel {
     }
 
     public GamePanel(World gameWorld, Input inputHandler) {
-        super(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        super(new FlowLayout(FlowLayout.CENTER, 0, 0));
         this.viewState = ViewState.IDLE;
         //TODO: load assets
         try {
@@ -80,8 +85,8 @@ public class GamePanel extends JPanel {
         this.gameWorld = gameWorld;
 
         this.add(new JLabel(new ImageIcon(map)));
-        this.setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
-        this.setMinimumSize(new Dimension(DEFAULT_WIDTH,DEFAULT_HEIGHT));
+        this.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        this.setMaximumSize(new Dimension(MAX_WIDTH, MAX_HEIGHT));
         
         this.addMouseListener(new MouseInputListener() {
 
@@ -103,35 +108,22 @@ public class GamePanel extends JPanel {
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
-                return;
-            }
+            public void mousePressed(MouseEvent e) { }
 
             @Override
-            public void mouseReleased(MouseEvent e) {
-                return;
-            }
+            public void mouseReleased(MouseEvent e) { }
 
             @Override
-            public void mouseEntered(MouseEvent e) {
-                return;
-            }
+            public void mouseEntered(MouseEvent e) { }
 
             @Override
-            public void mouseExited(MouseEvent e) {
-                return;
-            }
+            public void mouseExited(MouseEvent e) { }
 
             @Override
-            public void mouseDragged(MouseEvent e) {
-                return;
-                
-            }
+            public void mouseDragged(MouseEvent e) { }
 
             @Override
-            public void mouseMoved(MouseEvent e) {
-                return;
-            }
+            public void mouseMoved(MouseEvent e) { }
             
         });
     }
