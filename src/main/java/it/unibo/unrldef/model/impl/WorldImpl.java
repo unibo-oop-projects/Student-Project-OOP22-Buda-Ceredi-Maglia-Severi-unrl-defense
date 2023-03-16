@@ -58,6 +58,7 @@ public class WorldImpl implements World{
     public void updateState(long time){
         this.timeToNextHorde = (this.timeToNextHorde - time < 0) ? 0 : (this.timeToNextHorde - time);
         this.timeToNextSpawn = (this.timeToNextSpawn - time < 0) ? 0 : (this.timeToNextSpawn - time);
+        //this.livingEnemies.stream().filter(Enemy::isDead).forEach(x -> this.bank.addMoney(x.getDrop));
         this.livingEnemies.removeAll(this.livingEnemies.stream().filter(Enemy::isDead).toList());
         this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath).forEach(x -> this.castleIntegrity.damage(ENEMY_POWER));
         this.livingEnemies.removeAll(this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath).toList());
