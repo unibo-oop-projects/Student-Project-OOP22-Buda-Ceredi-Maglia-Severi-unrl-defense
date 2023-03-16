@@ -37,7 +37,7 @@ public class PlayerImpl implements Player{
     public void setGameMap(final World world) {
         this.currentWorld = Objects.requireNonNull(world);
         this.spells.add(new FireBall(world));
-        this.spells.add(new IceSpell(world));
+        this.spells.add(new SnowStorm(world));
     }
 
     @Override

@@ -7,9 +7,9 @@ import it.unibo.unrldef.model.api.World;
  * An ice spell used in a tower defense game
  * @author tommaso.severi2@studio.unibo.it
  */
-public class IceSpell extends SpellImpl {
+public class SnowStorm extends SpellImpl {
     
-    public static final String NAME = "ice-spell";
+    public static final String NAME = "snow_storm";
     private static final long ATTACK_RATE = 6 * 1000;
     private static final double DMG = 10.0;
     private static final double RAD = 200.0;
@@ -21,7 +21,7 @@ public class IceSpell extends SpellImpl {
      * Creates a new spell of type ice
      * @param parentWorld the world where it'll be having effect
      */
-    public IceSpell(final World parentWorld) {
+    public SnowStorm(final World parentWorld) {
         super(NAME, parentWorld, RAD, DMG, ATTACK_RATE, LINGERING_EFFECT);
     }
 

@@ -26,7 +26,7 @@ import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.Orc;
-import it.unibo.unrldef.model.impl.IceSpell;
+import it.unibo.unrldef.model.impl.SnowStorm;
 import it.unibo.unrldef.model.impl.FireBall;
 import it.unibo.unrldef.model.impl.Goblin;
 import it.unibo.unrldef.model.impl.Cannon;
@@ -66,7 +66,7 @@ public class GamePanel extends JPanel {
         //TODO: load assets
         try {
             this.fireball = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
-            this.iceSpell = ImageIO.read(new File("assets"+File.separator+"ice-spell.png"));
+            this.iceSpell = ImageIO.read(new File("assets"+File.separator+"snowStorm.png"));
             this.orcImage = ImageIO.read(new File("assets"+File.separator+"orc.png"));
             this.goblinImage = ImageIO.read(new File("assets"+File.separator+"goblin.png"));
             this.map = ImageIO.read(new File("assets"+File.separator+"debugMap.png")).getScaledInstance(DEFAULT_WIDTH, DEFAULT_HEIGHT, java.awt.Image.SCALE_SMOOTH);
@@ -245,7 +245,7 @@ public class GamePanel extends JPanel {
             case FireBall.NAME:
                 asset = this.fireball;
                 break;
-            case IceSpell.NAME:
+            case SnowStorm.NAME:
                 asset = this.iceSpell;
                 break;
             default:

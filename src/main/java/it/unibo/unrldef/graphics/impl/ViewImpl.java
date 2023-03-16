@@ -17,7 +17,7 @@ import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.FireBall;
 import it.unibo.unrldef.model.impl.Hunter;
-import it.unibo.unrldef.model.impl.IceSpell;
+import it.unibo.unrldef.model.impl.SnowStorm;
 import it.unibo.unrldef.model.impl.Cannon;
 import it.unibo.unrldef.model.impl.SpellImpl;
 import java.io.File;
@@ -87,7 +87,7 @@ public class ViewImpl implements View{
             cannon = new PlaceDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Cannon.NAME, gamePanel, new ImageIcon(ImageIO.read(new File("assets"+File.separator+"cannonIcon.png"))));
             hunter = new PlaceDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Hunter.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"hunterIcon.png"))));
             this.fireBall = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, FireBall.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"fireball.png"))));
-            this.iceSpell = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, IceSpell.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"ice-spell.png"))));
+            this.iceSpell = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, SnowStorm.NAME, gamePanel,new ImageIcon(ImageIO.read(new File("assets"+File.separator+"snowStorm.png"))));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -123,7 +123,7 @@ public class ViewImpl implements View{
                 case FireBall.NAME:
                     this.fireBall.setEnabled(((SpellImpl)spell).isReady());
                     break;
-                case IceSpell.NAME:
+                case SnowStorm.NAME:
                     this.iceSpell.setEnabled(((SpellImpl)spell).isReady());
                     break;
                 default:
