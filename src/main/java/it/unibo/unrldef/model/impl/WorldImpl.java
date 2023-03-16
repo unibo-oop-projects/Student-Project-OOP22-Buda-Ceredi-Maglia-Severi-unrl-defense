@@ -23,7 +23,7 @@ public class WorldImpl implements World{
     private final String name;
     private final Player player;
     private final Integrity castleIntegrity;
-    //private final Bank bank;
+    private final Bank bank;
     private final Path path;
     private final List<Wave> waves;
     private int waveCounter;
@@ -38,7 +38,7 @@ public class WorldImpl implements World{
 
 
 
-    public WorldImpl(String name, Player player, Integrity castleIntegrity, Path path, List<Wave> waves, Map<String, Tower> availableTowers, Set<Position> validPositions){
+    public WorldImpl(String name, Player player, Integrity castleIntegrity, Path path, List<Wave> waves, Map<String, Tower> availableTowers, Set<Position> validPositions, Bank bank){
         this.name = name;
         this.player = player;
         this.castleIntegrity = castleIntegrity;
@@ -52,6 +52,7 @@ public class WorldImpl implements World{
         this.timeToNextHorde = 0;
         this.timeToNextSpawn = 0;
         this.waveCounter = 0; 
+        this.bank = bank;
     }
 
     public void updateState(long time){
@@ -213,16 +214,18 @@ public class WorldImpl implements World{
         private Player player;
         private Integrity castleIntegrity;
         private Path path;
+        private Bank bank;
         private List<List<Pair<Horde, Long>>> wavesTemp;
         private Map<String, Tower> availableTowers;
         private Set<Position> validTowersPositions;
 
-        public Builder(String worldName, Player player, Position spawnPoint, int castleHearts) {
+        public Builder(String worldName, Player player, Position spawnPoint, int castleHearts, double startingMoney) {
             this.name = worldName;
             this.player = player;
             this.path = new PathImpl(spawnPoint);
             this.wavesTemp = new ArrayList<>();
             this.castleIntegrity = new IntegrityImpl(castleHearts);
+            this.bank = new Bank(startingMoney);
             this.availableTowers = new HashMap<>();
             this.validTowersPositions = new HashSet<>();
         }
@@ -278,7 +281,7 @@ public class WorldImpl implements World{
                 }
             }
 
-            WorldImpl ret = new WorldImpl(this.name, this.player, this.castleIntegrity, this.path, waves, this.availableTowers, this.validTowersPositions);
+            WorldImpl ret = new WorldImpl(this.name, this.player, this.castleIntegrity, this.path, waves, this.availableTowers, this.validTowersPositions, this.bank);
             for (int i = 0; i < this.wavesTemp.size(); i++) {
                 for (Pair<Horde, Long> horde : this.wavesTemp.get(i)) {
                     horde.getFirst().getEnemies().forEach(x -> x.setParentWorld(ret));
