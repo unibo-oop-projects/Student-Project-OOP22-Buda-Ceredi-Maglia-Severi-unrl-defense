@@ -61,11 +61,7 @@ public class WorldImpl implements World{
         this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath).forEach(x -> this.castleIntegrity.damage(ENEMY_POWER));
         this.livingEnemies.removeAll(this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath).toList());
         this.getSceneEntities().forEach(x -> x.updateState(time));
-        //this.player.uptatePotions();
-        //this is temporary (
-        PlayerImpl tmp = (PlayerImpl) this.player;
-        tmp.updateSpellState(time);
-        // )
+        this.player.updateSpellState(time);
         if (timeToNextHorde == 0 && !this.areWavesEnded()) {
             if (this.waves.get(this.waveCounter).isWaveOver()) {
                 this.waveCounter++;
