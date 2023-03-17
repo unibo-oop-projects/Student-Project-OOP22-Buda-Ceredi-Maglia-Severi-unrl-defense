@@ -13,7 +13,8 @@ import it.unibo.unrldef.model.api.Path;
  */
 public class EnemyImpl extends EntityImpl implements Enemy {
     private double health;
-    private final double speed;
+    private double speed;
+    private final double DEFAULT_SPEED;
     private int currentDirectionIndex;
     private Pair<Path.Direction, Double> currentDirection;
     
@@ -21,6 +22,7 @@ public class EnemyImpl extends EntityImpl implements Enemy {
         super(position, name);
         this.health = startingHealth;
         this.speed = speed;
+        this.DEFAULT_SPEED = speed;
         this.currentDirectionIndex = 0;
         this.currentDirection = new Pair<Path.Direction,Double>(Path.Direction.DOWN, 0.0);
 
@@ -39,6 +41,16 @@ public class EnemyImpl extends EntityImpl implements Enemy {
     @Override
     public void reduceHealth(final double amount) {
         this.health -= amount;
+    }
+
+    @Override
+    public void reduceSpeed(double amount) {
+        this.speed -= amount;
+    }
+
+    @Override
+    public void resetSpeed() {
+        this.speed = DEFAULT_SPEED;
     }
 
     @Override

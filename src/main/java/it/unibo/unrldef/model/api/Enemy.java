@@ -22,6 +22,17 @@ public interface Enemy extends Entity{
     public void reduceHealth(final double amount);
 
     /**
+     * 
+     * Method that reduces the speed of the enemy
+     */
+    public void reduceSpeed(final double amount);
+
+    /**
+     * Method that resets the speed of the enemy to the default speed
+     */
+    public void resetSpeed();
+
+    /**
      * @return true if the enemy is dead, false otherwise
      */
     public boolean isDead();
