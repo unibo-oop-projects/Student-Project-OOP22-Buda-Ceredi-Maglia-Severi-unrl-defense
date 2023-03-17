@@ -18,6 +18,7 @@ public class PlayerImpl implements Player{
     private World currentWorld;
     private final String name;
     private final Set<Spell> spells = new HashSet<>();
+    private Bank bank;
 
     /**
      * Crates a new Player
@@ -46,7 +47,7 @@ public class PlayerImpl implements Player{
     }
     
     @Override
-    public void buildNewTower(final Position pos, final String towerName) {
+    public void ifPossibleBuildTower(final Position pos, final String towerName) {
         this.currentWorld.tryBuildTower(pos, towerName);
     }
 
@@ -72,5 +73,15 @@ public class PlayerImpl implements Player{
     @Override
     public Set<Spell> getSpells() {
         return Set.copyOf(this.spells);
+    }
+
+    @Override
+    public void setBank(final Bank bank) {
+        this.bank = bank;
+    }
+
+    @Override
+    public Bank getBank() {
+        return this.bank;
     }
 }

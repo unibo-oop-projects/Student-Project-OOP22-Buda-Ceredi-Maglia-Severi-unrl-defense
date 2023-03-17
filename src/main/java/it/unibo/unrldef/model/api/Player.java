@@ -3,6 +3,7 @@ package it.unibo.unrldef.model.api;
 import java.util.Set;
 
 import it.unibo.unrldef.common.Position;
+import it.unibo.unrldef.model.impl.Bank;
 
 /**
  * A player in a strategic game where his position is irrelevant and spells can be used
@@ -27,11 +28,11 @@ public interface Player {
     public World getGameWorld();
 
     /**
-     * Places a new tower on the world map
+     * Places a new tower on the world map if the player has enough money
      * @param pos the position where to place it
      * @param towerName the type of tower to build
      */
-    public void buildNewTower(final Position pos, final String towerName);
+    public void ifPossibleBuildTower(final Position pos, final String towerName);
 
     /**
      * Places a new spell on the world map deling damage to enemies
@@ -50,4 +51,16 @@ public interface Player {
      * @return a set containing all the spells that the player can use
      */
     public Set<Spell> getSpells();
+
+    /**
+     * Sets the bank of the player
+     * @param bank
+     */
+    public void setBank(final Bank bank);
+
+    /**
+     * Gets the bank of the player
+     * @return the bank
+     */
+    public Bank getBank();
 }
