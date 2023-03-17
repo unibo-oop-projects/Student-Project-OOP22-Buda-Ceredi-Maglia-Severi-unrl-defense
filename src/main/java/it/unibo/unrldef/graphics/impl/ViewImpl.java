@@ -7,7 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.imageio.ImageIO;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import it.unibo.unrldef.graphics.api.View;
@@ -42,31 +41,13 @@ public class ViewImpl implements View{
         this.frame = new JFrame("Unreal Defense");
         this.gamePanel = new GamePanel(world, inputHandler);
 
-        this.gamePanel.addComponentListener(new ComponentListener() {
-
-            @Override
-            public void componentResized(ComponentEvent arg0) {
-                System.out.println("New Map Size: " + gamePanel.getWidth() + " " + gamePanel.getHeight());;
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent arg0) { }
-
-            @Override
-            public void componentMoved(ComponentEvent arg0) { }
-
-            @Override
-            public void componentShown(ComponentEvent arg0) { }
-            
-        });
         this.frame.addComponentListener(new ComponentListener() {
 
             @Override
             public void componentResized(ComponentEvent e) {
                 xScale = (double)frame.getWidth() / (double)DEFAULT_WIDTH;
                 yScale = (double)frame.getHeight() / (double)DEFAULT_HEIGHT;
-                System.out.println("New Size: " + frame.getWidth() + " " + frame.getHeight());
-                //gamePanel.setScale(xScale, yScale);
+                gamePanel.setScale(xScale, yScale);
             }
 
             @Override
@@ -80,17 +61,6 @@ public class ViewImpl implements View{
             
         });
 
-
-		//TODO: resize handler with scale on GamePanel
-		
-        final Box mapPanel1 = Box.createVerticalBox();
-        final Box mapPanel2 = Box.createHorizontalBox();
-        mapPanel2.add(Box.createVerticalGlue());
-        mapPanel2.add(this.gamePanel);
-        mapPanel2.add(Box.createVerticalGlue());
-        mapPanel1.add(Box.createHorizontalGlue());
-        mapPanel1.add(mapPanel2);
-        mapPanel1.add(Box.createHorizontalGlue());
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         
@@ -119,16 +89,14 @@ public class ViewImpl implements View{
 		buttonPanel.add(hunter);
 		buttonPanel.add(this.fireBall);
 		buttonPanel.add(this.iceSpell);
-		this.frame.getContentPane().add(mapPanel1);
+		this.frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
 		this.frame.getContentPane().add(buttonPanel, BorderLayout.EAST);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         final Dimension preferredSize = new Dimension((int)this.gamePanel.getPreferredSize().getWidth()+PlaceDefenseButton.WIDTH, 
-                (int)this.gamePanel.getPreferredSize().getWidth()+PlaceDefenseButton.HEIGHT);
-        System.out.println(preferredSize);
+                (int)this.gamePanel.getPreferredSize().getHeight());
         this.frame.setSize(preferredSize);
         this.frame.setMinimumSize(preferredSize);
         this.frame.setPreferredSize(preferredSize);
-		//this.frame.pack();
         this.frame.setLocationRelativeTo(null);
 		this.frame.setVisible(true);
     }
