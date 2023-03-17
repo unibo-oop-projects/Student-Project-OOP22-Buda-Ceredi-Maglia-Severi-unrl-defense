@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
@@ -24,7 +23,7 @@ public class WorldImpl implements World{
     private final String name;
     private final Player player;
     private final Integrity castleIntegrity;
-    //private final Bank bank;
+    private final Bank bank;
     private final Path path;
     private final List<Wave> waves;
     private int waveCounter;
@@ -39,7 +38,7 @@ public class WorldImpl implements World{
 
 
 
-    public WorldImpl(String name, Player player, Integrity castleIntegrity, Path path, List<Wave> waves, Map<String, Tower> availableTowers, Set<Position> validPositions){
+    public WorldImpl(String name, Player player, Integrity castleIntegrity, Path path, List<Wave> waves, Map<String, Tower> availableTowers, Set<Position> validPositions, Bank bank){
         this.name = name;
         this.player = player;
         this.castleIntegrity = castleIntegrity;
@@ -53,20 +52,18 @@ public class WorldImpl implements World{
         this.timeToNextHorde = 0;
         this.timeToNextSpawn = 0;
         this.waveCounter = 0; 
+        this.bank = bank;
     }
 
     public void updateState(long time){
         this.timeToNextHorde = (this.timeToNextHorde - time < 0) ? 0 : (this.timeToNextHorde - time);
         this.timeToNextSpawn = (this.timeToNextSpawn - time < 0) ? 0 : (this.timeToNextSpawn - time);
+        //this.livingEnemies.stream().filter(Enemy::isDead).forEach(x -> this.bank.addMoney(x.getDrop));
         this.livingEnemies.removeAll(this.livingEnemies.stream().filter(Enemy::isDead).toList());
         this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath).forEach(x -> this.castleIntegrity.damage(ENEMY_POWER));
         this.livingEnemies.removeAll(this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath).toList());
         this.getSceneEntities().forEach(x -> x.updateState(time));
-        //this.player.uptatePotions();
-        //this is temporary (
-        PlayerImpl tmp = (PlayerImpl) this.player;
-        tmp.updateSpellState(time);
-        // )
+        this.player.updateSpellState(time);
         if (timeToNextHorde == 0 && !this.areWavesEnded()) {
             if (this.waves.get(this.waveCounter).isWaveOver()) {
                 this.waveCounter++;
@@ -188,8 +185,7 @@ public class WorldImpl implements World{
 
 	@Override
 	public List<Enemy> sorroundingEnemies(Position center, double radius) {
-		List<Enemy> ret = this.livingEnemies.stream().filter(x -> (distance(center, x.getPosition().get()) <= radius )).collect(Collectors.toCollection(ArrayList::new));
-        ret.sort((a,b) -> {
+		return this.livingEnemies.stream().filter(x -> (distance(center, x.getPosition().get()) <= radius )).sorted((a,b) -> {
             double distanceDifference = this.distanceFromSpawn(a.getPosition().get()) - this.distanceFromSpawn(b.getPosition().get());
             if(distanceDifference < 0) {
                 return -1;
@@ -198,8 +194,7 @@ public class WorldImpl implements World{
             } else {
                 return 0;
             }
-        });
-        return ret;
+        }).toList();
 	}  
     
     private double distance(Position a, Position b ) {
@@ -220,16 +215,18 @@ public class WorldImpl implements World{
         private Player player;
         private Integrity castleIntegrity;
         private Path path;
+        private Bank bank;
         private List<List<Pair<Horde, Long>>> wavesTemp;
         private Map<String, Tower> availableTowers;
         private Set<Position> validTowersPositions;
 
-        public Builder(String worldName, Player player, Position spawnPoint, int castleHearts) {
+        public Builder(String worldName, Player player, Position spawnPoint, int castleHearts, double startingMoney) {
             this.name = worldName;
             this.player = player;
             this.path = new PathImpl(spawnPoint);
             this.wavesTemp = new ArrayList<>();
             this.castleIntegrity = new IntegrityImpl(castleHearts);
+            this.bank = new Bank(startingMoney);
             this.availableTowers = new HashMap<>();
             this.validTowersPositions = new HashSet<>();
         }
@@ -285,7 +282,7 @@ public class WorldImpl implements World{
                 }
             }
 
-            WorldImpl ret = new WorldImpl(this.name, this.player, this.castleIntegrity, this.path, waves, this.availableTowers, this.validTowersPositions);
+            WorldImpl ret = new WorldImpl(this.name, this.player, this.castleIntegrity, this.path, waves, this.availableTowers, this.validTowersPositions, this.bank);
             for (int i = 0; i < this.wavesTemp.size(); i++) {
                 for (Pair<Horde, Long> horde : this.wavesTemp.get(i)) {
                     horde.getFirst().getEnemies().forEach(x -> x.setParentWorld(ret));
