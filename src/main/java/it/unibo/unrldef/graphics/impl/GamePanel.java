@@ -10,8 +10,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import java.awt.Dimension;
@@ -61,7 +59,6 @@ public class GamePanel extends JPanel {
     }
 
     public GamePanel(World gameWorld, Input inputHandler) {
-        super(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
         this.viewState = ViewState.IDLE;
         //TODO: load assets
         try {
@@ -71,7 +68,7 @@ public class GamePanel extends JPanel {
             this.goblinImage = ImageIO.read(new File("assets"+File.separator+"goblin.png"));
             this.map = ImageIO.read(new File("assets"+File.separator+"debugMap.png")).getScaledInstance(DEFAULT_WIDTH, DEFAULT_HEIGHT, java.awt.Image.SCALE_SMOOTH);
             this.hunterImage = ImageIO.read(new File("assets"+File.separator+"Hunter.png"));
-            this.cannonImage = ImageIO.read(new File("assets"+File.separator+"Cannon.png"));
+            this.cannonImage = ImageIO.read(new File("assets"+File.separator+"cannon.png"));
             this.shootingCannon = ImageIO.read(new File("assets"+File.separator+"shootingCannon.png"));
             this.shootingHunter = ImageIO.read(new File("assets"+File.separator+"shootingHunter.png"));
         } catch (IOException e) {
@@ -79,9 +76,7 @@ public class GamePanel extends JPanel {
         }
         this.gameWorld = gameWorld;
 
-        this.add(new JLabel(new ImageIcon(map)));
-        this.setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
-        this.setMinimumSize(new Dimension(DEFAULT_WIDTH,DEFAULT_HEIGHT));
+        this.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         
         this.addMouseListener(new MouseInputListener() {
 
@@ -103,35 +98,22 @@ public class GamePanel extends JPanel {
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
-                return;
-            }
+            public void mousePressed(MouseEvent e) { }
 
             @Override
-            public void mouseReleased(MouseEvent e) {
-                return;
-            }
+            public void mouseReleased(MouseEvent e) { }
 
             @Override
-            public void mouseEntered(MouseEvent e) {
-                return;
-            }
+            public void mouseEntered(MouseEvent e) { }
 
             @Override
-            public void mouseExited(MouseEvent e) {
-                return;
-            }
+            public void mouseExited(MouseEvent e) { }
 
             @Override
-            public void mouseDragged(MouseEvent e) {
-                return;
-                
-            }
+            public void mouseDragged(MouseEvent e) { }
 
             @Override
-            public void mouseMoved(MouseEvent e) {
-                return;
-            }
+            public void mouseMoved(MouseEvent e) { }
             
         });
     }
@@ -173,6 +155,11 @@ public class GamePanel extends JPanel {
             }
             graphic.setColor(java.awt.Color.BLACK);
         }
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
     private void renderEntity(Graphics2D graphic, Entity entity) {
@@ -217,6 +204,8 @@ public class GamePanel extends JPanel {
 
     private void renderEnemy(Graphics2D graphic, Entity enemy) {
         Image asset = null;
+        final int h = 40;
+        final int w = 40;
 
         switch(enemy.getName()) {
             case Orc.NAME:
@@ -228,8 +217,8 @@ public class GamePanel extends JPanel {
             default:
                 break;
         }
-        int width = (int) Math.round(40 * xScale);
-        int height = (int) Math.round(40 * yScale);
+        int width = (int) Math.round(h * xScale);
+        int height = (int) Math.round(w * yScale);
         int x = (int)Math.round(enemy.getPosition().get().getX() * xScale );
         int y = (int)Math.round(enemy.getPosition().get().getY() * yScale );
         graphic.drawImage(asset, x, y, width, height, null);
@@ -259,6 +248,10 @@ public class GamePanel extends JPanel {
     }
 
     private void renderMap(final Graphics2D graphic) {
-        graphic.drawImage(this.map, 0, 0, this.getWidth(), this.getHeight(), null);
+        int size = Math.min(getWidth(), getHeight());
+        int x = (getWidth() - size) / 2;
+        int y = (getHeight() - size) / 2;
+
+        graphic.drawImage(this.map, x, y, size, size, null);
     }
 }
