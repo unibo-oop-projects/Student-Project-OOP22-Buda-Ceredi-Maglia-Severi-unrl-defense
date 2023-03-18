@@ -169,9 +169,8 @@ public class WorldImpl implements World{
 
      
     @Override
-    public int getMoney() {
-        // TODO Auto-generated method stub
-        return 0;
+    public double getMoney() {
+        return this.bank.getMoney();
     } 
 
     @Override

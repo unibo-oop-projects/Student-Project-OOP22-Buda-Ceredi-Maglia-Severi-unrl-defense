@@ -16,7 +16,7 @@ public interface World {
     List<Entity> getSceneEntities();
     Integrity getCastleIntegrity();
     Set<Position> getAvailablePositions();
-    int getMoney();
+    double getMoney();
     Set<Tower> getAvailableTowers();
     List<Enemy> sorroundingEnemies(Position center, double radius);
     Path getPath();
