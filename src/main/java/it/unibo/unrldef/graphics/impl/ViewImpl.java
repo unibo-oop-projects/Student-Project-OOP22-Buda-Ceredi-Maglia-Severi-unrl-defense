@@ -12,15 +12,15 @@ import javax.swing.ImageIcon;
 import it.unibo.unrldef.graphics.api.View;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Player;
-import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.FireBall;
 import it.unibo.unrldef.model.impl.Hunter;
 import it.unibo.unrldef.model.impl.SnowStorm;
 import it.unibo.unrldef.model.impl.Cannon;
-import it.unibo.unrldef.model.impl.SpellImpl;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
@@ -29,8 +29,8 @@ public class ViewImpl implements View{
     private final GamePanel gamePanel;
     private final JFrame frame;
     private final Player player;
-    private PlaceDefenseButton fireBall;
-    private PlaceDefenseButton iceSpell;
+    private final World world;
+    private final ButtonsUpdater buttonsUpdater;
     private double xScale = 1;
     private double yScale = 1;
     private final int DEFAULT_WIDTH = 800;
@@ -38,6 +38,7 @@ public class ViewImpl implements View{
 
     public ViewImpl(Player player, World world, Input inputHandler){
         this.player = player;
+        this.world = world;
         this.frame = new JFrame("Unreal Defense");
         this.gamePanel = new GamePanel(world, inputHandler);
 
@@ -66,29 +67,30 @@ public class ViewImpl implements View{
         
         PlaceDefenseButton cannon = null;
         PlaceDefenseButton hunter = null;
-        this.fireBall = null;
-        this.iceSpell = null;
+        PlaceDefenseButton fireBall = null;
+        PlaceDefenseButton iceSpell = null;
 
         try {
             cannon = new PlaceDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Cannon.NAME, gamePanel, 
                     new ImageIcon(ImageIO.read(new File("assets"+File.separator+"cannonIcon.png"))));
             hunter = new PlaceDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Hunter.NAME, gamePanel, 
                     new ImageIcon(ImageIO.read(new File("assets"+File.separator+"hunterIcon.png"))));
-            this.fireBall = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, FireBall.NAME, gamePanel, 
+            fireBall = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, FireBall.NAME, gamePanel, 
                     new ImageIcon(ImageIO.read(new File("assets"+File.separator+"fireball.png"))));
-            this.iceSpell = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, SnowStorm.NAME, gamePanel, 
+            iceSpell = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, SnowStorm.NAME, gamePanel, 
                     new ImageIcon(ImageIO.read(new File("assets"+File.separator+"snowStorm.png"))));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        this.fireBall.setEnabled(false);
-        this.iceSpell.setEnabled(false);
+        this.buttonsUpdater = new ButtonsUpdater(this.world, 
+                List.of(Cannon.NAME, Hunter.NAME, FireBall.NAME, SnowStorm.NAME), 
+                List.of(cannon, hunter, fireBall, iceSpell));
 
 		buttonPanel.add(cannon);
 		buttonPanel.add(hunter);
-		buttonPanel.add(this.fireBall);
-		buttonPanel.add(this.iceSpell);
+		buttonPanel.add(fireBall);
+		buttonPanel.add(iceSpell);
 		this.frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
 		this.frame.getContentPane().add(buttonPanel, BorderLayout.EAST);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,22 +105,8 @@ public class ViewImpl implements View{
 
     @Override
     public void render() {
-        this.updateButtons();
+        // TO-DO fix method getAvailableTowers
+        //this.buttonsUpdater.update(Set.of(this.world.getAvailableTowers() ,this.player.getSpells()));
         this.gamePanel.repaint();
-    }
-
-    private void updateButtons() {
-        for (Spell spell : player.getSpells()) {
-            switch (spell.getName()) {
-                case FireBall.NAME:
-                    this.fireBall.setEnabled(((SpellImpl)spell).isReady());
-                    break;
-                case SnowStorm.NAME:
-                    this.iceSpell.setEnabled(((SpellImpl)spell).isReady());
-                    break;
-                default:
-                    break;
-            }
-        }
     }
 }
