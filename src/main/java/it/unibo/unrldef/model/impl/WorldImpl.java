@@ -209,6 +209,11 @@ public class WorldImpl implements World{
     public String getName() {
         return this.name;
     }
+    
+    @Override
+    public Set<Position> getAvailablePositions() {
+        return this.availablePositions;
+    }
 
     public static class Builder {
         private String name;
@@ -293,8 +298,5 @@ public class WorldImpl implements World{
         }
     }
 
-    @Override
-    public Set<Position> getAvailablePositions() {
-        return this.availablePositions;
-    }
+    
 }
