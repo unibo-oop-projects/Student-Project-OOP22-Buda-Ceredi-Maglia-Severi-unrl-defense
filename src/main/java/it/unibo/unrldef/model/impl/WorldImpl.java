@@ -294,6 +294,8 @@ public class WorldImpl implements World{
                 }
             }
 
+            this.player.setGameMap(ret);
+
             return ret;
         }
     }
