@@ -11,6 +11,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import it.unibo.unrldef.graphics.api.View;
 import it.unibo.unrldef.input.api.Input;
+import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.FireBall;
@@ -19,6 +20,7 @@ import it.unibo.unrldef.model.impl.SnowStorm;
 import it.unibo.unrldef.model.impl.Cannon;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.awt.event.ComponentEvent;
@@ -105,8 +107,16 @@ public class ViewImpl implements View{
 
     @Override
     public void render() {
-        // TO-DO fix method getAvailableTowers
-        //this.buttonsUpdater.update(Set.of(this.world.getAvailableTowers() ,this.player.getSpells()));
+        this.updateButtons();
         this.gamePanel.repaint();
+    }
+
+    /**
+     * Updates the buttons states
+     */
+    private void updateButtons() {
+        final Set<Entity> buttonsEntities = new HashSet<Entity>(this.world.getAvailableTowers());
+        buttonsEntities.addAll(this.player.getSpells());
+        this.buttonsUpdater.update(buttonsEntities);
     }
 }

@@ -17,18 +17,32 @@ import it.unibo.unrldef.model.impl.Cannon;
 import it.unibo.unrldef.model.impl.FireBall;
 import it.unibo.unrldef.model.impl.SnowStorm;
 
+/**
+ * A simple class that updates the buttons used in the tower defense game
+ * @author tommaso.severi2@studio.unibo.it
+ */
 public class ButtonsUpdater {
     
     private final World world;
     private final Map<String, JButton> buttons = new HashMap<>();
 
-    public ButtonsUpdater(final World world, final List<String> respectiveNames, final List<JButton> buttons) {
-        for (int i = 0; i < buttons.size(); i++) {
-            this.buttons.put(respectiveNames.get(i), buttons.get(i));
+    /**
+     * Creates a new buttons updater
+     * @param world the world where the entities are based
+     * @param respectiveNames the names associated with the buttons
+     * @param respectiveButtons the buttons that correspond the the names having the same order in the list
+     */
+    public ButtonsUpdater(final World world, final List<String> respectiveNames, final List<JButton> respectiveButtons) {
+        for (int i = 0; i < respectiveButtons.size(); i++) {
+            this.buttons.put(respectiveNames.get(i), respectiveButtons.get(i));
         }
         this.world = world;
     }
 
+    /**
+     * Updates the state of the buttons
+     * @param referenceEntities the entities from which are taken the informations used to update the buttons
+     */
     public void update(Set<Entity> referenceEntities) {
         for (Entity entity : referenceEntities) {
             boolean enableState = false;
@@ -52,7 +66,7 @@ public class ButtonsUpdater {
                         respectiveButton = this.buttons.get(FireBall.NAME);
                         break;
                     case SnowStorm.NAME:
-                        respectiveButton = this.buttons.get(FireBall.NAME);
+                        respectiveButton = this.buttons.get(SnowStorm.NAME);
                         break;
                     default:
                         break;
