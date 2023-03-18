@@ -43,27 +43,6 @@ public class ViewImpl implements View{
         this.world = world;
         this.frame = new JFrame("Unreal Defense");
         this.gamePanel = new GamePanel(world, inputHandler);
-
-        this.frame.addComponentListener(new ComponentListener() {
-
-            @Override
-            public void componentResized(ComponentEvent e) {
-                xScale = (double)frame.getWidth() / (double)DEFAULT_WIDTH;
-                yScale = (double)frame.getHeight() / (double)DEFAULT_HEIGHT;
-                gamePanel.setScale(xScale, yScale);
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) { }
-
-            @Override
-            public void componentShown(ComponentEvent e) { }
-
-            @Override
-            public void componentHidden(ComponentEvent e) { }
-            
-        });
-
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         
@@ -89,6 +68,26 @@ public class ViewImpl implements View{
                 List.of(Cannon.NAME, Hunter.NAME, FireBall.NAME, SnowStorm.NAME), 
                 List.of(cannon, hunter, fireBall, iceSpell));
 
+        this.frame.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                xScale = (double)frame.getWidth() / (double)DEFAULT_WIDTH;
+                yScale = (double)frame.getHeight() / (double)DEFAULT_HEIGHT;
+                gamePanel.setScale(xScale, yScale);
+                System.out.println("M: "+gamePanel.getSize()+" F: "+frame.getSize()+" B: "+buttonPanel.getSize());
+            }
+    
+            @Override
+            public void componentMoved(ComponentEvent e) { }
+
+            @Override
+            public void componentShown(ComponentEvent e) { }
+
+            @Override
+            public void componentHidden(ComponentEvent e) { }
+                
+        });
+
 		buttonPanel.add(cannon);
 		buttonPanel.add(hunter);
 		buttonPanel.add(fireBall);
@@ -96,12 +95,10 @@ public class ViewImpl implements View{
 		this.frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
 		this.frame.getContentPane().add(buttonPanel, BorderLayout.EAST);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        final Dimension preferredSize = new Dimension((int)this.gamePanel.getPreferredSize().getWidth()+PlaceDefenseButton.WIDTH, 
-                (int)this.gamePanel.getPreferredSize().getHeight());
-        this.frame.setSize(preferredSize);
-        this.frame.setMinimumSize(preferredSize);
-        this.frame.setPreferredSize(preferredSize);
+        this.frame.setSize(this.frame.getPreferredSize());
+        this.frame.setMinimumSize(this.frame.getPreferredSize());
         this.frame.setLocationRelativeTo(null);
+        this.frame.pack();
 		this.frame.setVisible(true);
     }
 
