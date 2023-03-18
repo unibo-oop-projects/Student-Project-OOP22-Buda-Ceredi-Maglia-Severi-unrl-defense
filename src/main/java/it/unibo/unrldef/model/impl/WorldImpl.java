@@ -143,14 +143,16 @@ public class WorldImpl implements World{
     @Override
     public Boolean tryBuildTower(Position pos, String towerName) {
         //if(this.availablePositions.contains(pos)) {
-          //  this.availablePositions.remove(pos);
             Tower newTower = this.availableTowers.get(towerName).copy();
-            this.placedTowers.add(newTower);
-            newTower.setParentWorld(this);
-            newTower.setPosition(pos.getX(), pos.getY());
-            return true;
+            if (this.bank.trySpend(newTower.getCost())) {
+                //this.availablePositions.remove(pos);
+                this.placedTowers.add(newTower);
+                newTower.setParentWorld(this);
+                newTower.setPosition(pos.getX(), pos.getY());
+                return true;
+            }
         //}
-        //return false;
+        return false;
     }
 
     @Override
@@ -208,6 +210,11 @@ public class WorldImpl implements World{
 
     public String getName() {
         return this.name;
+    }
+    
+    @Override
+    public Set<Position> getAvailablePositions() {
+        return this.availablePositions;
     }
 
     public static class Builder {
@@ -289,12 +296,11 @@ public class WorldImpl implements World{
                 }
             }
 
+            this.player.setGameMap(ret);
+
             return ret;
         }
     }
 
-    @Override
-    public Set<Position> getAvailablePositions() {
-        return this.availablePositions;
-    }
+    
 }
