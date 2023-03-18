@@ -56,9 +56,9 @@ public class ViewImpl implements View{
             hunter = new PlaceDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Hunter.NAME, gamePanel, 
                     new ImageIcon(ImageIO.read(new File("assets"+File.separator+"hunterIcon.png"))));
             fireBall = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, FireBall.NAME, gamePanel, 
-                    new ImageIcon(ImageIO.read(new File("assets"+File.separator+"fireball.png"))));
+                    new ImageIcon(ImageIO.read(new File("assets"+File.separator+"fireballIcon.png"))));
             iceSpell = new PlaceDefenseButton(GamePanel.ViewState.SPELL_SELECTED, SnowStorm.NAME, gamePanel, 
-                    new ImageIcon(ImageIO.read(new File("assets"+File.separator+"snowStorm.png"))));
+                    new ImageIcon(ImageIO.read(new File("assets"+File.separator+"snowstormIcon.png"))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,7 +73,6 @@ public class ViewImpl implements View{
                 xScale = (double)frame.getWidth() / (double)DEFAULT_WIDTH;
                 yScale = (double)frame.getHeight() / (double)DEFAULT_HEIGHT;
                 gamePanel.setScale(xScale, yScale);
-                System.out.println("M: "+gamePanel.getSize()+" F: "+frame.getSize()+" B: "+buttonPanel.getSize());
             }
     
             @Override
