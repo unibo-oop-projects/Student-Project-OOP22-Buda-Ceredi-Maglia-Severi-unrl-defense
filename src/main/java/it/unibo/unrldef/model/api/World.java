@@ -18,7 +18,7 @@ public interface World {
     Integrity getCastleIntegrity();
     Set<Position> getAvailablePositions();
     int getMoney();
-    Map<String, Tower> getAvailableTowers();
+    Set<Tower> getAvailableTowers();
     List<Enemy> sorroundingEnemies(Position center, double radius);
     Path getPath();
     boolean isGameOver();
