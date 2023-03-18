@@ -1,7 +1,6 @@
 package it.unibo.unrldef.model.api;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import it.unibo.unrldef.common.*;
