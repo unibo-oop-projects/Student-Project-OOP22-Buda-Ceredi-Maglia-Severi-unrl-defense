@@ -49,6 +49,9 @@ public class GamePanel extends JPanel {
     private Image shootingHunter;
     private double xScale = 1;
     private double yScale = 1;
+    private int xMapPosition = 0;
+    private int yMapPosition = 0;
+    private int mapSize = 0;
     private final int DEFAULT_WIDTH = 600;
     private final int DEFAULT_HEIGHT = 600;
 
@@ -219,9 +222,8 @@ public class GamePanel extends JPanel {
         }
         int width = (int) Math.round(h * xScale);
         int height = (int) Math.round(w * yScale);
-        int x = (int)Math.round(enemy.getPosition().get().getX() * xScale );
-        int y = (int)Math.round(enemy.getPosition().get().getY() * yScale );
-        graphic.drawImage(asset, x, y, width, height, null);
+        Position pos = this.getRealPosition(enemy.getPosition().get());
+        graphic.drawImage(asset,(int) pos.getX(), (int) pos.getY(), width, height, null);
     }
 
     private void renderSpell(final Graphics2D graphic, final Entity spell) {
@@ -248,10 +250,21 @@ public class GamePanel extends JPanel {
     }
 
     private void renderMap(final Graphics2D graphic) {
-        int size = Math.min(getWidth(), getHeight());
-        int x = (getWidth() - size) / 2;
-        int y = (getHeight() - size) / 2;
+        this.mapSize = Math.min(getWidth(), getHeight());
+        this.xMapPosition = (getWidth() - this.mapSize) / 2;
+        this.yMapPosition = (getHeight() - this.mapSize) / 2;
+        
 
-        graphic.drawImage(this.map, x, y, size, size, null);
+        System.out.println("Map origin: [" + xMapPosition + ", " + yMapPosition + "]\n Map size: " + this.mapSize);
+        graphic.drawImage(this.map, this.xMapPosition, this.yMapPosition, this.mapSize, this.mapSize, null);
+    }
+
+    private Position getRealPosition(Position pos) {
+        int mapScale = 40;
+        double newX = (pos.getX() * this.mapSize) / mapScale + this.xMapPosition;
+        double newY = (pos.getY() * this.mapSize) / mapScale + this.yMapPosition;
+        Position panelPosition = new Position(newX, newY);
+
+        return panelPosition;
     }
 }
