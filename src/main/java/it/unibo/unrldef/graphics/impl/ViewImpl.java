@@ -23,8 +23,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+
 import java.awt.Color;
 
 public class ViewImpl implements View{
@@ -35,10 +34,6 @@ public class ViewImpl implements View{
     private final World world;
     private final ButtonsUpdater buttonsUpdater;
     private final JLabel bank;
-    private double xScale = 1;
-    private double yScale = 1;
-    private final int DEFAULT_WIDTH = 800;
-    private final int DEFAULT_HEIGHT = 600;
 
     public ViewImpl(Player player, World world, Input inputHandler){
         this.player = player;
@@ -70,25 +65,6 @@ public class ViewImpl implements View{
         this.buttonsUpdater = new ButtonsUpdater(this.world, 
                 List.of(Cannon.NAME, Hunter.NAME, FireBall.NAME, SnowStorm.NAME), 
                 List.of(cannon, hunter, fireBall, iceSpell));
-
-        this.frame.addComponentListener(new ComponentListener() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                xScale = (double)frame.getWidth() / (double)DEFAULT_WIDTH;
-                yScale = (double)frame.getHeight() / (double)DEFAULT_HEIGHT;
-                gamePanel.setScale(xScale, yScale);
-            }
-    
-            @Override
-            public void componentMoved(ComponentEvent e) { }
-
-            @Override
-            public void componentShown(ComponentEvent e) { }
-
-            @Override
-            public void componentHidden(ComponentEvent e) { }
-                
-        });
 
 		buttonPanel.add(cannon);
 		buttonPanel.add(hunter);

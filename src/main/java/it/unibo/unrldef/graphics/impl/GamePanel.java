@@ -6,6 +6,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,6 +31,9 @@ import it.unibo.unrldef.model.impl.Goblin;
 import it.unibo.unrldef.model.impl.Cannon;
 import it.unibo.unrldef.model.impl.Hunter;
 
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.GradientPaint;
 import java.awt.Image;
 
 public class GamePanel extends JPanel {
@@ -57,6 +61,8 @@ public class GamePanel extends JPanel {
     private final int DEFAULT_WIDTH = 600;
     private final int DEFAULT_HEIGHT = 600;
 
+    private final JPanel panelRef;
+
     public enum ViewState {
         IDLE,
         TOWER_SELECTED,
@@ -65,6 +71,7 @@ public class GamePanel extends JPanel {
 
     public GamePanel(World gameWorld, Input inputHandler) {
         this.viewState = ViewState.IDLE;
+        this.panelRef = this;
         //TODO: load assets
         try {
             this.fireball = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
@@ -83,43 +90,51 @@ public class GamePanel extends JPanel {
 
         this.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         
+        this.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                int tmp = Math.min(panelRef.getWidth(), panelRef.getHeight());
+                xScale = (double)tmp / DEFAULT_WIDTH;
+                yScale = (double)tmp / DEFAULT_HEIGHT;
+            }
+            @Override
+            public void componentMoved(ComponentEvent e) {}
+            @Override
+            public void componentShown(ComponentEvent e) {}
+            @Override
+            public void componentHidden(ComponentEvent e) {}
+        });
+
+
         this.addMouseListener(new MouseInputListener() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                int x = e.getX();
-                int y = e.getY();
+                Position p = fromRealPositionToPosition(new Position(e.getX(),e.getY()));
                 switch (viewState) {
                     case IDLE:
                         break;
-                    case TOWER_SELECTED:
-                        inputHandler.setLastHit(x, y, Input.HitType.PLACE_TOWER, Optional.of(selectedEntity));
+                    case TOWER_SELECTED:      
+                        inputHandler.setLastHit((int)p.getX(), (int)p.getY(), Input.HitType.PLACE_TOWER, Optional.of(selectedEntity));
                         break;
                     case SPELL_SELECTED:
-                        inputHandler.setLastHit(x, y, Input.HitType.PLACE_SPELL, Optional.of(selectedEntity));
+                        inputHandler.setLastHit((int)p.getX(), (int)p.getY(), Input.HitType.PLACE_SPELL, Optional.of(selectedEntity));
                         break;
                 }
                 viewState = ViewState.IDLE; // reset the view state every time the mouse is clicked
             }
-
             @Override
             public void mousePressed(MouseEvent e) { }
-
             @Override
             public void mouseReleased(MouseEvent e) { }
-
             @Override
             public void mouseEntered(MouseEvent e) { }
-
             @Override
             public void mouseExited(MouseEvent e) { }
-
             @Override
             public void mouseDragged(MouseEvent e) { }
-
             @Override
-            public void mouseMoved(MouseEvent e) { }
-            
+            public void mouseMoved(MouseEvent e) { }  
         });
     }
 
@@ -131,19 +146,20 @@ public class GamePanel extends JPanel {
         this.selectedEntity = entity;
     }
 
-    public void setScale(double xScale, double yScale) {
-        this.xScale = xScale;
-        this.yScale = yScale;
-        this.setPreferredSize(new Dimension(DEFAULT_WIDTH*(int)xScale,(int)DEFAULT_HEIGHT*(int)yScale));
-    }
-
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D graphic = (Graphics2D) g;
+        Color a = new Color(23, 79, 120);
+        Color b = new Color(21, 95,110);
+        GradientPaint cp = new GradientPaint(0, this.getHeight(), a, this.getWidth(), 0, b);
+
+       // graphic.setBackground(new java.awt.Color(22, 89, 114));
         graphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphic.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         graphic.clearRect(0,0,this.getWidth(),this.getHeight());
+        graphic.setPaint(cp);
+        graphic.fillRect(0, 0, this.getWidth(), this.getHeight());
         // TODO: render the game world
         renderMap(graphic);
         for (Entity entity : gameWorld.getSceneEntities()) {
@@ -153,10 +169,12 @@ public class GamePanel extends JPanel {
         if(viewState == ViewState.TOWER_SELECTED) {
             // TODO: get available positions from world and render them as rectangles
             Set<Position> availablePosition = this.gameWorld.getAvailablePositions();
+            List<Position> realAvailablePosition = availablePosition.stream().map((p) -> this.fromPositionToRealPosition(p)).toList();
             graphic.setColor(java.awt.Color.GREEN);
-            for (Position p: availablePosition) {
-                graphic.drawRect((int)p.getX(), (int)p.getY(), 1, 1);
-                graphic.fillRect((int)p.getX(), (int)p.getY(), 1, 1);
+            for (Position p: realAvailablePosition) {
+                int width = (int)(50*xScale);
+                int height = (int)(50*yScale);
+                graphic.fillRect((int)p.getX()-height/2, (int)p.getY()-width/2, width, height);
             }
             graphic.setColor(java.awt.Color.BLACK);
         }
@@ -179,9 +197,13 @@ public class GamePanel extends JPanel {
     
     private void renderTower(Graphics2D graphic, Entity tower) {
         Image towerAsset = null;
+        int h = 0;
+        int w = 0;
         Optional<Enemy> target = ((Tower)tower).getTarget();
         switch(tower.getName()) {
             case Cannon.NAME:
+                w=140;
+                h=100;
                 if (target.isPresent()) {
                     towerAsset = shootingCannon;
                     // render
@@ -193,6 +215,8 @@ public class GamePanel extends JPanel {
                 }
                 break;
             case Hunter.NAME:
+                h=100;
+                w=75;
                 if (target.isPresent()) {
                     towerAsset = shootingHunter;
                 } else {
@@ -202,9 +226,11 @@ public class GamePanel extends JPanel {
             default:
                 break;
         }
-        int width = (int) Math.round(100 * xScale);
-        int height = (int) Math.round(100 * yScale);
-        graphic.drawImage(towerAsset, (int)tower.getPosition().get().getX()-height/2, (int)tower.getPosition().get().getY()-width/2, width, height, null);
+        int width = (int)(w * yScale);
+        int height = (int)(h * xScale);
+
+        Position pos = this.fromPositionToRealPosition(tower.getPosition().get());
+        graphic.drawImage(towerAsset, (int)pos.getX()-width/2, (int)pos.getY()-height/2, width, height, null);
     }
 
     private void renderEnemy(Graphics2D graphic, Entity enemy) {
@@ -222,9 +248,10 @@ public class GamePanel extends JPanel {
             default:
                 break;
         }
-        int width = (int) Math.round(h * xScale);
-        int height = (int) Math.round(w * yScale);
-        Position pos = this.getRealPosition(enemy.getPosition().get());
+
+        int width = (int)(w* yScale);
+        int height = (int)(h * xScale);
+        Position pos = this.fromPositionToRealPosition(enemy.getPosition().get());
         int x = ((int)pos.getX()) - height/2;
         int y = ((int)pos.getY()) - width/2;
         graphic.drawImage(asset,(int) x, y, width, height, null);
@@ -234,8 +261,6 @@ public class GamePanel extends JPanel {
         Image asset = null;
         final int h = 40;
         final int w = 40;
-        final int x = (int)spell.getPosition().get().getX();
-        final int y = (int)spell.getPosition().get().getY();
         switch (spell.getName()) {
             case FireBall.NAME:
                 asset = this.fireball;
@@ -246,11 +271,14 @@ public class GamePanel extends JPanel {
             default:
                 break;
         }
-        final int imageX = x-h/2;
-        final int imageY = y-w/2;
-        int width = (int) Math.round(h * xScale);
-        int height = (int) Math.round(w * yScale);
-        graphic.drawImage(asset, imageX, imageY, width, height,  null);
+
+        int width = (int)(w* yScale);
+        int height = (int)(h * xScale);
+
+        Position pos = this.fromPositionToRealPosition(spell.getPosition().get());
+        int x = ((int)pos.getX()) - height/2;
+        int y = ((int)pos.getY()) - width/2;
+        graphic.drawImage(asset, x, y, width, height,  null);
     }
 
     private void renderMap(final Graphics2D graphic) {
@@ -263,11 +291,20 @@ public class GamePanel extends JPanel {
         graphic.drawImage(this.map, this.xMapPosition, this.yMapPosition, this.mapSize, this.mapSize, null);
     }
 
-    private Position getRealPosition(Position pos) {
+    private Position fromPositionToRealPosition(Position pos) {
         double newX = (pos.getX() * this.mapSize) / this.MAP_SIZE_IN_UNITS + this.xMapPosition;
         double newY = (pos.getY() * this.mapSize) / this.MAP_SIZE_IN_UNITS + this.yMapPosition;
         Position panelPosition = new Position(newX, newY);
 
         return panelPosition;
+    }
+
+    private Position fromRealPositionToPosition(Position pos) {
+        double newX = (this.MAP_SIZE_IN_UNITS*(pos.getX() - this.xMapPosition))/this.mapSize;
+        double newY = (this.MAP_SIZE_IN_UNITS*(pos.getY() - this.yMapPosition))/this.mapSize;
+        Position panelPosition = new Position(newX, newY);
+
+        return panelPosition;
+        
     }
 }
