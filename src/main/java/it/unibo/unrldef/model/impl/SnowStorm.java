@@ -13,7 +13,8 @@ public class SnowStorm extends SpellImpl {
     private static final long ATTACK_RATE = 6 * 1000;
     private static final double DMG = 10.0;
     private static final double RAD = 200.0;
-    private static final long LINGERING_EFFECT = 4 * 1000;
+    private static final long LINGERING_EFFECT_TIME = 4 * 1000;
+    private static final long LINGERING_EFFECT_FREQ = 500;
 
     // private final double speedReduction = 3.0;
 
@@ -22,7 +23,7 @@ public class SnowStorm extends SpellImpl {
      * @param parentWorld the world where it'll be having effect
      */
     public SnowStorm(final World parentWorld) {
-        super(NAME, parentWorld, RAD, DMG, ATTACK_RATE, LINGERING_EFFECT);
+        super(NAME, parentWorld, RAD, DMG, ATTACK_RATE, LINGERING_EFFECT_TIME, LINGERING_EFFECT_FREQ);
     }
 
     @Override
