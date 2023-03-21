@@ -33,6 +33,8 @@ import it.unibo.unrldef.model.impl.Hunter;
 import java.awt.Image;
 
 public class GamePanel extends JPanel {
+    private final int MAP_SIZE_IN_UNITS = 80;
+
     private String selectedEntity;
 
     private World gameWorld;
@@ -202,13 +204,13 @@ public class GamePanel extends JPanel {
         }
         int width = (int) Math.round(100 * xScale);
         int height = (int) Math.round(100 * yScale);
-        graphic.drawImage(towerAsset, (int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), width, height, null);
+        graphic.drawImage(towerAsset, (int)tower.getPosition().get().getX()-height/2, (int)tower.getPosition().get().getY()-width/2, width, height, null);
     }
 
     private void renderEnemy(Graphics2D graphic, Entity enemy) {
         Image asset = null;
         final int h = 40;
-        final int w = 40;
+        final int w = 30;
 
         switch(enemy.getName()) {
             case Orc.NAME:
@@ -223,7 +225,9 @@ public class GamePanel extends JPanel {
         int width = (int) Math.round(h * xScale);
         int height = (int) Math.round(w * yScale);
         Position pos = this.getRealPosition(enemy.getPosition().get());
-        graphic.drawImage(asset,(int) pos.getX(), (int) pos.getY(), width, height, null);
+        int x = ((int)pos.getX()) - height/2;
+        int y = ((int)pos.getY()) - width/2;
+        graphic.drawImage(asset,(int) x, y, width, height, null);
     }
 
     private void renderSpell(final Graphics2D graphic, final Entity spell) {
@@ -255,14 +259,13 @@ public class GamePanel extends JPanel {
         this.yMapPosition = (getHeight() - this.mapSize) / 2;
         
 
-        System.out.println("Map origin: [" + xMapPosition + ", " + yMapPosition + "]\n Map size: " + this.mapSize);
+        //System.out.println("Map origin: [" + xMapPosition + ", " + yMapPosition + "]\n Map size: " + this.mapSize);
         graphic.drawImage(this.map, this.xMapPosition, this.yMapPosition, this.mapSize, this.mapSize, null);
     }
 
     private Position getRealPosition(Position pos) {
-        int mapScale = 40;
-        double newX = (pos.getX() * this.mapSize) / mapScale + this.xMapPosition;
-        double newY = (pos.getY() * this.mapSize) / mapScale + this.yMapPosition;
+        double newX = (pos.getX() * this.mapSize) / this.MAP_SIZE_IN_UNITS + this.xMapPosition;
+        double newY = (pos.getY() * this.mapSize) / this.MAP_SIZE_IN_UNITS + this.yMapPosition;
         Position panelPosition = new Position(newX, newY);
 
         return panelPosition;

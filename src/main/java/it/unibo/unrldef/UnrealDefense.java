@@ -23,11 +23,11 @@ import it.unibo.unrldef.model.impl.WorldImpl;
 public class UnrealDefense {
 
 	public static void main(String[] args) {
-		int scale = 1;
+		int scale = 2;
 		GameEngine engine = new GameEngine();
 		Player p = new PlayerImpl("io");
 
-		World world = new WorldImpl.Builder("mondo1", p, new Position(28, 0), 20, 100)
+		World world = new WorldImpl.Builder("mondo1", p, new Position(60, 0), 20, 100)
 		.addPathSegment(Path.Direction.DOWN, 7*scale)
 		.addPathSegment(Path.Direction.LEFT, 25*scale)
 		.addPathSegment(Path.Direction.DOWN, 10*scale)

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.Color;
 
 public class ViewImpl implements View{
 
@@ -41,6 +42,7 @@ public class ViewImpl implements View{
         this.player = player;
         this.world = world;
         this.frame = new JFrame("Unreal Defense");
+        this.frame.getContentPane().setBackground(Color.BLACK);
         this.gamePanel = new GamePanel(world, inputHandler);
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
