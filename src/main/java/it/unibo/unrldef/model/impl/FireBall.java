@@ -12,7 +12,7 @@ public class FireBall extends SpellImpl {
     public static final String NAME = "fireball";
     private static final long ATTACK_RATE = 8 * 1000;
     private static final double DMG = 15.0;
-    private static final double RAD = 100.0;
+    private static final double RAD = 4.0;
     private static final long LINGERING_EFFECT_TIME = 3 * 1000;
     private static final long LINGERING_EFFECT_FREQ = 1 * 1000;
 

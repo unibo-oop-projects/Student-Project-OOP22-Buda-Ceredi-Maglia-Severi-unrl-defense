@@ -259,8 +259,6 @@ public class GamePanel extends JPanel {
 
     private void renderSpell(final Graphics2D graphic, final Entity spell) {
         Image asset = null;
-        final int h = 40;
-        final int w = 40;
         switch (spell.getName()) {
             case FireBall.NAME:
                 asset = this.fireball;
@@ -271,23 +269,18 @@ public class GamePanel extends JPanel {
             default:
                 break;
         }
-
-        int width = (int)(w* yScale);
-        int height = (int)(h * xScale);
-
-        Position pos = this.fromPositionToRealPosition(spell.getPosition().get());
-        int x = ((int)pos.getX()) - height/2;
-        int y = ((int)pos.getY()) - width/2;
-        graphic.drawImage(asset, x, y, width, height,  null);
+        final Position pos = spell.getPosition().get();
+        final double radius = ((Spell)spell).getRadius();
+        final Position realPos1 = this.fromPositionToRealPosition(new Position(pos.getX()-radius, pos.getY()-radius));
+        final Position realPos2 = this.fromPositionToRealPosition(new Position(pos.getX()+radius, pos.getY()+radius));
+        graphic.drawImage(asset, (int)realPos1.getX(), (int)realPos1.getY(), (int)(realPos2.getX()-realPos1.getX()), 
+                (int)(realPos2.getY()-realPos1.getY()) , null);
     }
 
     private void renderMap(final Graphics2D graphic) {
         this.mapSize = Math.min(getWidth(), getHeight());
         this.xMapPosition = (getWidth() - this.mapSize) / 2;
         this.yMapPosition = (getHeight() - this.mapSize) / 2;
-        
-
-        //System.out.println("Map origin: [" + xMapPosition + ", " + yMapPosition + "]\n Map size: " + this.mapSize);
         graphic.drawImage(this.map, this.xMapPosition, this.yMapPosition, this.mapSize, this.mapSize, null);
     }
 
@@ -295,7 +288,6 @@ public class GamePanel extends JPanel {
         double newX = (pos.getX() * this.mapSize) / this.MAP_SIZE_IN_UNITS + this.xMapPosition;
         double newY = (pos.getY() * this.mapSize) / this.MAP_SIZE_IN_UNITS + this.yMapPosition;
         Position panelPosition = new Position(newX, newY);
-
         return panelPosition;
     }
 
@@ -303,7 +295,6 @@ public class GamePanel extends JPanel {
         double newX = (this.MAP_SIZE_IN_UNITS*(pos.getX() - this.xMapPosition))/this.mapSize;
         double newY = (this.MAP_SIZE_IN_UNITS*(pos.getY() - this.yMapPosition))/this.mapSize;
         Position panelPosition = new Position(newX, newY);
-
         return panelPosition;
     }
 }
