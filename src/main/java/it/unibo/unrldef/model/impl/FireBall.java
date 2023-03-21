@@ -30,4 +30,7 @@ public class FireBall extends SpellImpl {
     protected void effect(final Enemy enemy) {
         enemy.reduceHealth(this.lingeringDamage);
     }
+
+    @Override
+    protected void resetEffect() { }
 }

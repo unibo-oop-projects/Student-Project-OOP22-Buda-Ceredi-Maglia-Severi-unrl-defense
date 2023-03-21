@@ -78,6 +78,7 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
         this.active = false;
         this.resetElapsedTime();
         this.lingerTime = 0;
+        this.resetEffect();
     }
 
     /**
@@ -86,7 +87,6 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
     private void ifPossibleApplyEffect() {
         if (this.getTimeSinceLastAction() <= this.lingeringEffectTime) {
             if (this.lingerTime >= this.lingeringEffectFrequency) {
-                System.out.println("Attack: " + this.lingerTime);
                 this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius())
                     .forEach(e -> this.effect(e));
                 this.lingerTime = 0;
@@ -100,4 +100,9 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
      * The effect of the spell while lingering
      */
     protected abstract void effect(final Enemy enemy);
+
+    /**
+     * Resets the effect applied by the spell
+     */
+    protected abstract void resetEffect();
 }
