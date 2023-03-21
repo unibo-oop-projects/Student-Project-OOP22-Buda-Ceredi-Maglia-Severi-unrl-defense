@@ -1,6 +1,7 @@
 package it.unibo.unrldef.graphics.impl;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
@@ -33,6 +34,7 @@ public class ViewImpl implements View{
     private final Player player;
     private final World world;
     private final ButtonsUpdater buttonsUpdater;
+    private final JLabel bank;
     private double xScale = 1;
     private double yScale = 1;
     private final int DEFAULT_WIDTH = 800;
@@ -92,6 +94,8 @@ public class ViewImpl implements View{
 		buttonPanel.add(hunter);
 		buttonPanel.add(fireBall);
 		buttonPanel.add(iceSpell);
+        this.bank = new JLabel("$ "+this.world.getMoney());
+        buttonPanel.add(this.bank);
 		this.frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
 		this.frame.getContentPane().add(buttonPanel, BorderLayout.EAST);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -105,6 +109,7 @@ public class ViewImpl implements View{
     @Override
     public void render() {
         this.updateButtons();
+        this.bank.setText("$ "+this.world.getMoney());
         this.gamePanel.repaint();
     }
 
