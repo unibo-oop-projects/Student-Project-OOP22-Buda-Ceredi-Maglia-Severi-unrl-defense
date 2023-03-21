@@ -19,7 +19,7 @@ public class ViewImpl implements View{
     private final JFrame frame;
     private final Player player;
     private final World world;
-    private final ButtonsUpdater buttonsUpdater;
+    private final DefenseButtonsUpdater buttonsUpdater;
     private final JLabel bank;
 
     public ViewImpl(Player player, World world, Input inputHandler){

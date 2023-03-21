@@ -21,7 +21,7 @@ import it.unibo.unrldef.model.impl.SnowStorm;
  * A simple class that updates the buttons used in the tower defense game
  * @author tommaso.severi2@studio.unibo.it
  */
-public class ButtonsUpdater {
+public class DefenseButtonsUpdater {
     
     private final World world;
     private final Map<String, JButton> buttons = new HashMap<>();
@@ -32,7 +32,7 @@ public class ButtonsUpdater {
      * @param respectiveNames the names associated with the buttons
      * @param respectiveButtons the buttons that correspond the the names having the same order in the list
      */
-    public ButtonsUpdater(final World world, final List<String> respectiveNames, final List<JButton> respectiveButtons) {
+    public DefenseButtonsUpdater(final World world, final List<String> respectiveNames, final List<JButton> respectiveButtons) {
         for (int i = 0; i < respectiveButtons.size(); i++) {
             this.buttons.put(respectiveNames.get(i), respectiveButtons.get(i));
         }

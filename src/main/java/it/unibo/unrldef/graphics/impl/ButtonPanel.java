@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class ButtonPanel extends JPanel {
     
-    private final ButtonsUpdater buttonsUpdater;
+    private final DefenseButtonsUpdater buttonsUpdater;
 
     public ButtonPanel(final GamePanel gamePanel, final World world) {
         super();
@@ -46,12 +46,12 @@ public class ButtonPanel extends JPanel {
 		this.add(hunter);
 		this.add(fireBall);
 		this.add(iceSpell);
-        this.buttonsUpdater = new ButtonsUpdater(world, 
+        this.buttonsUpdater = new DefenseButtonsUpdater(world, 
                 List.of(Cannon.NAME, Hunter.NAME, FireBall.NAME, SnowStorm.NAME), 
                 List.of(cannon, hunter, fireBall, iceSpell));
     }
 
-    public ButtonsUpdater getUpdater() {
+    public DefenseButtonsUpdater getUpdater() {
         return this.buttonsUpdater;
     }
 }
