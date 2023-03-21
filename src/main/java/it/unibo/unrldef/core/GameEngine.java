@@ -31,7 +31,6 @@ public class GameEngine {
 
     public void setGameWorld(final World world) {
         this.currentWorld = world;
-        this.player.setGameMap(world);
     }
 
     public void GameLoop() {

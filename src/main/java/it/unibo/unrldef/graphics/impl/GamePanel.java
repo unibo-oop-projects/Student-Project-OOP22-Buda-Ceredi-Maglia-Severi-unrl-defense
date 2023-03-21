@@ -240,10 +240,10 @@ public class GamePanel extends JPanel {
             default:
                 break;
         }
-        final int imageX = x-h/2;
-        final int imageY = y-w/2;
-        int width = (int) Math.round(h * xScale);
-        int height = (int) Math.round(w * yScale);
+        final int imageX = x-w/2;
+        final int imageY = y-h/2;
+        int width = (int) Math.round(w * xScale);
+        int height = (int) Math.round(h * yScale);
         graphic.drawImage(asset, imageX, imageY, width, height,  null);
     }
 
@@ -251,7 +251,6 @@ public class GamePanel extends JPanel {
         int size = Math.min(getWidth(), getHeight());
         int x = (getWidth() - size) / 2;
         int y = (getHeight() - size) / 2;
-
         graphic.drawImage(this.map, x, y, size, size, null);
     }
 }
