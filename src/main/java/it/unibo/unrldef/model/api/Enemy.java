@@ -14,12 +14,29 @@ public interface Enemy extends Entity{
      * @return the speed of the enemy
      */
     public double getSpeed();
+    
+    /**
+     * 
+     * @return the amount of money that the enemy will drop on death
+     */
+    public double getDropAmount();
 
     /**
      * Method that reduces the health of the enemy
      * @param amount the amount of health to reduce
      */
     public void reduceHealth(final double amount);
+
+    /**
+     * 
+     * @param speed the new speed of the enemy
+     */
+    public void setSpeed(final double speed);
+
+    /**
+     * Method that resets the speed of the enemy to the default speed
+     */
+    public void resetSpeed();
 
     /**
      * @return true if the enemy is dead, false otherwise

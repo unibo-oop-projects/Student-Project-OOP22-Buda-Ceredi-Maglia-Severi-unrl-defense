@@ -13,14 +13,18 @@ import it.unibo.unrldef.model.api.Path;
  */
 public class EnemyImpl extends EntityImpl implements Enemy {
     private double health;
-    private final double speed;
+    private double speed;
+    private double dropAmount;
+    private final double DEFAULT_SPEED;
     private int currentDirectionIndex;
     private Pair<Path.Direction, Double> currentDirection;
     
-    public EnemyImpl(final Optional<Position> position, final String name, final double startingHealth, final double speed) {
+    public EnemyImpl(final Optional<Position> position, final String name, final double startingHealth, final double speed, final double dropAmount) {
         super(position, name);
         this.health = startingHealth;
         this.speed = speed;
+        this.dropAmount = dropAmount;
+        this.DEFAULT_SPEED = speed;
         this.currentDirectionIndex = 0;
         this.currentDirection = new Pair<Path.Direction,Double>(Path.Direction.DOWN, 0.0);
 
@@ -37,8 +41,23 @@ public class EnemyImpl extends EntityImpl implements Enemy {
     }
 
     @Override
+    public double getDropAmount() {
+        return this.dropAmount;
+    }
+
+    @Override
     public void reduceHealth(final double amount) {
         this.health -= amount;
+    }
+
+    @Override
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    @Override
+    public void resetSpeed() {
+        this.speed = DEFAULT_SPEED;
     }
 
     @Override
@@ -93,7 +112,7 @@ public class EnemyImpl extends EntityImpl implements Enemy {
 
     @Override
     public Enemy copy() {
-        EnemyImpl enemy = new EnemyImpl(Optional.of(this.getPosition().get().copy()), this.getName(), health, speed);
+        EnemyImpl enemy = new EnemyImpl(Optional.of(this.getPosition().get().copy()), this.getName(), this.health, this.speed, this.dropAmount);
         enemy.setParentWorld(this.getParentWorld());
         return enemy;
     }

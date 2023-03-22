@@ -73,10 +73,17 @@ public abstract class DefenseEntity extends EntityImpl {
     }
 
     /**
+     * @return the attack rate of the defensive entity
+     */
+    public double getAttackRate() {
+        return this.attackRate;
+    }
+
+    /**
      * checks if the entity can attack
      */
     public void checkAttack(){
-        if (this.getTimeSinceLastAction() >= this.attackRate){
+        if (this.getTimeSinceLastAction() >= this.getAttackRate()){
             this.resetElapsedTime();
             this.attack();
             this.isAttacking = true;

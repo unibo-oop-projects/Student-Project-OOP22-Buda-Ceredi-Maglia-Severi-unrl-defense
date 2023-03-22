@@ -20,7 +20,7 @@ public interface Spell extends Entity {
      * @param position the desired place to throw th spell at
      * @return true if the spell is ready to be used, false otherwise
      */
-    public boolean tryActivation(final Position position);
+    public boolean ifPossibleActivate(final Position position);
 
     /**
      * @return the damage dealt by the spell every frame it's active

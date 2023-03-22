@@ -12,7 +12,7 @@ import it.unibo.unrldef.model.api.*;
 
 public class GameEngine {
 
-    private final long period = 30;
+    private final long period = 1000 / 30;
     private Player player;
     private World currentWorld;
     private final Input input;
@@ -31,7 +31,6 @@ public class GameEngine {
 
     public void setGameWorld(final World world) {
         this.currentWorld = world;
-        this.player.setGameMap(world);
     }
 
     public void GameLoop() {

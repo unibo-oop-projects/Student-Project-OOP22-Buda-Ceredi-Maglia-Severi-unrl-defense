@@ -23,21 +23,21 @@ import it.unibo.unrldef.model.impl.WorldImpl;
 public class UnrealDefense {
 
 	public static void main(String[] args) {
-		int scale = 1;
+		int scale = 2;
 		GameEngine engine = new GameEngine();
 		Player p = new PlayerImpl("io");
 
-		World world = new WorldImpl.Builder("mondo1", p, new Position(500, 0), 20)
-		.addPathSegment(Path.Direction.DOWN, 167*scale)
-		.addPathSegment(Path.Direction.LEFT, 544*scale)
-		.addPathSegment(Path.Direction.DOWN, 112*scale)
-		.addPathSegment(Path.Direction.RIGHT, 177*scale)
-		.addPathSegment(Path.Direction.UP, 38*scale)
-		.addPathSegment(Path.Direction.RIGHT, 267*scale)
-		.addPathSegment(Path.Direction.DOWN, 205*scale)
-		.addPathSegment(Path.Direction.RIGHT, 222*scale)
-		.addPathSegment(Path.Direction.DOWN, 224*scale)
-		.addPathSegment(Path.Direction.LEFT, 442*scale)
+		World world = new WorldImpl.Builder("mondo1", p, new Position(60, 0), 20, 100)
+		.addPathSegment(Path.Direction.DOWN, 7*scale)
+		.addPathSegment(Path.Direction.LEFT, 25*scale)
+		.addPathSegment(Path.Direction.DOWN, 10*scale)
+		.addPathSegment(Path.Direction.RIGHT, 12*scale)
+		.addPathSegment(Path.Direction.UP, 2*scale)
+		.addPathSegment(Path.Direction.RIGHT, 8*scale)
+		.addPathSegment(Path.Direction.DOWN, 11*scale)
+		.addPathSegment(Path.Direction.RIGHT, 10*scale)
+		.addPathSegment(Path.Direction.DOWN, 8*scale)
+		.addPathSegment(Path.Direction.LEFT, 20*scale)
 		.addPathSegment(Path.Direction.DOWN, 3*scale)
 		.addPathSegment(Path.Direction.END, 0)
 		.addWave()
