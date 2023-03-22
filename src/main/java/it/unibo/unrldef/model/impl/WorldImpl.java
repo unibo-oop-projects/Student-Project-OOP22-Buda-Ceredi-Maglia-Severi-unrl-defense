@@ -142,16 +142,16 @@ public class WorldImpl implements World{
 
     @Override
     public Boolean tryBuildTower(Position pos, String towerName) {
-        //if(this.availablePositions.contains(pos)) {
+        if(this.availablePositions.contains(pos)) {
             Tower newTower = this.availableTowers.get(towerName).copy();
             if (this.bank.trySpend(newTower.getCost())) {
-                //this.availablePositions.remove(pos);
+                this.availablePositions.remove(pos);
                 this.placedTowers.add(newTower);
                 newTower.setParentWorld(this);
                 newTower.setPosition(pos.getX(), pos.getY());
                 return true;
             }
-        //}
+        }
         return false;
     }
 
