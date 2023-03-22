@@ -50,7 +50,7 @@ public class GamePanel extends JPanel {
     private Image orcImage;
     private Image goblinImage;
     private Image fireball;
-    private Image iceSpell;
+    private Image snowStorm;
     private Image map;
     private Image cannonImage;
     private Image hunterImage;
@@ -79,12 +79,10 @@ public class GamePanel extends JPanel {
     public GamePanel(World gameWorld, Input inputHandler) {
         this.viewState = ViewState.IDLE;
         this.panelRef = this;
-
-
-        //TODO: load assets
+        this.mousePosition = new Position(0, 0);
         try {
             this.fireball = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
-            this.iceSpell = ImageIO.read(new File("assets"+File.separator+"snowStorm.png"));
+            this.snowStorm = ImageIO.read(new File("assets"+File.separator+"snowStorm.png"));
             this.orcImage = ImageIO.read(new File("assets"+File.separator+"orc.png"));
             this.goblinImage = ImageIO.read(new File("assets"+File.separator+"goblin.png"));
             this.map = ImageIO.read(new File("assets"+File.separator+"debugMap.png")).getScaledInstance(DEFAULT_WIDTH, DEFAULT_HEIGHT, java.awt.Image.SCALE_SMOOTH);
@@ -128,10 +126,10 @@ public class GamePanel extends JPanel {
                         break;
                     case TOWER_SELECTED: 
                         towerAvailablePositions.stream()
-                        .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < e.getX() && towerSquare.getX() + towerSquareWidth/2 > e.getX() && towerSquare.getY() - towerSquareHeight/2 < e.getY() && towerSquare.getY() + towerSquareHeight/2 > e.getY())
-                        .findFirst()
-                        .map(towerSquare -> fromRealPositionToPosition(towerSquare))
-                        .ifPresent(modelP -> inputHandler.setLastHit((int)modelP.getX(), (int)modelP.getY(), Input.HitType.PLACE_TOWER, Optional.of(selectedEntity)));
+                                .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < e.getX() && towerSquare.getX() + towerSquareWidth/2 > e.getX() && towerSquare.getY() - towerSquareHeight/2 < e.getY() && towerSquare.getY() + towerSquareHeight/2 > e.getY())
+                                .findFirst()
+                                .map(towerSquare -> fromRealPositionToPosition(towerSquare))
+                                .ifPresent(modelP -> inputHandler.setLastHit((int)modelP.getX(), (int)modelP.getY(), Input.HitType.PLACE_TOWER, Optional.of(selectedEntity)));
                         break;
                     case SPELL_SELECTED:
                         inputHandler.setLastHit((int)p.getX(), (int)p.getY(), Input.HitType.PLACE_SPELL, Optional.of(selectedEntity));
@@ -222,7 +220,7 @@ public class GamePanel extends JPanel {
                             radius = FireBall.RAD;
                             break;
                         case SnowStorm.NAME:
-                            asset = this.iceSpell;
+                            asset = this.snowStorm;
                             radius = SnowStorm.RAD;
                             break;
                     }
@@ -340,7 +338,7 @@ public class GamePanel extends JPanel {
                 asset = this.fireball;
                 break;
             case SnowStorm.NAME:
-                asset = this.iceSpell;
+                asset = this.snowStorm;
                 break;
             default:
                 break;
