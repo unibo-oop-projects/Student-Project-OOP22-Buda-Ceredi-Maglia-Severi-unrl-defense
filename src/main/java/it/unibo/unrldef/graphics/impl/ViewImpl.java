@@ -29,7 +29,7 @@ public class ViewImpl implements View{
         this.gamePanel = new GamePanel(world, inputHandler);
 		ButtonPanel buttonPanel = new ButtonPanel(this.gamePanel, this.world);
         this.buttonsUpdater = buttonPanel.getUpdater();
-        this.bank = new JLabel("$ "+this.world.getMoney());
+        this.bank = new JLabel("€ "+this.world.getMoney());
         buttonPanel.add(this.bank);
 		this.frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
 		this.frame.getContentPane().add(buttonPanel, BorderLayout.EAST);
@@ -54,6 +54,6 @@ public class ViewImpl implements View{
         final Set<Entity> buttonsEntities = new HashSet<Entity>(this.world.getAvailableTowers());
         buttonsEntities.addAll(this.player.getSpells());
         this.buttonsUpdater.update(buttonsEntities);
-        this.bank.setText("$ "+this.world.getMoney());
+        this.bank.setText("€ "+this.world.getMoney());
     }
 }
