@@ -6,9 +6,13 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -17,6 +21,7 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.BasicStroke;
 
+import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Enemy;
@@ -41,6 +46,8 @@ public class GamePanel extends JPanel {
 
     private String selectedEntity;
 
+    private List<Position> towerAvailablePositions;
+
     private World gameWorld;
     private ViewState viewState;
     
@@ -61,6 +68,9 @@ public class GamePanel extends JPanel {
     private final int DEFAULT_WIDTH = 600;
     private final int DEFAULT_HEIGHT = 600;
 
+    private int towerSquareWidth = 50;
+    private int towerSquareHeight = 50;
+
     private final JPanel panelRef;
 
     public enum ViewState {
@@ -72,6 +82,8 @@ public class GamePanel extends JPanel {
     public GamePanel(World gameWorld, Input inputHandler) {
         this.viewState = ViewState.IDLE;
         this.panelRef = this;
+
+
         //TODO: load assets
         try {
             this.fireball = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
@@ -86,8 +98,8 @@ public class GamePanel extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.towerAvailablePositions = new ArrayList<>();
         this.gameWorld = gameWorld;
-
         this.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         
         this.addComponentListener(new ComponentListener() {
@@ -96,6 +108,8 @@ public class GamePanel extends JPanel {
                 int tmp = Math.min(panelRef.getWidth(), panelRef.getHeight());
                 xScale = (double)tmp / DEFAULT_WIDTH;
                 yScale = (double)tmp / DEFAULT_HEIGHT;
+                towerSquareWidth = (int)(30 * xScale);
+                towerSquareHeight = (int)(30 * yScale);
             }
             @Override
             public void componentMoved(ComponentEvent e) {}
@@ -114,8 +128,15 @@ public class GamePanel extends JPanel {
                 switch (viewState) {
                     case IDLE:
                         break;
-                    case TOWER_SELECTED:      
-                        inputHandler.setLastHit((int)p.getX(), (int)p.getY(), Input.HitType.PLACE_TOWER, Optional.of(selectedEntity));
+                    case TOWER_SELECTED: 
+                        for(Position towerSquare : towerAvailablePositions) {
+                            System.out.println("e: " + e.getX() + " " + e.getY());
+                            if (towerSquare.getX() - towerSquareWidth/2 < e.getX() && towerSquare.getX() + towerSquareWidth/2 > e.getX() && towerSquare.getY() - towerSquareHeight/2 < e.getY() && towerSquare.getY() + towerSquareHeight/2 > e.getY()) {
+                                p = fromRealPositionToPosition(towerSquare);
+                                inputHandler.setLastHit((int)p.getX(), (int)p.getY(), Input.HitType.PLACE_TOWER, Optional.of(selectedEntity));
+                                break;
+                            }
+                        }
                         break;
                     case SPELL_SELECTED:
                         inputHandler.setLastHit((int)p.getX(), (int)p.getY(), Input.HitType.PLACE_SPELL, Optional.of(selectedEntity));
@@ -136,6 +157,8 @@ public class GamePanel extends JPanel {
             @Override
             public void mouseMoved(MouseEvent e) { }  
         });
+
+
     }
 
     public void setState(ViewState state) {
@@ -167,14 +190,9 @@ public class GamePanel extends JPanel {
         }
         
         if(viewState == ViewState.TOWER_SELECTED) {
-            // TODO: get available positions from world and render them as rectangles
-            Set<Position> availablePosition = this.gameWorld.getAvailablePositions();
-            List<Position> realAvailablePosition = availablePosition.stream().map((p) -> this.fromPositionToRealPosition(p)).toList();
             graphic.setColor(java.awt.Color.GREEN);
-            for (Position p: realAvailablePosition) {
-                int width = (int)(50*xScale);
-                int height = (int)(50*yScale);
-                graphic.fillRect((int)p.getX()-height/2, (int)p.getY()-width/2, width, height);
+            for (Position p: this.towerAvailablePositions) {
+                graphic.fillRect((int)p.getX()-this.towerSquareWidth/2, (int)p.getY()-this.towerSquareHeight/2, this.towerSquareWidth, this.towerSquareHeight);
             }
             graphic.setColor(java.awt.Color.BLACK);
         }
@@ -281,6 +299,8 @@ public class GamePanel extends JPanel {
         this.mapSize = Math.min(getWidth(), getHeight());
         this.xMapPosition = (getWidth() - this.mapSize) / 2;
         this.yMapPosition = (getHeight() - this.mapSize) / 2;
+        this.towerAvailablePositions.clear();
+        this.towerAvailablePositions = this.gameWorld.getAvailablePositions().stream().map((p) -> this.fromPositionToRealPosition(p)).collect(Collectors.toList());
         graphic.drawImage(this.map, this.xMapPosition, this.yMapPosition, this.mapSize, this.mapSize, null);
     }
 
