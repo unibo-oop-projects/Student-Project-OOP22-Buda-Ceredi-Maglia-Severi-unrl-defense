@@ -107,7 +107,7 @@ public class WorldImpl implements World{
         boolean end = false;
         Optional<Enemy> firstInLine = Optional.empty();
         int i = 0;
-        List<Enemy> sorroundingEnemies = this.livingEnemies.stream().filter(x -> (distance(center, x.getPosition().get()) <= radius )).toList();
+        List<Enemy> sorroundingEnemies = this.livingEnemies.stream().filter(x -> (distance(center, x.getPosition().get()) <= radius )).collect(Collectors.toList());
         while (!end) {
             Pair<Direction, Double> dir = this.path.getDirection(i);
             Position A;
@@ -117,43 +117,39 @@ public class WorldImpl implements World{
             Optional<Enemy> tmp = Optional.empty();
             switch (dir.getFirst()) {
                 case UP:
-                    A = new Position(pathCur.getX(), pathCur.getY());
+                    A = pathCur;
                     B = new Position(A.getX(), A.getY() - dir.getSecond());
                     ul = new Position(B.getX() - PATH_DEPHT/2, B.getY());
                     dr = new Position(A.getX() + PATH_DEPHT/2, A.getY());
                     tmp = sorroundingEnemies.stream()
-                            .filter(x -> this.enemiesInArea(ul, dr)
-                            .contains(x))
+                            .filter(x -> this.enemiesInArea(ul, dr).contains(x))
                             .reduce((a, b) -> a.getPosition().get().getY() < b.getPosition().get().getY() ? a : b);
                     break;
                 case DOWN:
-                    A = new Position(pathCur.getX(), pathCur.getY());
+                    A = pathCur;
                     B = new Position(A.getX(), A.getY() + dir.getSecond());
                     ul = new Position(A.getX() - PATH_DEPHT/2, A.getY());
                     dr = new Position(B.getX() + PATH_DEPHT/2, B.getY());
                     tmp = sorroundingEnemies.stream()
-                            .filter(x -> this.enemiesInArea(ul, dr)
-                            .contains(x))
+                            .filter(x -> this.enemiesInArea(ul, dr).contains(x))
                             .reduce((a, b) -> a.getPosition().get().getY() > b.getPosition().get().getY() ? a : b);
                     break;
                 case RIGHT:
-                    A = new Position(pathCur.getX(), pathCur.getY());
+                    A = pathCur;
                     B = new Position(A.getX() + dir.getSecond(), A.getY());
                     ul = new Position(A.getX(), A.getY() - PATH_DEPHT/2 );
                     dr = new Position(B.getX(), B.getY() + PATH_DEPHT/2);
                     tmp = sorroundingEnemies.stream()
-                            .filter(x -> this.enemiesInArea(ul, dr)
-                            .contains(x))
+                            .filter(x -> this.enemiesInArea(ul, dr).contains(x))
                             .reduce((a, b) -> a.getPosition().get().getX() > b.getPosition().get().getX() ? a : b);
                     break;
                 case LEFT:
-                    A = new Position(pathCur.getX(), pathCur.getY());
+                    A = pathCur;
                     B = new Position(A.getX() - dir.getSecond(), A.getY());
                     ul = new Position(B.getX(), B.getY() - PATH_DEPHT/2);
                     dr = new Position(A.getX(), A.getY() + PATH_DEPHT/2);
                     tmp = sorroundingEnemies.stream()
-                            .filter(x -> this.enemiesInArea(ul, dr)
-                            .contains(x))
+                            .filter(x -> this.enemiesInArea(ul, dr).contains(x))
                             .reduce((a, b) -> a.getPosition().get().getX() < b.getPosition().get().getX() ? a : b);
                     break;
                 default:
@@ -161,14 +157,15 @@ public class WorldImpl implements World{
                     break;            
             }
             if (!end) {
-                firstInLine = tmp;
+                if (tmp.isPresent()) {
+                    firstInLine = tmp;
+                }
                 pathCur = B;
                 i++;
             }
         }
         if (firstInLine.isPresent()) {
                 sorroundingEnemies.remove(firstInLine.get());
-                sorroundingEnemies.add(sorroundingEnemies.get(0));
                 sorroundingEnemies.add(0, firstInLine.get());
         }
             return sorroundingEnemies;
