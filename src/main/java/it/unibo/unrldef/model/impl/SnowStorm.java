@@ -15,7 +15,7 @@ public class SnowStorm extends SpellImpl {
     public static final String NAME = "snow_storm";
     private static final long ATTACK_RATE = 6 * 1000;
     private static final double DMG = 10.0;
-    private static final double RAD = 7.0;
+    public static final double RAD = 7.0;
     private static final long LINGERING_EFFECT_TIME = 4 * 1000;
     private static final long LINGERING_EFFECT_FREQ = 500;
 

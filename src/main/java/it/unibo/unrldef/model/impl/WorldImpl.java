@@ -81,8 +81,8 @@ public class WorldImpl implements World{
             Random rand = new Random();
             newEnemy.setPosition(spawningPoint.getX() + rand.nextInt(-2, 2), spawningPoint.getY());
             this.livingEnemies.add(newEnemy);
-            System.out.println(spawningPoint.getX() + " " + spawningPoint.getY());
-            System.out.println(newEnemy.getPosition().get().getX() + " " + newEnemy.getPosition().get().getY());
+            // System.out.println(spawningPoint.getX() + " " + spawningPoint.getY());
+            // System.out.println(newEnemy.getPosition().get().getX() + " " + newEnemy.getPosition().get().getY());
         }   
     }
     private Boolean areWavesEnded() {

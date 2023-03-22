@@ -152,7 +152,6 @@ public class GamePanel extends JPanel {
             @Override
             public void mouseMoved(MouseEvent e) { 
                 mousePosition = new Position(e.getX(), e.getY());
-                //System.out.println("New mouse position: " + mousePosition);
             }  
         };
 
@@ -175,51 +174,67 @@ public class GamePanel extends JPanel {
         Color a = new Color(23, 79, 120);
         Color b = new Color(21, 95,110);
         GradientPaint cp = new GradientPaint(0, this.getHeight(), a, this.getWidth(), 0, b);
-
-       // graphic.setBackground(new java.awt.Color(22, 89, 114));
         graphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphic.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         graphic.clearRect(0,0,this.getWidth(),this.getHeight());
         graphic.setPaint(cp);
         graphic.fillRect(0, 0, this.getWidth(), this.getHeight());
-        // TODO: render the game world
         renderMap(graphic);
 
-        // System.out.println("Entities:" + gameWorld.getSceneEntities());
         for (Entity entity : gameWorld.getSceneEntities()) {
             renderEntity(graphic, entity);
-            // System.out.println("Entity: " + entity.getName() + " Pos X: " + entity.getPosition().get().getX() + " Pos Y: " + entity.getPosition().get().getY());
         }
         
-        if(viewState == ViewState.TOWER_SELECTED) {
-            // TODO: get available positions from world and render them as rectangles
-
-            towerAvailablePositions.stream()
-            .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < mousePosition.getX() && towerSquare.getX() + towerSquareWidth/2 > mousePosition.getX() && towerSquare.getY() - towerSquareHeight/2 < mousePosition.getY() && towerSquare.getY() + towerSquareHeight/2 > mousePosition.getY())
-            .findFirst()
-            .ifPresent(towerSquare -> {
-                int radius = 0;
-                final Position modelP = fromRealPositionToPosition(towerSquare);
-                if (selectedEntity.equals(Hunter.NAME)) {
-                    radius = (int)(Hunter.RADIOUS);
-                } else if (selectedEntity.equals(Cannon.NAME)) {
-                    radius = (int)(Cannon.RADIOUS);
+        switch(viewState) {
+            case TOWER_SELECTED:
+                towerAvailablePositions.stream()
+                        .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < mousePosition.getX() && towerSquare.getX() + towerSquareWidth/2 > mousePosition.getX() && towerSquare.getY() - towerSquareHeight/2 < mousePosition.getY() && towerSquare.getY() + towerSquareHeight/2 > mousePosition.getY())
+                        .findFirst()
+                        .ifPresent(towerSquare -> {
+                            int radius = 0;
+                            final Position modelP = fromRealPositionToPosition(towerSquare);
+                            if (selectedEntity.equals(Hunter.NAME)) {
+                                radius = (int)(Hunter.RADIOUS);
+                            } else if (selectedEntity.equals(Cannon.NAME)) {
+                                radius = (int)(Cannon.RADIOUS);
+                            }
+                            if (radius != 0) {
+                                graphic.setColor(java.awt.Color.GREEN);
+                                final Position realPL = fromPositionToRealPosition(new Position(modelP.getX()-radius, modelP.getY()-radius));
+                                final Position realPR = fromPositionToRealPosition(new Position(modelP.getX()+radius, modelP.getY()+radius));
+                                graphic.drawOval((int)realPL.getX(), (int)realPL.getY(), (int)(realPR.getX()-realPL.getX()), (int)(realPR.getY()-realPL.getY()));
+                            }          
+                        });
+                graphic.setColor(java.awt.Color.GREEN);
+                for (Position p: this.towerAvailablePositions) {
+                    graphic.fillRect((int)p.getX()-this.towerSquareWidth/2, (int)p.getY()-this.towerSquareHeight/2, this.towerSquareWidth, this.towerSquareHeight);
                 }
-                if (radius != 0) {
-                    graphic.setColor(java.awt.Color.GREEN);
-                    final Position realPL = fromPositionToRealPosition(new Position(modelP.getX()-radius, modelP.getY()-radius));
-                    final Position realPR = fromPositionToRealPosition(new Position(modelP.getX()+radius, modelP.getY()+radius));
-                    graphic.drawOval((int)realPL.getX(), (int)realPL.getY(), (int)(realPR.getX()-realPL.getX()), (int)(realPR.getY()-realPL.getY()));
-                }          
-            });
-                
-            
-
-            graphic.setColor(java.awt.Color.GREEN);
-            for (Position p: this.towerAvailablePositions) {
-                graphic.fillRect((int)p.getX()-this.towerSquareWidth/2, (int)p.getY()-this.towerSquareHeight/2, this.towerSquareWidth, this.towerSquareHeight);
-            }
-            graphic.setColor(java.awt.Color.BLACK);
+                graphic.setColor(java.awt.Color.BLACK);
+                break;
+            case SPELL_SELECTED:
+                if (this.mousePosition.getY() < this.getHeight()-1 && this.mousePosition.getX() < this.getWidth()-1
+                        && this.mousePosition.getY() > 0 && this.mousePosition.getX() > 0) {
+                    Image asset = null;
+                    double radius = 0.0;
+                    switch (selectedEntity) {
+                        case FireBall.NAME:
+                            asset = this.fireball;
+                            radius = FireBall.RAD;
+                            break;
+                        case SnowStorm.NAME:
+                            asset = this.iceSpell;
+                            radius = SnowStorm.RAD;
+                            break;
+                    }
+                    final Position mPos = this.fromRealPositionToPosition(this.mousePosition);
+                    final Position realPos1 = this.fromPositionToRealPosition(new Position(mPos.getX()-radius, mPos.getY()-radius));
+                    final Position realPos2 = this.fromPositionToRealPosition(new Position(mPos.getX()+radius, mPos.getY()+radius));
+                    graphic.drawImage(asset, (int)realPos1.getX(), (int)realPos1.getY(), (int)(realPos2.getX()-realPos1.getX()), 
+                            (int)(realPos2.getY()-realPos1.getY()) , null);
+                }
+                break;
+            case IDLE:
+                break;
         }
     }
 
