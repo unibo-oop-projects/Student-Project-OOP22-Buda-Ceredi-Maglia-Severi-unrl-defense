@@ -60,6 +60,7 @@ public class GamePanel extends JPanel {
     private int mapSize = 0;
     private final int DEFAULT_WIDTH = 600;
     private final int DEFAULT_HEIGHT = 600;
+    private Position mousePosition;
 
     private final JPanel panelRef;
 
@@ -107,8 +108,8 @@ public class GamePanel extends JPanel {
         });
 
 
-        this.addMouseListener(new MouseInputListener() {
-
+        MouseInputListener mouse = new MouseInputListener() {
+            
             @Override
             public void mouseClicked(MouseEvent e) {
                 Position p = fromRealPositionToPosition(new Position(e.getX(),e.getY()));
@@ -135,8 +136,14 @@ public class GamePanel extends JPanel {
             @Override
             public void mouseDragged(MouseEvent e) { }
             @Override
-            public void mouseMoved(MouseEvent e) { }  
-        });
+            public void mouseMoved(MouseEvent e) { 
+                mousePosition = new Position(e.getX(), e.getY());
+                System.out.println("New mouse position: " + mousePosition);
+            }  
+        };
+
+        this.addMouseListener(mouse);
+        this.addMouseMotionListener(mouse);
     }
 
     public void setState(ViewState state) {
@@ -174,12 +181,15 @@ public class GamePanel extends JPanel {
             // TODO: get available positions from world and render them as rectangles
             Set<Position> availablePosition = this.gameWorld.getAvailablePositions();
             List<Position> realAvailablePosition = availablePosition.stream().map((p) -> this.fromPositionToRealPosition(p)).toList();
+
+            // se il mose si trova 
+
             graphic.setColor(java.awt.Color.GREEN);
             for (Position p: realAvailablePosition) {
                 int width = (int)(50*xScale);
                 int height = (int)(50*yScale);
                 graphic.fillRect((int)p.getX()-height/2, (int)p.getY()-width/2, width, height);
-                
+
                 int radius = 0;
                 final Position modelP = fromRealPositionToPosition(p);
                 if (selectedEntity.equals(Hunter.NAME)) {
