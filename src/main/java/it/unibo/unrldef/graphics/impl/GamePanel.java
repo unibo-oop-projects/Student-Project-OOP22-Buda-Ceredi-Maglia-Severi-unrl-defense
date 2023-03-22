@@ -156,7 +156,7 @@ public class GamePanel extends JPanel {
             @Override
             public void mouseMoved(MouseEvent e) { 
                 mousePosition = new Position(e.getX(), e.getY());
-                System.out.println("New mouse position: " + mousePosition);
+                //System.out.println("New mouse position: " + mousePosition);
             }  
         };
 
@@ -268,7 +268,7 @@ public class GamePanel extends JPanel {
 
                     graphic.setColor(Color.BLUE);
                     graphic.setStroke(new BasicStroke(5));
-                    System.out.println("Drawing line from " + realTowerPosition + " to " + realTargetPosition);
+                    //System.out.println("Drawing line from " + realTowerPosition + " to " + realTargetPosition);
                     graphic.drawLine((int)realTowerPosition.getX(), (int)realTowerPosition.getY(), 
                             (int)realTargetPosition.getX(), (int)realTargetPosition.getY());
                     graphic.setStroke(new BasicStroke(1));
