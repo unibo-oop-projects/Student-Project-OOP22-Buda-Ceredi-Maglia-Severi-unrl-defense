@@ -55,7 +55,7 @@ public class GamePanel extends JPanel {
     private Image cannonImage;
     private Image hunterImage;
     private Image shootingCannon;
-    private Image shootingHunter;
+    // private Image shootingHunter;
     private double xScale = 1;
     private double yScale = 1;
     private int xMapPosition = 0;
@@ -91,7 +91,7 @@ public class GamePanel extends JPanel {
             this.hunterImage = ImageIO.read(new File("assets"+File.separator+"Hunter.png"));
             this.cannonImage = ImageIO.read(new File("assets"+File.separator+"cannon.png"));
             this.shootingCannon = ImageIO.read(new File("assets"+File.separator+"shootingCannon.png"));
-            this.shootingHunter = ImageIO.read(new File("assets"+File.separator+"shootingHunter.png"));
+            // this.shootingHunter = ImageIO.read(new File("assets"+File.separator+"shootingHunter.png"));
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -245,7 +245,7 @@ public class GamePanel extends JPanel {
         final int hunterGap = 5;
         Optional<Enemy> target = ((Tower)tower).getTarget();
         final Position realTowerPosition = this.fromPositionToRealPosition(new Position(tower.getPosition().get().getX(), tower.getPosition().get().getY()-hunterGap));
-        final Position realTargetPosition = target.isPresent() ? this.fromPositionToRealPosition(target.get().getPosition().get()) : null;
+        Position realTargetPosition = new Position(0, 0);
         switch(tower.getName()) {
             case Cannon.NAME:
                 w=100;
@@ -260,8 +260,8 @@ public class GamePanel extends JPanel {
                 h=100;
                 w=75;
                 if (target.isPresent()) {
+                    realTargetPosition = this.fromPositionToRealPosition(target.get().getPosition().get());
                     towerAsset = hunterImage;
-
                     graphic.setColor(Color.BLUE);
                     graphic.setStroke(new BasicStroke(5));
                     //System.out.println("Drawing line from " + realTowerPosition + " to " + realTargetPosition);
