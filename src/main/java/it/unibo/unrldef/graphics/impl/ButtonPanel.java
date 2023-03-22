@@ -26,6 +26,7 @@ public class ButtonPanel extends JPanel {
     public ButtonPanel(final GamePanel gamePanel, final World world) {
         super();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setBackground(new java.awt.Color(194, 148, 103));
         PlaceDefenseButton cannon = null;
         PlaceDefenseButton hunter = null;
         PlaceDefenseButton fireBall = null;

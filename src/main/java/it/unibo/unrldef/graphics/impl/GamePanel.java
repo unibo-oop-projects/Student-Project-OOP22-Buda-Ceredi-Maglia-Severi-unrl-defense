@@ -131,14 +131,11 @@ public class GamePanel extends JPanel {
                     case IDLE:
                         break;
                     case TOWER_SELECTED: 
-                        for(Position towerSquare : towerAvailablePositions) {
-                            System.out.println("e: " + e.getX() + " " + e.getY());
-                            if (towerSquare.getX() - towerSquareWidth/2 < e.getX() && towerSquare.getX() + towerSquareWidth/2 > e.getX() && towerSquare.getY() - towerSquareHeight/2 < e.getY() && towerSquare.getY() + towerSquareHeight/2 > e.getY()) {
-                                p = fromRealPositionToPosition(towerSquare);
-                                inputHandler.setLastHit((int)p.getX(), (int)p.getY(), Input.HitType.PLACE_TOWER, Optional.of(selectedEntity));
-                                break;
-                            }
-                        }
+                        towerAvailablePositions.stream()
+                        .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < e.getX() && towerSquare.getX() + towerSquareWidth/2 > e.getX() && towerSquare.getY() - towerSquareHeight/2 < e.getY() && towerSquare.getY() + towerSquareHeight/2 > e.getY())
+                        .findFirst()
+                        .map(towerSquare -> fromRealPositionToPosition(towerSquare))
+                        .ifPresent(modelP -> inputHandler.setLastHit((int)modelP.getX(), (int)modelP.getY(), Input.HitType.PLACE_TOWER, Optional.of(selectedEntity)));
                         break;
                     case SPELL_SELECTED:
                         inputHandler.setLastHit((int)p.getX(), (int)p.getY(), Input.HitType.PLACE_SPELL, Optional.of(selectedEntity));
@@ -200,30 +197,31 @@ public class GamePanel extends JPanel {
         
         if(viewState == ViewState.TOWER_SELECTED) {
             // TODO: get available positions from world and render them as rectangles
-            Set<Position> availablePosition = this.gameWorld.getAvailablePositions();
-            List<Position> realAvailablePosition = availablePosition.stream().map((p) -> this.fromPositionToRealPosition(p)).toList();
 
-            // se il mose si trova 
-
-            graphic.setColor(java.awt.Color.GREEN);
-            for (Position p: this.towerAvailablePositions) {
-                int width = (int)(50*xScale);
-                int height = (int)(50*yScale);
-                graphic.fillRect((int)p.getX()-this.towerSquareWidth/2, (int)p.getY()-this.towerSquareHeight/2, this.towerSquareWidth, this.towerSquareHeight);
-
+            towerAvailablePositions.stream()
+            .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < mousePosition.getX() && towerSquare.getX() + towerSquareWidth/2 > mousePosition.getX() && towerSquare.getY() - towerSquareHeight/2 < mousePosition.getY() && towerSquare.getY() + towerSquareHeight/2 > mousePosition.getY())
+            .findFirst()
+            .ifPresent(towerSquare -> {
                 int radius = 0;
-                final Position modelP = fromRealPositionToPosition(p);
+                final Position modelP = fromRealPositionToPosition(towerSquare);
                 if (selectedEntity.equals(Hunter.NAME)) {
                     radius = (int)(Hunter.RADIOUS);
                 } else if (selectedEntity.equals(Cannon.NAME)) {
                     radius = (int)(Cannon.RADIOUS);
                 }
                 if (radius != 0) {
+                    graphic.setColor(java.awt.Color.GREEN);
                     final Position realPL = fromPositionToRealPosition(new Position(modelP.getX()-radius, modelP.getY()-radius));
                     final Position realPR = fromPositionToRealPosition(new Position(modelP.getX()+radius, modelP.getY()+radius));
                     graphic.drawOval((int)realPL.getX(), (int)realPL.getY(), (int)(realPR.getX()-realPL.getX()), (int)(realPR.getY()-realPL.getY()));
-                }
-                graphic.setColor(java.awt.Color.GREEN);
+                }          
+            });
+                
+            
+
+            graphic.setColor(java.awt.Color.GREEN);
+            for (Position p: this.towerAvailablePositions) {
+                graphic.fillRect((int)p.getX()-this.towerSquareWidth/2, (int)p.getY()-this.towerSquareHeight/2, this.towerSquareWidth, this.towerSquareHeight);
             }
             graphic.setColor(java.awt.Color.BLACK);
         }
@@ -273,6 +271,8 @@ public class GamePanel extends JPanel {
                     System.out.println("Drawing line from " + realTowerPosition + " to " + realTargetPosition);
                     graphic.drawLine((int)realTowerPosition.getX(), (int)realTowerPosition.getY(), 
                             (int)realTargetPosition.getX(), (int)realTargetPosition.getY());
+                    graphic.setStroke(new BasicStroke(1));
+                    graphic.setColor(Color.BLACK);
                 } else {
                     towerAsset = hunterImage;
                 }
