@@ -50,12 +50,12 @@ public class GamePanel extends JPanel {
     private Image orcImage;
     private Image goblinImage;
     private Image fireball;
-    private Image iceSpell;
+    private Image snowStorm;
     private Image map;
     private Image cannonImage;
     private Image hunterImage;
     private Image shootingCannon;
-    private Image shootingHunter;
+    // private Image shootingHunter;
     private double xScale = 1;
     private double yScale = 1;
     private int xMapPosition = 0;
@@ -79,19 +79,17 @@ public class GamePanel extends JPanel {
     public GamePanel(World gameWorld, Input inputHandler) {
         this.viewState = ViewState.IDLE;
         this.panelRef = this;
-
-
-        //TODO: load assets
+        this.mousePosition = new Position(0, 0);
         try {
             this.fireball = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
-            this.iceSpell = ImageIO.read(new File("assets"+File.separator+"snowStorm.png"));
+            this.snowStorm = ImageIO.read(new File("assets"+File.separator+"snowStorm.png"));
             this.orcImage = ImageIO.read(new File("assets"+File.separator+"orc.png"));
             this.goblinImage = ImageIO.read(new File("assets"+File.separator+"goblin.png"));
             this.map = ImageIO.read(new File("assets"+File.separator+"debugMap.png")).getScaledInstance(DEFAULT_WIDTH, DEFAULT_HEIGHT, java.awt.Image.SCALE_SMOOTH);
             this.hunterImage = ImageIO.read(new File("assets"+File.separator+"Hunter.png"));
             this.cannonImage = ImageIO.read(new File("assets"+File.separator+"cannon.png"));
             this.shootingCannon = ImageIO.read(new File("assets"+File.separator+"shootingCannon.png"));
-            this.shootingHunter = ImageIO.read(new File("assets"+File.separator+"shootingHunter.png"));
+            // this.shootingHunter = ImageIO.read(new File("assets"+File.separator+"shootingHunter.png"));
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -128,10 +126,10 @@ public class GamePanel extends JPanel {
                         break;
                     case TOWER_SELECTED: 
                         towerAvailablePositions.stream()
-                        .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < e.getX() && towerSquare.getX() + towerSquareWidth/2 > e.getX() && towerSquare.getY() - towerSquareHeight/2 < e.getY() && towerSquare.getY() + towerSquareHeight/2 > e.getY())
-                        .findFirst()
-                        .map(towerSquare -> fromRealPositionToPosition(towerSquare))
-                        .ifPresent(modelP -> inputHandler.setLastHit((int)modelP.getX(), (int)modelP.getY(), Input.HitType.PLACE_TOWER, Optional.of(selectedEntity)));
+                                .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < e.getX() && towerSquare.getX() + towerSquareWidth/2 > e.getX() && towerSquare.getY() - towerSquareHeight/2 < e.getY() && towerSquare.getY() + towerSquareHeight/2 > e.getY())
+                                .findFirst()
+                                .map(towerSquare -> fromRealPositionToPosition(towerSquare))
+                                .ifPresent(modelP -> inputHandler.setLastHit((int)modelP.getX(), (int)modelP.getY(), Input.HitType.PLACE_TOWER, Optional.of(selectedEntity)));
                         break;
                     case SPELL_SELECTED:
                         inputHandler.setLastHit((int)p.getX(), (int)p.getY(), Input.HitType.PLACE_SPELL, Optional.of(selectedEntity));
@@ -152,7 +150,6 @@ public class GamePanel extends JPanel {
             @Override
             public void mouseMoved(MouseEvent e) { 
                 mousePosition = new Position(e.getX(), e.getY());
-                //System.out.println("New mouse position: " + mousePosition);
             }  
         };
 
@@ -175,51 +172,67 @@ public class GamePanel extends JPanel {
         Color a = new Color(23, 79, 120);
         Color b = new Color(21, 95,110);
         GradientPaint cp = new GradientPaint(0, this.getHeight(), a, this.getWidth(), 0, b);
-
-       // graphic.setBackground(new java.awt.Color(22, 89, 114));
         graphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphic.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         graphic.clearRect(0,0,this.getWidth(),this.getHeight());
         graphic.setPaint(cp);
         graphic.fillRect(0, 0, this.getWidth(), this.getHeight());
-        // TODO: render the game world
         renderMap(graphic);
 
-        // System.out.println("Entities:" + gameWorld.getSceneEntities());
         for (Entity entity : gameWorld.getSceneEntities()) {
             renderEntity(graphic, entity);
-            // System.out.println("Entity: " + entity.getName() + " Pos X: " + entity.getPosition().get().getX() + " Pos Y: " + entity.getPosition().get().getY());
         }
         
-        if(viewState == ViewState.TOWER_SELECTED) {
-            // TODO: get available positions from world and render them as rectangles
-
-            towerAvailablePositions.stream()
-            .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < mousePosition.getX() && towerSquare.getX() + towerSquareWidth/2 > mousePosition.getX() && towerSquare.getY() - towerSquareHeight/2 < mousePosition.getY() && towerSquare.getY() + towerSquareHeight/2 > mousePosition.getY())
-            .findFirst()
-            .ifPresent(towerSquare -> {
-                int radius = 0;
-                final Position modelP = fromRealPositionToPosition(towerSquare);
-                if (selectedEntity.equals(Hunter.NAME)) {
-                    radius = (int)(Hunter.RADIOUS);
-                } else if (selectedEntity.equals(Cannon.NAME)) {
-                    radius = (int)(Cannon.RADIOUS);
+        switch(viewState) {
+            case TOWER_SELECTED:
+                towerAvailablePositions.stream()
+                        .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < mousePosition.getX() && towerSquare.getX() + towerSquareWidth/2 > mousePosition.getX() && towerSquare.getY() - towerSquareHeight/2 < mousePosition.getY() && towerSquare.getY() + towerSquareHeight/2 > mousePosition.getY())
+                        .findFirst()
+                        .ifPresent(towerSquare -> {
+                            int radius = 0;
+                            final Position modelP = fromRealPositionToPosition(towerSquare);
+                            if (selectedEntity.equals(Hunter.NAME)) {
+                                radius = (int)(Hunter.RADIOUS);
+                            } else if (selectedEntity.equals(Cannon.NAME)) {
+                                radius = (int)(Cannon.RADIOUS);
+                            }
+                            if (radius != 0) {
+                                graphic.setColor(java.awt.Color.GREEN);
+                                final Position realPL = fromPositionToRealPosition(new Position(modelP.getX()-radius, modelP.getY()-radius));
+                                final Position realPR = fromPositionToRealPosition(new Position(modelP.getX()+radius, modelP.getY()+radius));
+                                graphic.drawOval((int)realPL.getX(), (int)realPL.getY(), (int)(realPR.getX()-realPL.getX()), (int)(realPR.getY()-realPL.getY()));
+                            }          
+                        });
+                graphic.setColor(java.awt.Color.GREEN);
+                for (Position p: this.towerAvailablePositions) {
+                    graphic.fillRect((int)p.getX()-this.towerSquareWidth/2, (int)p.getY()-this.towerSquareHeight/2, this.towerSquareWidth, this.towerSquareHeight);
                 }
-                if (radius != 0) {
-                    graphic.setColor(java.awt.Color.GREEN);
-                    final Position realPL = fromPositionToRealPosition(new Position(modelP.getX()-radius, modelP.getY()-radius));
-                    final Position realPR = fromPositionToRealPosition(new Position(modelP.getX()+radius, modelP.getY()+radius));
-                    graphic.drawOval((int)realPL.getX(), (int)realPL.getY(), (int)(realPR.getX()-realPL.getX()), (int)(realPR.getY()-realPL.getY()));
-                }          
-            });
-                
-            
-
-            graphic.setColor(java.awt.Color.GREEN);
-            for (Position p: this.towerAvailablePositions) {
-                graphic.fillRect((int)p.getX()-this.towerSquareWidth/2, (int)p.getY()-this.towerSquareHeight/2, this.towerSquareWidth, this.towerSquareHeight);
-            }
-            graphic.setColor(java.awt.Color.BLACK);
+                graphic.setColor(java.awt.Color.BLACK);
+                break;
+            case SPELL_SELECTED:
+                if (this.mousePosition.getY() < this.getHeight()-1 && this.mousePosition.getX() < this.getWidth()-1
+                        && this.mousePosition.getY() > 0 && this.mousePosition.getX() > 0) {
+                    Image asset = null;
+                    double radius = 0.0;
+                    switch (selectedEntity) {
+                        case FireBall.NAME:
+                            asset = this.fireball;
+                            radius = FireBall.RAD;
+                            break;
+                        case SnowStorm.NAME:
+                            asset = this.snowStorm;
+                            radius = SnowStorm.RAD;
+                            break;
+                    }
+                    final Position mPos = this.fromRealPositionToPosition(this.mousePosition);
+                    final Position realPos1 = this.fromPositionToRealPosition(new Position(mPos.getX()-radius, mPos.getY()-radius));
+                    final Position realPos2 = this.fromPositionToRealPosition(new Position(mPos.getX()+radius, mPos.getY()+radius));
+                    graphic.drawImage(asset, (int)realPos1.getX(), (int)realPos1.getY(), (int)(realPos2.getX()-realPos1.getX()), 
+                            (int)(realPos2.getY()-realPos1.getY()) , null);
+                }
+                break;
+            case IDLE:
+                break;
         }
     }
 
@@ -245,7 +258,7 @@ public class GamePanel extends JPanel {
         final int hunterGap = 5;
         Optional<Enemy> target = ((Tower)tower).getTarget();
         final Position realTowerPosition = this.fromPositionToRealPosition(new Position(tower.getPosition().get().getX(), tower.getPosition().get().getY()-hunterGap));
-        final Position realTargetPosition = target.isPresent() ? this.fromPositionToRealPosition(target.get().getPosition().get()) : null;
+        Position realTargetPosition = new Position(0, 0);
         switch(tower.getName()) {
             case Cannon.NAME:
                 w=100;
@@ -260,8 +273,8 @@ public class GamePanel extends JPanel {
                 h=100;
                 w=75;
                 if (target.isPresent()) {
+                    realTargetPosition = this.fromPositionToRealPosition(target.get().getPosition().get());
                     towerAsset = hunterImage;
-
                     graphic.setColor(Color.BLUE);
                     graphic.setStroke(new BasicStroke(5));
                     //System.out.println("Drawing line from " + realTowerPosition + " to " + realTargetPosition);
@@ -325,7 +338,7 @@ public class GamePanel extends JPanel {
                 asset = this.fireball;
                 break;
             case SnowStorm.NAME:
-                asset = this.iceSpell;
+                asset = this.snowStorm;
                 break;
             default:
                 break;

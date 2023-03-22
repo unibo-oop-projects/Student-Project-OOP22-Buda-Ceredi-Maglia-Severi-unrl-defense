@@ -16,23 +16,25 @@ import java.util.Set;
 public class ViewImpl implements View{
 
     private final GamePanel gamePanel;
+    private final DefenseButtonPanel buttonPanel;
     private final JFrame frame;
     private final Player player;
     private final World world;
-    private final DefenseButtonsUpdater buttonsUpdater;
     private final JLabel bank;
+    private final JLabel hearts;
 
     public ViewImpl(Player player, World world, Input inputHandler){
         this.player = player;
         this.world = world;
         this.frame = new JFrame("Unreal Defense");
         this.gamePanel = new GamePanel(world, inputHandler);
-		ButtonPanel buttonPanel = new ButtonPanel(this.gamePanel, this.world);
-        this.buttonsUpdater = buttonPanel.getUpdater();
-        this.bank = new JLabel("€ "+this.world.getMoney());
-        buttonPanel.add(this.bank);
+		this.buttonPanel = new DefenseButtonPanel(this.gamePanel, this.world);
+        this.bank = new JLabel();
+        this.hearts = new JLabel();
+        this.buttonPanel.add(this.bank);
+        this.buttonPanel.add(this.hearts);
 		this.frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
-		this.frame.getContentPane().add(buttonPanel, BorderLayout.EAST);
+		this.frame.getContentPane().add(this.buttonPanel, BorderLayout.EAST);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setSize(this.frame.getPreferredSize());
         this.frame.setMinimumSize(this.frame.getPreferredSize());
@@ -53,7 +55,8 @@ public class ViewImpl implements View{
     private void updateHUD() {
         final Set<Entity> buttonsEntities = new HashSet<Entity>(this.world.getAvailableTowers());
         buttonsEntities.addAll(this.player.getSpells());
-        this.buttonsUpdater.update(buttonsEntities);
+        this.buttonPanel.update(buttonsEntities);
         this.bank.setText("€ "+this.world.getMoney());
+        this.hearts.setText("<3 "+this.world.getCastleIntegrity().getHearts());
     }
 }
