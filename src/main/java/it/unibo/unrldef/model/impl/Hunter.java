@@ -17,7 +17,7 @@ public class Hunter extends TowerImpl {
     final private static long ATTACK_FOR_SECOND = 1000;
     final private static int DAMAGE = 50;
     final public static String NAME = "sdrogo hunter";
-    final private static double RADIOUS = 1000;
+    final public static double RADIOUS = 30;
     private Enemy target;
 
     public Hunter(final Position hunterPosition) {

@@ -27,7 +27,7 @@ public class UnrealDefense {
 		GameEngine engine = new GameEngine();
 		Player p = new PlayerImpl("io");
 
-		World world = new WorldImpl.Builder("mondo1", p, new Position(60, 0), 20, 100)
+		World world = new WorldImpl.Builder("mondo1", p, new Position(60, 0), 20, 10000)
 		.addPathSegment(Path.Direction.DOWN, 7*scale)
 		.addPathSegment(Path.Direction.LEFT, 25*scale)
 		.addPathSegment(Path.Direction.DOWN, 10*scale)

@@ -17,7 +17,7 @@ public class Cannon extends TowerImpl {
     final private static long ATTACK_FOR_SECOND = 1000;
     final private static int DAMAGE = 5;
     final public static String NAME = "sdrogo cannon";
-    final private static double RADIOUS = 100;
+    final public static double RADIOUS = 20;
     final private static double EXPLOSION_RADIUS = 2;
     private Enemy target;
     

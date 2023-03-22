@@ -83,7 +83,7 @@ public class GamePanel extends JPanel {
             this.cannonImage = ImageIO.read(new File("assets"+File.separator+"cannon.png"));
             this.shootingCannon = ImageIO.read(new File("assets"+File.separator+"shootingCannon.png"));
             this.shootingHunter = ImageIO.read(new File("assets"+File.separator+"shootingHunter.png"));
-            this.ballEsplosion = ImageIO.read(new File("assets"+File.separator+"esplosione.png"));
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -163,8 +163,11 @@ public class GamePanel extends JPanel {
         graphic.fillRect(0, 0, this.getWidth(), this.getHeight());
         // TODO: render the game world
         renderMap(graphic);
+
+        // System.out.println("Entities:" + gameWorld.getSceneEntities());
         for (Entity entity : gameWorld.getSceneEntities()) {
             renderEntity(graphic, entity);
+            // System.out.println("Entity: " + entity.getName() + " Pos X: " + entity.getPosition().get().getX() + " Pos Y: " + entity.getPosition().get().getY());
         }
         
         if(viewState == ViewState.TOWER_SELECTED) {
@@ -176,6 +179,19 @@ public class GamePanel extends JPanel {
                 int width = (int)(50*xScale);
                 int height = (int)(50*yScale);
                 graphic.fillRect((int)p.getX()-height/2, (int)p.getY()-width/2, width, height);
+                
+                int radius = 0;
+                final Position modelP = fromRealPositionToPosition(p);
+                if (selectedEntity.equals(Hunter.NAME)) {
+                    radius = (int)(Hunter.RADIOUS);
+                } else if (selectedEntity.equals(Cannon.NAME)) {
+                    radius = (int)(Cannon.RADIOUS);
+                }
+                if (radius != 0) {
+                    final Position realPL = fromPositionToRealPosition(new Position(modelP.getX()-radius, modelP.getY()-radius));
+                    final Position realPR = fromPositionToRealPosition(new Position(modelP.getX()+radius, modelP.getY()+radius));
+                    graphic.drawOval((int)realPL.getX(), (int)realPL.getY(), (int)(realPR.getX()-realPL.getX()), (int)(realPR.getY()-realPL.getY()));
+                }
             }
             graphic.setColor(java.awt.Color.BLACK);
         }
@@ -200,17 +216,16 @@ public class GamePanel extends JPanel {
         Image towerAsset = null;
         int h = 0;
         int w = 0;
+        final int hunterGap = 5;
         Optional<Enemy> target = ((Tower)tower).getTarget();
+        final Position realTowerPosition = this.fromPositionToRealPosition(new Position(tower.getPosition().get().getX(), tower.getPosition().get().getY()-hunterGap));
+        final Position realTargetPosition = target.isPresent() ? this.fromPositionToRealPosition(target.get().getPosition().get()) : null;
         switch(tower.getName()) {
             case Cannon.NAME:
-                w=140;
-                h=100;
+                w=100;
+                h=71;
                 if (target.isPresent()) {
                     towerAsset = shootingCannon;
-                    // render
-                    graphic.setColor(Color.RED);
-                    graphic.setStroke(new BasicStroke(20));
-                    graphic.drawLine((int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), (int)target.get().getPosition().get().getX(), (int)target.get().getPosition().get().getY());
                 } else {
                     towerAsset = cannonImage;
                 }
@@ -219,12 +234,13 @@ public class GamePanel extends JPanel {
                 h=100;
                 w=75;
                 if (target.isPresent()) {
-                    towerAsset = shootingHunter;
+                    towerAsset = hunterImage;
 
-                    graphic.setColor(Color.RED);
-                    graphic.setStroke(new BasicStroke(20));
-                    System.out.println("Drawing line from " + tower.getPosition().get() + " to " + target.get().getPosition().get());
-                    graphic.drawLine((int)tower.getPosition().get().getX(), (int)tower.getPosition().get().getY(), (int)target.get().getPosition().get().getX(), (int)target.get().getPosition().get().getY());
+                    graphic.setColor(Color.BLUE);
+                    graphic.setStroke(new BasicStroke(5));
+                    System.out.println("Drawing line from " + realTowerPosition + " to " + realTargetPosition);
+                    graphic.drawLine((int)realTowerPosition.getX(), (int)realTowerPosition.getY(), 
+                            (int)realTargetPosition.getX(), (int)realTargetPosition.getY());
                 } else {
                     towerAsset = hunterImage;
                 }
