@@ -7,11 +7,8 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -21,7 +18,6 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.BasicStroke;
 
-import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Enemy;
@@ -288,27 +284,38 @@ public class GamePanel extends JPanel {
     }
 
     private void renderEnemy(Graphics2D graphic, Entity enemy) {
+        Enemy e = (Enemy)enemy;
+        double startingHealth = 0;
         Image asset = null;
         final int h = 40;
         final int w = 30;
 
-        switch(enemy.getName()) {
+        switch(e.getName()) {
             case Orc.NAME:
                 asset = orcImage;
+                startingHealth = Orc.HEALTH;
                 break;
             case Goblin.NAME:
                 asset = goblinImage;
+                startingHealth = Goblin.HEALTH;
                 break;
             default:
                 break;
         }
-
+        double healthPercentage = e.getHealth() / startingHealth;
         int width = (int)(w* yScale);
         int height = (int)(h * xScale);
         Position pos = this.fromPositionToRealPosition(enemy.getPosition().get());
         int x = ((int)pos.getX()) - height/2;
         int y = ((int)pos.getY()) - width/2;
+        int healthBarY = (int)(y - 5 * yScale);
         graphic.drawImage(asset,(int) x, y, width, height, null);
+        graphic.setColor(Color.RED);
+        
+        graphic.fillRect(x, healthBarY, width, 5);
+        graphic.setColor(Color.GREEN);
+        
+        graphic.fillRect(x, healthBarY, (int)(width*healthPercentage), 5);
     }
 
     private void renderSpell(final Graphics2D graphic, final Entity spell) {

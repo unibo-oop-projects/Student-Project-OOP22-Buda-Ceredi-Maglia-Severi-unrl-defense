@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,7 @@ import it.unibo.unrldef.model.api.Path.Direction;
 
 public class WorldImpl implements World{
 
-    private final static long SPAWNING_TIME = 1000;
+    private final static long SPAWNING_TIME = 1500;
     private final static int ENEMY_POWER = 1;
 
     private final String name;
@@ -77,8 +78,11 @@ public class WorldImpl implements World{
             timeToNextSpawn = SPAWNING_TIME;
             Enemy newEnemy = this.spawningQueue.poll();
             Position spawningPoint = this.path.getSpawningPoint();
-            newEnemy.setPosition(spawningPoint.getX(), spawningPoint.getY());
+            Random rand = new Random();
+            newEnemy.setPosition(spawningPoint.getX() + rand.nextInt(-2, 2), spawningPoint.getY());
             this.livingEnemies.add(newEnemy);
+            System.out.println(spawningPoint.getX() + " " + spawningPoint.getY());
+            System.out.println(newEnemy.getPosition().get().getX() + " " + newEnemy.getPosition().get().getY());
         }   
     }
     private Boolean areWavesEnded() {
@@ -88,7 +92,7 @@ public class WorldImpl implements World{
 
 
     private double distanceFromSpawn(Position pos) {
-        Position pathCur = this.path.getSpawningPoint();
+        Position pathCur = this.path.getSpawningPoint().copy();
         Pair<Direction, Double> curSeg;
         double distance = 0;
         int i = 0;
