@@ -12,13 +12,13 @@ public class Sprite {
     private final Image sprite;
     private Image scaledSprite;
 
-    public Sprite(int length, int eight, Image sprite) {
-        this.dim = new Pair<>(length, eight);
+    public Sprite(int width, int height, Image sprite) {
+        this.dim = new Pair<>(width, height);
         this.sprite = sprite;
     }
 
-    public void scale(int scaleFactor) {
-        this.scaledDim = new Pair<>(this.dim.getFirst()*scaleFactor, this.dim.getSecond()*scaleFactor);
+    public void scale(int xScale, int yScale) {
+        this.scaledDim = new Pair<>(this.dim.getFirst()*xScale, this.dim.getSecond()*yScale);
         this.scaledSprite = sprite.getScaledInstance(this.scaledDim.getFirst(), this.scaledDim.getSecond(), java.awt.Image.SCALE_SMOOTH);
     }
 
@@ -26,7 +26,11 @@ public class Sprite {
         return this.scaledSprite;
     }
 
+    public Pair<Integer, Integer> getScaledDimension() {
+        return new Pair<Integer, Integer> (this.scaledDim.getFirst(), this.scaledDim.getSecond());
+    }
+
     public Position getApplicationPoint( Position pos ) {
-        return new Position( pos.getX() - this.scaledDim.getFirst()/2, pos.getY() - this.scaledDim.getSecond()/2 );
+        return new Position( pos.getX() - this.dim.getFirst()/2, pos.getY() - this.dim.getSecond()/2 );
     }
 }

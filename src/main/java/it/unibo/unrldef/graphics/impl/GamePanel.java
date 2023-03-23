@@ -7,9 +7,12 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.lang.Math;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -35,10 +38,11 @@ import it.unibo.unrldef.model.impl.Hunter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.GradientPaint;
-import java.awt.Image;
+//import java.awt.Image;
 
 public class GamePanel extends JPanel {
-    private final int MAP_SIZE_IN_UNITS = 80;
+    private final int MAP_WIDTH_IN_UNITS = 80;
+    private final int MAP_HEIGHT_IN_UNITS = 80;
 
     private String selectedEntity;
 
@@ -47,20 +51,21 @@ public class GamePanel extends JPanel {
     private World gameWorld;
     private ViewState viewState;
     
-    private Image orcImage;
-    private Image goblinImage;
-    private Image fireball;
-    private Image snowStorm;
-    private Image map;
-    private Image cannonImage;
-    private Image hunterImage;
-    private Image shootingCannon;
+    private Sprite orc;
+    private Sprite goblin;
+    private Sprite fireball;
+    private Sprite snowStorm;
+    private Sprite map;
+    private Sprite cannon;
+    private Sprite hunter;
+    private Sprite shootingCannon;
     // private Image shootingHunter;
-    private double xScale = 1;
-    private double yScale = 1;
+    private Set<Sprite> sprites = new HashSet<>();
+    private int xScale = 1;
+    private int yScale = 1;
     private int xMapPosition = 0;
     private int yMapPosition = 0;
-    private int mapSize = 0;
+    //private int mapSize = 0;
     private final int DEFAULT_WIDTH = 600;
     private final int DEFAULT_HEIGHT = 600;
     private Position mousePosition;
@@ -81,14 +86,21 @@ public class GamePanel extends JPanel {
         this.panelRef = this;
         this.mousePosition = new Position(0, 0);
         try {
-            this.fireball = ImageIO.read(new File("assets"+File.separator+"fireball.png"));
-            this.snowStorm = ImageIO.read(new File("assets"+File.separator+"snowStorm.png"));
-            this.orcImage = ImageIO.read(new File("assets"+File.separator+"orc.png"));
-            this.goblinImage = ImageIO.read(new File("assets"+File.separator+"goblin.png"));
-            this.map = ImageIO.read(new File("assets"+File.separator+"debugMap.png")).getScaledInstance(DEFAULT_WIDTH, DEFAULT_HEIGHT, java.awt.Image.SCALE_SMOOTH);
-            this.hunterImage = ImageIO.read(new File("assets"+File.separator+"Hunter.png"));
-            this.cannonImage = ImageIO.read(new File("assets"+File.separator+"cannon.png"));
-            this.shootingCannon = ImageIO.read(new File("assets"+File.separator+"shootingCannon.png"));
+            this.map = new Sprite(80, 80, ImageIO.read(new File("assets"+File.separator+"debugMap.png")));
+            this.fireball = new Sprite(10, 10, ImageIO.read(new File("assets"+File.separator+"fireball.png")));
+            this.sprites.add(this.fireball);
+            this.snowStorm = new Sprite( 10, 10, ImageIO.read(new File("assets"+File.separator+"snowStorm.png")));
+            this.sprites.add(this.snowStorm);
+            this.orc = new Sprite(6, 6, ImageIO.read(new File("assets"+File.separator+"orc.png")));
+            this.sprites.add(this.orc);
+            this.goblin = new Sprite(4, 5, ImageIO.read(new File("assets"+File.separator+"goblin.png")));
+            this.sprites.add(this.goblin);
+            this.hunter = new Sprite(9, 12, ImageIO.read(new File("assets"+File.separator+"Hunter.png")));
+            this.sprites.add(this.hunter);
+            this.cannon = new Sprite(14, 10, ImageIO.read(new File("assets"+File.separator+"cannon.png")));
+            this.sprites.add(this.cannon);
+            this.shootingCannon = new Sprite(14, 10, ImageIO.read(new File("assets"+File.separator+"shootingCannon.png")));
+            this.sprites.add(this.shootingCannon);
             // this.shootingHunter = ImageIO.read(new File("assets"+File.separator+"shootingHunter.png"));
             
         } catch (IOException e) {
@@ -97,15 +109,32 @@ public class GamePanel extends JPanel {
         this.towerAvailablePositions = new ArrayList<>();
         this.gameWorld = gameWorld;
         this.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        this.scaleAll(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         
         this.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-                int tmp = Math.min(panelRef.getWidth(), panelRef.getHeight());
-                xScale = (double)tmp / DEFAULT_WIDTH;
-                yScale = (double)tmp / DEFAULT_HEIGHT;
-                towerSquareWidth = (int)(30 * xScale);
-                towerSquareHeight = (int)(30 * yScale);
+                //scaleAll(panelRef.getWidth(), panelRef.getHeight());
+                scaleAll(panelRef.getSize().width, panelRef.getSize().height);
+                /*double width;
+                double height;
+        
+                width = panelRef.getWidth();
+                height = (width * MAP_HEIGHT_IN_UNITS / MAP_WIDTH_IN_UNITS);
+                xMapPosition = 0;
+                yMapPosition = (int) Math.round(panelRef.getHeight()/2 - height/2);
+                if (height > panelRef.getHeight()) {
+                    height = panelRef.getHeight();
+                    width = (height * MAP_WIDTH_IN_UNITS / MAP_HEIGHT_IN_UNITS);
+                    yMapPosition = 0;
+                    xMapPosition = (int) Math.round(panelRef.getWidth()/2 - width/2);
+                }
+
+                xScale = (int) Math.round(width / MAP_WIDTH_IN_UNITS);
+                yScale = (int) Math.round(height / MAP_HEIGHT_IN_UNITS);
+
+                map.scale(xScale, yScale);
+                sprites.forEach(x -> x.scale(xScale, yScale));*/
             }
             @Override
             public void componentMoved(ComponentEvent e) {}
@@ -212,23 +241,26 @@ public class GamePanel extends JPanel {
             case SPELL_SELECTED:
                 if (this.mousePosition.getY() < this.getHeight()-1 && this.mousePosition.getX() < this.getWidth()-1
                         && this.mousePosition.getY() > 0 && this.mousePosition.getX() > 0) {
-                    Image asset = null;
-                    double radius = 0.0;
+                    Sprite asset = new Sprite(0, 0, null);
+                    //double radius = 0.0;
                     switch (selectedEntity) {
                         case FireBall.NAME:
                             asset = this.fireball;
-                            radius = FireBall.RAD;
+                            //radius = FireBall.RAD;
                             break;
                         case SnowStorm.NAME:
                             asset = this.snowStorm;
-                            radius = SnowStorm.RAD;
+                            //radius = SnowStorm.RAD;
                             break;
                     }
                     final Position mPos = this.fromRealPositionToPosition(this.mousePosition);
-                    final Position realPos1 = this.fromPositionToRealPosition(new Position(mPos.getX()-radius, mPos.getY()-radius));
-                    final Position realPos2 = this.fromPositionToRealPosition(new Position(mPos.getX()+radius, mPos.getY()+radius));
-                    graphic.drawImage(asset, (int)realPos1.getX(), (int)realPos1.getY(), (int)(realPos2.getX()-realPos1.getX()), 
-                            (int)(realPos2.getY()-realPos1.getY()) , null);
+                    //final double radius = ((Spell)spell).getRadius();
+                    final Position realPos = this.fromPositionToRealPosition(asset.getApplicationPoint(mPos));
+                    graphic.drawImage(asset.getScaledSprite(), (int)realPos.getX(), (int)realPos.getY() , null);
+                    //final Position realPos1 = this.fromPositionToRealPosition(new Position(mPos.getX()-radius, mPos.getY()-radius));
+                    //final Position realPos2 = this.fromPositionToRealPosition(new Position(mPos.getX()+radius, mPos.getY()+radius));
+                    //graphic.drawImage(asset, (int)realPos1.getX(), (int)realPos1.getY(), (int)(realPos2.getX()-realPos1.getX()), 
+                            //(int)(realPos2.getY()-realPos1.getY()) , null);
                 }
                 break;
             case IDLE:
@@ -252,77 +284,77 @@ public class GamePanel extends JPanel {
     }   
     
     private void renderTower(Graphics2D graphic, Entity tower) {
-        Image towerAsset = null;
-        int h = 0;
-        int w = 0;
-        final int hunterGap = 5;
+        Sprite towerAsset = new Sprite(0, 0, null);
+        //int h = 0;
+        //int w = 0;
+        final int electrodeHeight = 10;
         Optional<Enemy> target = ((Tower)tower).getTarget();
-        final Position realTowerPosition = this.fromPositionToRealPosition(new Position(tower.getPosition().get().getX(), tower.getPosition().get().getY()-hunterGap));
+        final Position rayStartPos = this.fromPositionToRealPosition(new Position(tower.getPosition().get().getX(), tower.getPosition().get().getY()-electrodeHeight));
         Position realTargetPosition = new Position(0, 0);
         switch(tower.getName()) {
             case Cannon.NAME:
-                w=100;
-                h=71;
+                //w=100;
+                //h=71;
                 if (target.isPresent()) {
                     towerAsset = shootingCannon;
                 } else {
-                    towerAsset = cannonImage;
+                    towerAsset = cannon;
                 }
                 break;
             case Hunter.NAME:
-                h=100;
-                w=75;
+                //h=100;
+                //w=75;
                 if (target.isPresent()) {
                     realTargetPosition = this.fromPositionToRealPosition(target.get().getPosition().get());
-                    towerAsset = hunterImage;
+                    towerAsset = hunter;
                     graphic.setColor(Color.BLUE);
                     graphic.setStroke(new BasicStroke(5));
                     //System.out.println("Drawing line from " + realTowerPosition + " to " + realTargetPosition);
-                    graphic.drawLine((int)realTowerPosition.getX(), (int)realTowerPosition.getY(), 
+                    graphic.drawLine((int)rayStartPos.getX(), (int)rayStartPos.getY(), 
                             (int)realTargetPosition.getX(), (int)realTargetPosition.getY());
                     graphic.setStroke(new BasicStroke(1));
                     graphic.setColor(Color.BLACK);
                 } else {
-                    towerAsset = hunterImage;
+                    towerAsset = hunter;
                 }
                 break;
             default:
                 break;
         }
-        int width = (int)(w * yScale);
-        int height = (int)(h * xScale);
+        //int width = (int)(w * yScale);
+        //int height = (int)(h * xScale);
 
-        Position pos = this.fromPositionToRealPosition(tower.getPosition().get());
-        graphic.drawImage(towerAsset, (int)pos.getX()-width/2, (int)pos.getY()-height/2, width, height, null);
+        Position pos = tower.getPosition().get();
+        Position realPos = fromPositionToRealPosition(towerAsset.getApplicationPoint(pos));
+        graphic.drawImage(towerAsset.getScaledSprite(), (int) realPos.getX(), (int) realPos.getY(), null);
     }
 
     private void renderEnemy(Graphics2D graphic, Entity enemy) {
         Enemy e = (Enemy)enemy;
         double startingHealth = 0;
-        Image asset = null;
-        final int h = 40;
-        final int w = 30;
-
+        Sprite asset = new Sprite(0, 0, null);
+        //final int h = 40;
+        //final int w = 30;
         switch(e.getName()) {
             case Orc.NAME:
-                asset = orcImage;
+                asset = orc;
                 startingHealth = Orc.HEALTH;
                 break;
             case Goblin.NAME:
-                asset = goblinImage;
+                asset = goblin;
                 startingHealth = Goblin.HEALTH;
                 break;
             default:
                 break;
         }
         double healthPercentage = e.getHealth() / startingHealth;
-        int width = (int)(w* yScale);
-        int height = (int)(h * xScale);
-        Position pos = this.fromPositionToRealPosition(enemy.getPosition().get());
-        int x = ((int)pos.getX()) - height/2;
-        int y = ((int)pos.getY()) - width/2;
+        int width = asset.getScaledDimension().getFirst();
+        Position pos = enemy.getPosition().get();
+        Position realPos = this.fromPositionToRealPosition(asset.getApplicationPoint(pos));
+        int x = (int)realPos.getX();
+        int y = (int)realPos.getY();
         int healthBarY = (int)(y - 5 * yScale);
-        graphic.drawImage(asset,(int) x, y, width, height, null);
+        graphic.drawImage(asset.getScaledSprite(),(int) x, y, null);
         graphic.setColor(Color.RED);
         
         graphic.fillRect(x, healthBarY, width, 5);
@@ -332,7 +364,7 @@ public class GamePanel extends JPanel {
     }
 
     private void renderSpell(final Graphics2D graphic, final Entity spell) {
-        Image asset = null;
+        Sprite asset = new Sprite(0, 0, null);
         switch (spell.getName()) {
             case FireBall.NAME:
                 asset = this.fireball;
@@ -344,33 +376,48 @@ public class GamePanel extends JPanel {
                 break;
         }
         final Position pos = spell.getPosition().get();
-        final double radius = ((Spell)spell).getRadius();
-        final Position realPos1 = this.fromPositionToRealPosition(new Position(pos.getX()-radius, pos.getY()-radius));
-        final Position realPos2 = this.fromPositionToRealPosition(new Position(pos.getX()+radius, pos.getY()+radius));
-        graphic.drawImage(asset, (int)realPos1.getX(), (int)realPos1.getY(), (int)(realPos2.getX()-realPos1.getX()), 
-                (int)(realPos2.getY()-realPos1.getY()) , null);
+        //final double radius = ((Spell)spell).getRadius();
+        final Position realPos = this.fromPositionToRealPosition(asset.getApplicationPoint(pos));
+        graphic.drawImage(asset.getScaledSprite(), (int)realPos.getX(), (int)realPos.getY() , null);
     }
 
     private void renderMap(final Graphics2D graphic) {
-        this.mapSize = Math.min(getWidth(), getHeight());
-        this.xMapPosition = (getWidth() - this.mapSize) / 2;
-        this.yMapPosition = (getHeight() - this.mapSize) / 2;
         this.towerAvailablePositions.clear();
         this.towerAvailablePositions = this.gameWorld.getAvailablePositions().stream().map((p) -> this.fromPositionToRealPosition(p)).collect(Collectors.toList());
-        graphic.drawImage(this.map, this.xMapPosition, this.yMapPosition, this.mapSize, this.mapSize, null);
+        graphic.drawImage(this.map.getScaledSprite(), this.xMapPosition, this.yMapPosition, null);
     }
 
     private Position fromPositionToRealPosition(Position pos) {
-        double newX = (pos.getX() * this.mapSize) / this.MAP_SIZE_IN_UNITS + this.xMapPosition;
-        double newY = (pos.getY() * this.mapSize) / this.MAP_SIZE_IN_UNITS + this.yMapPosition;
+        double newX = (pos.getX() * this.xScale) + this.xMapPosition;
+        double newY = (pos.getY() * this.yScale) + this.yMapPosition;
         Position panelPosition = new Position(newX, newY);
         return panelPosition;
     }
 
     private Position fromRealPositionToPosition(Position pos) {
-        double newX = (this.MAP_SIZE_IN_UNITS*(pos.getX() - this.xMapPosition))/this.mapSize;
-        double newY = (this.MAP_SIZE_IN_UNITS*(pos.getY() - this.yMapPosition))/this.mapSize;
+        double newX = ((pos.getX() - this.xMapPosition))/xScale;
+        double newY = ((pos.getY() - this.yMapPosition))/yScale;
         Position panelPosition = new Position(newX, newY);
         return panelPosition;
+    }
+
+    private void scaleAll(int realWidth, int realHeight) {
+        double width;
+        double height;
+
+        width = realWidth;
+        height = (width * MAP_HEIGHT_IN_UNITS / MAP_WIDTH_IN_UNITS);
+        xMapPosition = 0;
+        yMapPosition = (int) Math.round(realHeight/2 - height/2);
+        if (height > realHeight) {
+            height = realHeight;
+            width = (height * MAP_WIDTH_IN_UNITS / MAP_HEIGHT_IN_UNITS);
+            yMapPosition = 0;
+            xMapPosition = (int) Math.round(realWidth/2 - width/2);
+        }
+        xScale = (int) Math.round(width / MAP_WIDTH_IN_UNITS);
+        yScale = (int) Math.round(height / MAP_HEIGHT_IN_UNITS);
+        map.scale(xScale, yScale);
+        sprites.forEach(x -> x.scale(xScale, yScale));
     }
 }
