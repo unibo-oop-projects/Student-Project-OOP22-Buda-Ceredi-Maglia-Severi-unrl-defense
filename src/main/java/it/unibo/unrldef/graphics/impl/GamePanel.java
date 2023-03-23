@@ -408,15 +408,18 @@ public class GamePanel extends JPanel {
         width = realWidth;
         height = (width * MAP_HEIGHT_IN_UNITS / MAP_WIDTH_IN_UNITS);
         xMapPosition = 0;
-        yMapPosition = (int) Math.round(realHeight/2 - height/2);
+        yMapPosition = (int) Math.floor((realHeight - height)/2);
         if (height > realHeight) {
             height = realHeight;
             width = (height * MAP_WIDTH_IN_UNITS / MAP_HEIGHT_IN_UNITS);
             yMapPosition = 0;
-            xMapPosition = (int) Math.round(realWidth/2 - width/2);
+            xMapPosition = (int) Math.floor((realWidth - width)/2);
         }
-        xScale = (int) Math.round(width / MAP_WIDTH_IN_UNITS);
-        yScale = (int) Math.round(height / MAP_HEIGHT_IN_UNITS);
+        
+        xScale = (int) Math.floor(width / MAP_WIDTH_IN_UNITS);
+        yScale = (int) Math.floor(height / MAP_HEIGHT_IN_UNITS);
+
+
         map.scale(xScale, yScale);
         sprites.forEach(x -> x.scale(xScale, yScale));
     }
