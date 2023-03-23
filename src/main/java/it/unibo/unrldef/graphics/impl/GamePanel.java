@@ -114,8 +114,8 @@ public class GamePanel extends JPanel {
         this.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-                //scaleAll(panelRef.getWidth(), panelRef.getHeight());
-                scaleAll(panelRef.getSize().width, panelRef.getSize().height);
+                scaleAll(panelRef.getWidth(), panelRef.getHeight());
+                //scaleAll(panelRef.getSize().width, panelRef.getSize().height);
                 /*double width;
                 double height;
         
@@ -287,7 +287,7 @@ public class GamePanel extends JPanel {
         Sprite towerAsset = new Sprite(0, 0, null);
         //int h = 0;
         //int w = 0;
-        final int electrodeHeight = 10;
+        final int electrodeHeight = 4;
         Optional<Enemy> target = ((Tower)tower).getTarget();
         final Position rayStartPos = this.fromPositionToRealPosition(new Position(tower.getPosition().get().getX(), tower.getPosition().get().getY()-electrodeHeight));
         Position realTargetPosition = new Position(0, 0);
@@ -353,7 +353,7 @@ public class GamePanel extends JPanel {
         Position realPos = this.fromPositionToRealPosition(asset.getApplicationPoint(pos));
         int x = (int)realPos.getX();
         int y = (int)realPos.getY();
-        int healthBarY = (int)(y - 5 * yScale);
+        int healthBarY = (int)(y - 1*yScale);
         graphic.drawImage(asset.getScaledSprite(),(int) x, y, null);
         graphic.setColor(Color.RED);
         
