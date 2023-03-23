@@ -22,7 +22,7 @@ public class WorldImpl implements World{
 
     private final static long SPAWNING_TIME = 1500;
     private final static int ENEMY_POWER = 1;
-    private final static int PATH_DEPHT = 2;
+    private final static int PATH_DEPHT = 4;
 
     private final String name;
     private final Player player;
@@ -82,7 +82,7 @@ public class WorldImpl implements World{
             Enemy newEnemy = this.spawningQueue.poll();
             Position spawningPoint = this.path.getSpawningPoint();
             Random rand = new Random();
-            newEnemy.setPosition(spawningPoint.getX() + rand.nextInt(-PATH_DEPHT/2, PATH_DEPHT/2), spawningPoint.getY());
+            newEnemy.setPosition(spawningPoint.getX() + rand.nextInt(-PATH_DEPHT/2, PATH_DEPHT/2), spawningPoint.getY() + rand.nextInt(-PATH_DEPHT/2, PATH_DEPHT/2));
             this.livingEnemies.add(newEnemy);
             // System.out.println(spawningPoint.getX() + " " + spawningPoint.getY());
             // System.out.println(newEnemy.getPosition().get().getX() + " " + newEnemy.getPosition().get().getY());
