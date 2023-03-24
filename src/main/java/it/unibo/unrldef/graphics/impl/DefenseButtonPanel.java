@@ -121,4 +121,11 @@ public class DefenseButtonPanel extends JPanel {
             respectiveButton.setEnabled(enableState);
         }
     }
+
+    /**
+     * Disable all the buttons in the panel
+     */
+    public void disableAllButtons() {
+        this.buttons.values().forEach(b -> b.setEnabled(false));
+    }
 }

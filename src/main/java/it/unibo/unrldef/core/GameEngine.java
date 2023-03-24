@@ -45,8 +45,7 @@ public class GameEngine {
             this.waitForNextFrame(currentFrameStartTime);
             previousFrameStartTime = currentFrameStartTime;
         }
-        System.out.println("Hai vinto :)");
-        System.exit(0);
+        this.endOfGame(this.currentWorld.gameState());
     }
 
     private void waitForNextFrame(long cycleStartTime) {
@@ -82,5 +81,9 @@ public class GameEngine {
 
     private void render() {
         this.view.render();
+    }
+
+    private void endOfGame(final GameState state) {
+        this.view.renderEndGame(state);
     }
 }

@@ -4,12 +4,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 
 import it.unibo.unrldef.graphics.api.View;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
+import it.unibo.unrldef.model.api.World.GameState;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,5 +63,31 @@ public class ViewImpl implements View{
         this.buttonPanel.update(buttonsEntities);
         this.bank.setText("€ "+this.world.getMoney());
         this.hearts.setText("<3 "+this.world.getCastleIntegrity().getHearts());
+    }
+
+    @Override
+    public void renderEndGame(final GameState state) {
+        Graphics g = this.frame.getGraphics(); 
+        g.setFont(new Font("Verdana", Font.PLAIN, this.frame.getWidth()/8));
+        String displayState = "";
+        switch (state) {
+            case DEFEAT:
+                g.setColor(Color.BLACK);
+                displayState = "GAME OVER";
+                break;
+            case VICTORY:
+                g.setColor(Color.RED);
+                displayState = "YOU'VE WON!";
+                break;
+            default:
+                break;
+        }
+        this.frame.setResizable(false);
+        //this.frame.setSize(this.frame.getMinimumSize());
+        //this.frame.setLocationRelativeTo(null);
+        //this.frame.pack();
+        this.buttonPanel.disableAllButtons();
+        g.drawString(displayState, this.frame.getWidth()/10, this.frame.getHeight()/2);
+		g.setColor(Color.GREEN);
     }
 }

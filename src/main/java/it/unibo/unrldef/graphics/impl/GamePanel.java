@@ -220,7 +220,6 @@ public class GamePanel extends JPanel {
             case SPELL_SELECTED:
                 if (this.mousePosition.getY() < this.getHeight()-2 && this.mousePosition.getX() < this.getWidth()-2
                         && this.mousePosition.getY() > 0 && this.mousePosition.getX() > 0) {
-                    System.out.println(this.mousePosition.getX()+" "+ this.mousePosition.getY());
                     Sprite asset = new Sprite(0, 0, null);
                     switch (selectedEntity) {
                         case FireBall.NAME:
