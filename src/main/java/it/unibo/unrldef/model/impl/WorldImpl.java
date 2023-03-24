@@ -84,8 +84,6 @@ public class WorldImpl implements World{
             Random rand = new Random();
             newEnemy.setPosition(spawningPoint.getX() + rand.nextInt(-PATH_DEPHT/2, PATH_DEPHT/2), spawningPoint.getY() + rand.nextInt(-PATH_DEPHT/2, PATH_DEPHT/2));
             this.livingEnemies.add(newEnemy);
-            // System.out.println(spawningPoint.getX() + " " + spawningPoint.getY());
-            // System.out.println(newEnemy.getPosition().get().getX() + " " + newEnemy.getPosition().get().getY());
         }   
     }
     private Boolean areWavesEnded() {
@@ -171,53 +169,6 @@ public class WorldImpl implements World{
             return sorroundingEnemies;
     }
 
-    /* 
-    private double distanceFromSpawn(Position pos) {
-        Position pathCur = this.path.getSpawningPoint().copy();
-        Pair<Direction, Double> curSeg;
-        double distance = 0;
-        int i = 0;
-        boolean fownd = false;
-        boolean end = false;
-        boolean distanceIsCompatible;
-        while(!fownd && !end) {
-            curSeg = this.path.getDirection(i);
-            distanceIsCompatible = this.distance(pathCur, pos) <= curSeg.getSecond();
-            if (curSeg.getFirst() == Direction.UP) {
-                if (Double.valueOf(pathCur.getX()).equals(pos.getX()) && distanceIsCompatible && pos.getY() < pathCur.getY()) {
-                    fownd = true;
-                }
-                pathCur.setY(pathCur.getY() - curSeg.getSecond());
-            } else if (curSeg.getFirst() == Direction.DOWN) {
-                if (Double.valueOf(pathCur.getX()).equals(pos.getX()) && distanceIsCompatible && pos.getY() > pathCur.getY()) {
-                    fownd = true;
-                }
-                pathCur.setY(pathCur.getY() + curSeg.getSecond());
-            } else if (curSeg.getFirst() == Direction.LEFT) {
-                if (Double.valueOf(pathCur.getY()).equals(pos.getY()) && distanceIsCompatible && pos.getX() < pathCur.getX()) {
-                    fownd = true;
-                }
-                pathCur.setX(pathCur.getX() - curSeg.getSecond());
-            } else if (curSeg.getFirst() == Direction.RIGHT){
-                if (Double.valueOf(pathCur.getY()).equals(pos.getY()) && distanceIsCompatible && pos.getX() > pathCur.getX()) {
-                    fownd = true;
-                }
-                pathCur.setX(pathCur.getX() + curSeg.getSecond());
-            } else {
-                end = true;
-            }
-            if (!end) {
-                distance+=curSeg.getSecond();
-                i++;
-                if (fownd) {
-                    distance-=this.distance(pathCur, pos);
-                }
-            }
-        }
-        return distance;
-    }
-    */
-
     private void addToQueue(List<Enemy> Enemies) {
         this.spawningQueue.addAll(Enemies);
     }
@@ -270,21 +221,6 @@ public class WorldImpl implements World{
     public Path getPath() {
         return this.path;
     }
-
-    
-	/*@Override
-	public List<Enemy> sorroundingEnemies(Position center, double radius) {
-		return this.livingEnemies.stream().filter(x -> (distance(center, x.getPosition().get()) <= radius )).sorted((a,b) -> {
-            double distanceDifference = this.distanceFromSpawn(a.getPosition().get()) - this.distanceFromSpawn(b.getPosition().get());
-            if(distanceDifference < 0) {
-                return -1;
-            } else if (distanceDifference > 0) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }).toList();
-	} */ 
     
     
     private double distance(Position a, Position b ) {
@@ -388,7 +324,5 @@ public class WorldImpl implements World{
 
             return ret;
         }
-    }
-
-    
+    }    
 }

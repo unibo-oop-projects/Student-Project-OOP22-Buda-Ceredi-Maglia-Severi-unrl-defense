@@ -11,6 +11,13 @@ import it.unibo.unrldef.common.*;
  * 
  */
 public interface World {
+    
+    public enum GameState {
+        PLAYING,
+        VICTORY,
+        DEFEAT
+    }
+
     void startGame();
     Boolean tryBuildTower(Position pos, String towerName);
     List<Entity> getSceneEntities();
