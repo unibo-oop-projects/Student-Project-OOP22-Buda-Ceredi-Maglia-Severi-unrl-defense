@@ -85,9 +85,9 @@ public class GamePanel extends JPanel {
         this.mousePosition = new Position(0, 0);
         try {
             this.map = new Sprite(80, 80, ImageIO.read(new File("assets"+File.separator+"debugMap.png")));
-            this.fireball = new Sprite(10, 10, ImageIO.read(new File("assets"+File.separator+"fireball.png")));
+            this.fireball = new Sprite(8, 8, ImageIO.read(new File("assets"+File.separator+"fireball.png")));
             this.sprites.add(this.fireball);
-            this.snowStorm = new Sprite( 10, 10, ImageIO.read(new File("assets"+File.separator+"snowStorm.png")));
+            this.snowStorm = new Sprite( 14, 14, ImageIO.read(new File("assets"+File.separator+"snowStorm.png")));
             this.sprites.add(this.snowStorm);
             this.orc = new Sprite(6, 6, ImageIO.read(new File("assets"+File.separator+"orc.png")));
             this.sprites.add(this.orc);
@@ -218,8 +218,9 @@ public class GamePanel extends JPanel {
                 graphic.setColor(java.awt.Color.BLACK);
                 break;
             case SPELL_SELECTED:
-                if (this.mousePosition.getY() < this.getHeight()-1 && this.mousePosition.getX() < this.getWidth()-1
+                if (this.mousePosition.getY() < this.getHeight()-2 && this.mousePosition.getX() < this.getWidth()-2
                         && this.mousePosition.getY() > 0 && this.mousePosition.getX() > 0) {
+                    System.out.println(this.mousePosition.getX()+" "+ this.mousePosition.getY());
                     Sprite asset = new Sprite(0, 0, null);
                     switch (selectedEntity) {
                         case FireBall.NAME:
