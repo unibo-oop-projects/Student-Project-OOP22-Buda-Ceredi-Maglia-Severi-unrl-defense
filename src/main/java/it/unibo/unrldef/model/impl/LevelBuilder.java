@@ -15,7 +15,7 @@ public class LevelBuilder {
     }
 
     public WorldImpl levelOne() {
-        return new WorldImpl.Builder("River Castle", this.player, new Position(0.75 , 0), 5, 100)
+        return new WorldImpl.Builder("River Castle", this.player, new Position(60 , 0), 5, 100)
         .addPathSegment(Direction.DOWN, 15)
 		.addPathSegment(Direction.LEFT, 50)
 		.addPathSegment(Direction.DOWN, 20)
@@ -30,13 +30,13 @@ public class LevelBuilder {
 		.addPathSegment(Direction.END, 0)
 		.addWave()
 		.addHordeToWave(0, 50000)
-		.addMultipleEnemiesToHorde(0, 0, new Orc(Optional.of(new Position(0.75, 0))), (short)5)
-		.addMultipleEnemiesToHorde(0, 0, new Goblin(Optional.of(new Position(0.75, 0))), (short)5)
+		.addMultipleEnemiesToHorde(0, 0, new Orc(Optional.of(new Position(60, 0))), (short)5)
+		.addMultipleEnemiesToHorde(0, 0, new Goblin(Optional.of(new Position(60, 0))), (short)5)
 		.addAvailableTower(Cannon.NAME, new Cannon(null))
 		.addAvailableTower(Hunter.NAME, new Hunter(null))
 		.addTowerBuildingSpace(28, 6)
 		.addTowerBuildingSpace(48, 6)
-		.addTowerBuildingSpace(62, 8)
+		.addTowerBuildingSpace(68, 8)
 		.addTowerBuildingSpace(18, 24)
 		.addTowerBuildingSpace(38, 22)
 		.addTowerBuildingSpace(6, 42)
