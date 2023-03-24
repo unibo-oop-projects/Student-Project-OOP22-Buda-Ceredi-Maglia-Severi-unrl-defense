@@ -11,7 +11,7 @@ import it.unibo.unrldef.common.*;
  * 
  */
 public interface World {
-    
+
     public enum GameState {
         PLAYING,
         VICTORY,
@@ -27,6 +27,6 @@ public interface World {
     Set<Tower> getAvailableTowers();
     List<Enemy> sorroundingEnemies(Position center, double radius);
     Path getPath();
-    boolean isGameOver();
+    GameState gameState();
     void updateState(long time);
 }

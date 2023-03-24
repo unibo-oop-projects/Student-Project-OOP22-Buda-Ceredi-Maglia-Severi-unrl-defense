@@ -9,6 +9,7 @@ import it.unibo.unrldef.graphics.impl.ViewImpl;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.input.impl.PlayerInput;
 import it.unibo.unrldef.model.api.*;
+import it.unibo.unrldef.model.api.World.GameState;
 
 public class GameEngine {
 
@@ -35,7 +36,7 @@ public class GameEngine {
 
     public void GameLoop() {
         long previousFrameStartTime = System.currentTimeMillis();
-        while (!this.currentWorld.isGameOver()) {
+        while (this.currentWorld.gameState() == GameState.PLAYING) {
             final long currentFrameStartTime = System.currentTimeMillis();
             final long elapsed = currentFrameStartTime-previousFrameStartTime;
             processInput();

@@ -228,8 +228,14 @@ public class WorldImpl implements World{
     }
 
     @Override
-    public boolean isGameOver() {
-        return (this.areWavesEnded() && this.livingEnemies.size() == 0) || this.castleIntegrity.isCompromised();
+    public GameState gameState() {
+        if (this.areWavesEnded() && this.livingEnemies.size() == 0) {
+            return GameState.VICTORY;
+        } else if ( this.castleIntegrity.isCompromised() ) {
+            return GameState.DEFEAT;
+        } else {
+            return GameState.PLAYING;
+        }
     }
 
     public String getName() {
