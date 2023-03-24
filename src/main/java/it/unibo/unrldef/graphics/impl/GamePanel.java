@@ -38,7 +38,6 @@ import it.unibo.unrldef.model.impl.Hunter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.GradientPaint;
-//import java.awt.Image;
 
 public class GamePanel extends JPanel {
     private final int MAP_WIDTH_IN_UNITS = 80;
@@ -65,7 +64,6 @@ public class GamePanel extends JPanel {
     private double yScale;
     private int xMapPosition = 0;
     private int yMapPosition = 0;
-    //private int mapSize = 0;
     private final int DEFAULT_WIDTH = 600;
     private final int DEFAULT_HEIGHT = 600;
     private Position mousePosition;
@@ -116,25 +114,6 @@ public class GamePanel extends JPanel {
             public void componentResized(ComponentEvent e) {
                 scaleAll(panelRef.getWidth(), panelRef.getHeight());
                 //scaleAll(panelRef.getSize().width, panelRef.getSize().height);
-                /*double width;
-                double height;
-        
-                width = panelRef.getWidth();
-                height = (width * MAP_HEIGHT_IN_UNITS / MAP_WIDTH_IN_UNITS);
-                xMapPosition = 0;
-                yMapPosition = (int) Math.round(panelRef.getHeight()/2 - height/2);
-                if (height > panelRef.getHeight()) {
-                    height = panelRef.getHeight();
-                    width = (height * MAP_WIDTH_IN_UNITS / MAP_HEIGHT_IN_UNITS);
-                    yMapPosition = 0;
-                    xMapPosition = (int) Math.round(panelRef.getWidth()/2 - width/2);
-                }
-
-                xScale = (int) Math.round(width / MAP_WIDTH_IN_UNITS);
-                yScale = (int) Math.round(height / MAP_HEIGHT_IN_UNITS);
-
-                map.scale(xScale, yScale);
-                sprites.forEach(x -> x.scale(xScale, yScale));*/
             }
             @Override
             public void componentMoved(ComponentEvent e) {}
@@ -242,25 +221,17 @@ public class GamePanel extends JPanel {
                 if (this.mousePosition.getY() < this.getHeight()-1 && this.mousePosition.getX() < this.getWidth()-1
                         && this.mousePosition.getY() > 0 && this.mousePosition.getX() > 0) {
                     Sprite asset = new Sprite(0, 0, null);
-                    //double radius = 0.0;
                     switch (selectedEntity) {
                         case FireBall.NAME:
                             asset = this.fireball;
-                            //radius = FireBall.RAD;
                             break;
                         case SnowStorm.NAME:
                             asset = this.snowStorm;
-                            //radius = SnowStorm.RAD;
                             break;
                     }
                     final Position mPos = this.fromRealPositionToPosition(this.mousePosition);
-                    //final double radius = ((Spell)spell).getRadius();
                     final Position realPos = this.fromPositionToRealPosition(asset.getApplicationPoint(mPos));
                     graphic.drawImage(asset.getScaledSprite(), (int)realPos.getX(), (int)realPos.getY() , null);
-                    //final Position realPos1 = this.fromPositionToRealPosition(new Position(mPos.getX()-radius, mPos.getY()-radius));
-                    //final Position realPos2 = this.fromPositionToRealPosition(new Position(mPos.getX()+radius, mPos.getY()+radius));
-                    //graphic.drawImage(asset, (int)realPos1.getX(), (int)realPos1.getY(), (int)(realPos2.getX()-realPos1.getX()), 
-                            //(int)(realPos2.getY()-realPos1.getY()) , null);
                 }
                 break;
             case IDLE:
@@ -285,16 +256,12 @@ public class GamePanel extends JPanel {
     
     private void renderTower(Graphics2D graphic, Entity tower) {
         Sprite towerAsset = new Sprite(0, 0, null);
-        //int h = 0;
-        //int w = 0;
         final int electrodeHeight = 4;
         Optional<Enemy> target = ((Tower)tower).getTarget();
         final Position rayStartPos = this.fromPositionToRealPosition(new Position(tower.getPosition().get().getX(), tower.getPosition().get().getY()-electrodeHeight));
         Position realTargetPosition = new Position(0, 0);
         switch(tower.getName()) {
             case Cannon.NAME:
-                //w=100;
-                //h=71;
                 if (target.isPresent()) {
                     towerAsset = shootingCannon;
                 } else {
@@ -302,14 +269,11 @@ public class GamePanel extends JPanel {
                 }
                 break;
             case Hunter.NAME:
-                //h=100;
-                //w=75;
                 if (target.isPresent()) {
                     realTargetPosition = this.fromPositionToRealPosition(target.get().getPosition().get());
                     towerAsset = hunter;
                     graphic.setColor(Color.BLUE);
                     graphic.setStroke(new BasicStroke(5));
-                    //System.out.println("Drawing line from " + realTowerPosition + " to " + realTargetPosition);
                     graphic.drawLine((int)rayStartPos.getX(), (int)rayStartPos.getY(), 
                             (int)realTargetPosition.getX(), (int)realTargetPosition.getY());
                     graphic.setStroke(new BasicStroke(1));
@@ -321,8 +285,6 @@ public class GamePanel extends JPanel {
             default:
                 break;
         }
-        //int width = (int)(w * yScale);
-        //int height = (int)(h * xScale);
 
         Position pos = tower.getPosition().get();
         Position realPos = fromPositionToRealPosition(towerAsset.getApplicationPoint(pos));
@@ -333,8 +295,6 @@ public class GamePanel extends JPanel {
         Enemy e = (Enemy)enemy;
         double startingHealth = 0;
         Sprite asset = new Sprite(0, 0, null);
-        //final int h = 40;
-        //final int w = 30;
         switch(e.getName()) {
             case Orc.NAME:
                 asset = orc;
@@ -376,7 +336,6 @@ public class GamePanel extends JPanel {
                 break;
         }
         final Position pos = spell.getPosition().get();
-        //final double radius = ((Spell)spell).getRadius();
         final Position realPos = this.fromPositionToRealPosition(asset.getApplicationPoint(pos));
         graphic.drawImage(asset.getScaledSprite(), (int)realPos.getX(), (int)realPos.getY() , null);
     }
