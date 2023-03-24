@@ -102,7 +102,7 @@ public class GamePanel extends JPanel {
             this.sprites.add(this.shootingCannon);
             this.shootingHunter = new Sprite(9, 12, ImageIO.read(new File("assets"+File.separator+"shootingHunter.png")));
             this.sprites.add(this.shootingHunter);
-            this.explosion = this.shootingHunter = new Sprite(8, 4, ImageIO.read(new File("assets"+File.separator+"explosion.png")));
+            this.explosion = new Sprite(8, 4, ImageIO.read(new File("assets"+File.separator+"explosion.png")));
             this.sprites.add(this.explosion);
             
         } catch (IOException e) {
