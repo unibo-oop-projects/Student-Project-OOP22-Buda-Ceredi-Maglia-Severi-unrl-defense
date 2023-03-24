@@ -260,6 +260,7 @@ public class GamePanel extends JPanel {
         Optional<Enemy> target = ((Tower)tower).getTarget();
         final Position rayStartPos = this.fromPositionToRealPosition(new Position(tower.getPosition().get().getX(), tower.getPosition().get().getY()-electrodeHeight));
         Position realTargetPosition = new Position(0, 0);
+        
         switch(tower.getName()) {
             case Cannon.NAME:
                 if (target.isPresent()) {
@@ -285,7 +286,6 @@ public class GamePanel extends JPanel {
             default:
                 break;
         }
-
         Position pos = tower.getPosition().get();
         Position realPos = fromPositionToRealPosition(towerAsset.getApplicationPoint(pos));
         graphic.drawImage(towerAsset.getScaledSprite(), (int) realPos.getX(), (int) realPos.getY(), null);
