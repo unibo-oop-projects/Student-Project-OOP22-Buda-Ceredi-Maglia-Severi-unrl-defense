@@ -246,7 +246,10 @@ public class GamePanel extends JPanel {
         Image towerAsset = null;
         int h = 0;
         int w = 0;
-        final int hunterGap = 5;
+        int width = 0;
+        int height = 0;
+        Position pos;
+        final int hunterGap = 7;
         Optional<Enemy> target = ((Tower)tower).getTarget();
         final Position realTowerPosition = this.fromPositionToRealPosition(new Position(tower.getPosition().get().getX(), tower.getPosition().get().getY()-hunterGap));
         final Position realTargetPosition = target.isPresent() ? this.fromPositionToRealPosition(target.get().getPosition().get()) : null;
@@ -254,18 +257,23 @@ public class GamePanel extends JPanel {
             case Cannon.NAME:
                 w=100;
                 h=71;
+                width = (int)(w * yScale);
+                height = (int)(h * xScale);
                 if (target.isPresent()) {
                     towerAsset = shootingCannon;
                 } else {
                     towerAsset = cannonImage;
                 }
+                pos = this.fromPositionToRealPosition(tower.getPosition().get());
+                graphic.drawImage(towerAsset, (int)pos.getX()-width/2, (int)pos.getY()-height/2, width, height, null);
                 break;
             case Hunter.NAME:
                 h=100;
                 w=75;
+                width = (int)(w * yScale);
+                height = (int)(h * xScale);
                 if (target.isPresent()) {
                     towerAsset = hunterImage;
-
                     graphic.setColor(Color.BLUE);
                     graphic.setStroke(new BasicStroke(5));
                     //System.out.println("Drawing line from " + realTowerPosition + " to " + realTargetPosition);
@@ -276,15 +284,13 @@ public class GamePanel extends JPanel {
                 } else {
                     towerAsset = hunterImage;
                 }
+                pos = this.fromPositionToRealPosition(tower.getPosition().get());
+                graphic.drawImage(towerAsset, (int)pos.getX()-width/2, (int)(pos.getY()-height/2)-20, width, height, null);
                 break;
             default:
                 break;
         }
-        int width = (int)(w * yScale);
-        int height = (int)(h * xScale);
 
-        Position pos = this.fromPositionToRealPosition(tower.getPosition().get());
-        graphic.drawImage(towerAsset, (int)pos.getX()-width/2, (int)pos.getY()-height/2, width, height, null);
     }
 
     private void renderEnemy(Graphics2D graphic, Entity enemy) {
