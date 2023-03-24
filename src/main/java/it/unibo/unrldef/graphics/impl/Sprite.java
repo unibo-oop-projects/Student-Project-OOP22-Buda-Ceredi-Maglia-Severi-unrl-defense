@@ -17,8 +17,8 @@ public class Sprite {
         this.sprite = sprite;
     }
 
-    public void scale(int xScale, int yScale) {
-        this.scaledDim = new Pair<>(this.dim.getFirst()*xScale, this.dim.getSecond()*yScale);
+    public void scale(double xScale, double yScale) {
+        this.scaledDim = new Pair<Integer, Integer>( (int) (this.dim.getFirst()*xScale), (int) (this.dim.getSecond()*yScale));
         this.scaledSprite = sprite.getScaledInstance(this.scaledDim.getFirst(), this.scaledDim.getSecond(), java.awt.Image.SCALE_SMOOTH);
     }
 

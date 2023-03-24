@@ -61,8 +61,8 @@ public class GamePanel extends JPanel {
     private Sprite shootingCannon;
     // private Image shootingHunter;
     private Set<Sprite> sprites = new HashSet<>();
-    private int xScale = 1;
-    private int yScale = 1;
+    private double xScale;
+    private double yScale;
     private int xMapPosition = 0;
     private int yMapPosition = 0;
     //private int mapSize = 0;
@@ -416,8 +416,8 @@ public class GamePanel extends JPanel {
             xMapPosition = (int) Math.floor((realWidth - width)/2);
         }
         
-        xScale = (int) Math.floor(width / MAP_WIDTH_IN_UNITS);
-        yScale = (int) Math.floor(height / MAP_HEIGHT_IN_UNITS);
+        xScale = (width / MAP_WIDTH_IN_UNITS);
+        yScale = (height / MAP_HEIGHT_IN_UNITS);
 
 
         map.scale(xScale, yScale);
