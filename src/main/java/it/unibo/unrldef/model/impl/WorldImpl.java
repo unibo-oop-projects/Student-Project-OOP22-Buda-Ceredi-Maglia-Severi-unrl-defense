@@ -22,7 +22,7 @@ public class WorldImpl implements World{
 
     private final static long SPAWNING_TIME = 1500;
     private final static int ENEMY_POWER = 1;
-    private final static int PATH_DEPHT = 4;
+    private final static int PATH_DEPHT = 3;
     private final static double SAFETY_MARGIN = 0.2;
 
     private final String name;
@@ -196,6 +196,21 @@ public class WorldImpl implements World{
     @Override
     public List<Entity> getSceneEntities() {
         List<Entity> ret = new ArrayList<Entity>();
+        this.livingEnemies.sort((a, b) -> {
+            if (a.getPosition().get().getY() > b.getPosition().get().getY()) {
+                return 1;
+            } else if (a.getPosition().get().getY() < b.getPosition().get().getY()) {
+                return -1;
+            } else {
+                if (a.getPosition().get().getX() > b.getPosition().get().getX()) {
+                    return 1;
+                } else if (a.getPosition().get().getX() < b.getPosition().get().getX()) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
         ret.addAll(this.placedTowers);
         ret.addAll(this.livingEnemies);
         ret.addAll(((PlayerImpl) this.player).getActiveSpells());
