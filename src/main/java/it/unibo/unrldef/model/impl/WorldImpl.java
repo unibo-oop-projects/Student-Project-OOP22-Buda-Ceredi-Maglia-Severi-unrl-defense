@@ -23,6 +23,7 @@ public class WorldImpl implements World{
     private final static long SPAWNING_TIME = 1500;
     private final static int ENEMY_POWER = 1;
     private final static int PATH_DEPHT = 4;
+    private final static double SAFETY_MARGIN = 0.2;
 
     private final String name;
     private final Player player;
@@ -117,8 +118,8 @@ public class WorldImpl implements World{
                 case UP:
                     A = pathCur;
                     B = new Position(A.getX(), A.getY() - dir.getSecond());
-                    ul = new Position(B.getX() - PATH_DEPHT/2, B.getY());
-                    dr = new Position(A.getX() + PATH_DEPHT/2, A.getY());
+                    ul = new Position(B.getX() - (PATH_DEPHT + SAFETY_MARGIN)/2, B.getY());
+                    dr = new Position(A.getX() + (PATH_DEPHT + SAFETY_MARGIN)/2, A.getY());
                     tmp = sorroundingEnemies.stream()
                             .filter(x -> this.enemiesInArea(ul, dr).contains(x))
                             .reduce((a, b) -> a.getPosition().get().getY() < b.getPosition().get().getY() ? a : b);
@@ -126,8 +127,8 @@ public class WorldImpl implements World{
                 case DOWN:
                     A = pathCur;
                     B = new Position(A.getX(), A.getY() + dir.getSecond());
-                    ul = new Position(A.getX() - PATH_DEPHT/2, A.getY());
-                    dr = new Position(B.getX() + PATH_DEPHT/2, B.getY());
+                    ul = new Position(A.getX() - (PATH_DEPHT + SAFETY_MARGIN)/2, A.getY());
+                    dr = new Position(B.getX() + (PATH_DEPHT + SAFETY_MARGIN)/2, B.getY());
                     tmp = sorroundingEnemies.stream()
                             .filter(x -> this.enemiesInArea(ul, dr).contains(x))
                             .reduce((a, b) -> a.getPosition().get().getY() > b.getPosition().get().getY() ? a : b);
@@ -135,8 +136,8 @@ public class WorldImpl implements World{
                 case RIGHT:
                     A = pathCur;
                     B = new Position(A.getX() + dir.getSecond(), A.getY());
-                    ul = new Position(A.getX(), A.getY() - PATH_DEPHT/2 );
-                    dr = new Position(B.getX(), B.getY() + PATH_DEPHT/2);
+                    ul = new Position(A.getX(), A.getY() - (PATH_DEPHT + SAFETY_MARGIN)/2 );
+                    dr = new Position(B.getX(), B.getY() + (PATH_DEPHT + SAFETY_MARGIN)/2);
                     tmp = sorroundingEnemies.stream()
                             .filter(x -> this.enemiesInArea(ul, dr).contains(x))
                             .reduce((a, b) -> a.getPosition().get().getX() > b.getPosition().get().getX() ? a : b);
@@ -144,8 +145,8 @@ public class WorldImpl implements World{
                 case LEFT:
                     A = pathCur;
                     B = new Position(A.getX() - dir.getSecond(), A.getY());
-                    ul = new Position(B.getX(), B.getY() - PATH_DEPHT/2);
-                    dr = new Position(A.getX(), A.getY() + PATH_DEPHT/2);
+                    ul = new Position(B.getX(), B.getY() - (PATH_DEPHT + SAFETY_MARGIN)/2);
+                    dr = new Position(A.getX(), A.getY() + (PATH_DEPHT + SAFETY_MARGIN)/2);
                     tmp = sorroundingEnemies.stream()
                             .filter(x -> this.enemiesInArea(ul, dr).contains(x))
                             .reduce((a, b) -> a.getPosition().get().getX() < b.getPosition().get().getX() ? a : b);
