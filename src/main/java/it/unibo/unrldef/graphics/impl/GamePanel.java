@@ -85,7 +85,7 @@ public class GamePanel extends JPanel {
         this.panelRef = this;
         this.mousePosition = new Position(0, 0);
         try {
-            this.map = new Sprite(80, 80, ImageIO.read(new File("assets"+File.separator+"debugMap.png")));
+            this.map = new Sprite(80, 80, ImageIO.read(new File("assets"+File.separator+"firstMap.png")));
             this.fireball = new Sprite(8, 8, ImageIO.read(new File("assets"+File.separator+"fireball.png")));
             this.sprites.add(this.fireball);
             this.snowStorm = new Sprite( 14, 14, ImageIO.read(new File("assets"+File.separator+"snowStorm.png")));
