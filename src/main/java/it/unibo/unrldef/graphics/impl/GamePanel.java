@@ -58,7 +58,8 @@ public class GamePanel extends JPanel {
     private Sprite cannon;
     private Sprite hunter;
     private Sprite shootingCannon;
-    // private Image shootingHunter;
+    private Sprite explosion;
+    private Sprite shootingHunter;
     private Set<Sprite> sprites = new HashSet<>();
     private double xScale;
     private double yScale;
@@ -95,11 +96,14 @@ public class GamePanel extends JPanel {
             this.sprites.add(this.goblin);
             this.hunter = new Sprite(9, 12, ImageIO.read(new File("assets"+File.separator+"Hunter.png")));
             this.sprites.add(this.hunter);
-            this.cannon = new Sprite(14, 10, ImageIO.read(new File("assets"+File.separator+"cannon.png")));
+            this.cannon = new Sprite(14, 14, ImageIO.read(new File("assets"+File.separator+"cannon.png")));
             this.sprites.add(this.cannon);
-            this.shootingCannon = new Sprite(14, 10, ImageIO.read(new File("assets"+File.separator+"shootingCannon.png")));
+            this.shootingCannon = new Sprite(14, 14, ImageIO.read(new File("assets"+File.separator+"shootingCannon.png")));
             this.sprites.add(this.shootingCannon);
-            // this.shootingHunter = ImageIO.read(new File("assets"+File.separator+"shootingHunter.png"));
+            this.shootingHunter = new Sprite(9, 12, ImageIO.read(new File("assets"+File.separator+"shootingHunter.png")));
+            this.sprites.add(this.shootingHunter);
+            this.explosion = this.shootingHunter = new Sprite(8, 4, ImageIO.read(new File("assets"+File.separator+"explosion.png")));
+            this.sprites.add(this.explosion);
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -273,7 +277,7 @@ public class GamePanel extends JPanel {
             case Hunter.NAME:
                 if (target.isPresent()) {
                     realTargetPosition = this.fromPositionToRealPosition(target.get().getPosition().get());
-                    towerAsset = hunter;
+                    towerAsset = shootingHunter;
                     graphic.setColor(Color.BLUE);
                     graphic.setStroke(new BasicStroke(5));
                     graphic.drawLine((int)rayStartPos.getX(), (int)rayStartPos.getY(), 
