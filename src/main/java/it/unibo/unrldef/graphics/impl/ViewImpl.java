@@ -77,15 +77,12 @@ public class ViewImpl implements View{
                 break;
             case VICTORY:
                 g.setColor(Color.RED);
-                displayState = "YOU'VE WON!";
+                displayState = "YOU WON!";
                 break;
             default:
                 break;
         }
         this.frame.setResizable(false);
-        //this.frame.setSize(this.frame.getMinimumSize());
-        //this.frame.setLocationRelativeTo(null);
-        //this.frame.pack();
         this.buttonPanel.disableAllButtons();
         g.drawString(displayState, this.frame.getWidth()/10, this.frame.getHeight()/2);
 		g.setColor(Color.GREEN);
