@@ -7,8 +7,10 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.BasicStroke;
 
+import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Enemy;
@@ -72,7 +75,11 @@ public class GamePanel extends JPanel {
     private int towerSquareWidth = 50;
     private int towerSquareHeight = 50;
 
+
     private final JPanel panelRef;
+
+    //TODO: make it a class instead of this garbage
+    private final Map<Entity, Pair<Pair<Long, Long>, Optional<Enemy>>> animationMap; 
 
     public enum ViewState {
         IDLE,
@@ -109,6 +116,7 @@ public class GamePanel extends JPanel {
             e.printStackTrace();
         }
         this.towerAvailablePositions = new ArrayList<>();
+        this.animationMap = new HashMap<>();
         this.gameWorld = gameWorld;
         this.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         this.scaleAll(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -181,62 +189,23 @@ public class GamePanel extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D graphic = (Graphics2D) g;
-        Color a = new Color(23, 79, 120);
-        Color b = new Color(21, 95,110);
-        GradientPaint cp = new GradientPaint(0, this.getHeight(), a, this.getWidth(), 0, b);
         graphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphic.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         graphic.clearRect(0,0,this.getWidth(),this.getHeight());
-        graphic.setPaint(cp);
-        graphic.fillRect(0, 0, this.getWidth(), this.getHeight());
-        renderMap(graphic);
+
+        this.renderBackground(graphic);
+        this.renderMap(graphic);
 
         for (Entity entity : gameWorld.getSceneEntities()) {
-            renderEntity(graphic, entity);
+            this.renderEntity(graphic, entity);
         }
-        
+
         switch(viewState) {
             case TOWER_SELECTED:
-                towerAvailablePositions.stream()
-                        .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < mousePosition.getX() && towerSquare.getX() + towerSquareWidth/2 > mousePosition.getX() && towerSquare.getY() - towerSquareHeight/2 < mousePosition.getY() && towerSquare.getY() + towerSquareHeight/2 > mousePosition.getY())
-                        .findFirst()
-                        .ifPresent(towerSquare -> {
-                            int radius = 0;
-                            final Position modelP = fromRealPositionToPosition(towerSquare);
-                            if (selectedEntity.equals(Hunter.NAME)) {
-                                radius = (int)(Hunter.RADIOUS);
-                            } else if (selectedEntity.equals(Cannon.NAME)) {
-                                radius = (int)(Cannon.RADIOUS);
-                            }
-                            if (radius != 0) {
-                                graphic.setColor(java.awt.Color.GREEN);
-                                final Position realPL = fromPositionToRealPosition(new Position(modelP.getX()-radius, modelP.getY()-radius));
-                                final Position realPR = fromPositionToRealPosition(new Position(modelP.getX()+radius, modelP.getY()+radius));
-                                graphic.drawOval((int)realPL.getX(), (int)realPL.getY(), (int)(realPR.getX()-realPL.getX()), (int)(realPR.getY()-realPL.getY()));
-                            }          
-                        });
-                graphic.setColor(java.awt.Color.GREEN);
-                for (Position p: this.towerAvailablePositions) {
-                    graphic.fillRect((int)p.getX()-this.towerSquareWidth/2, (int)p.getY()-this.towerSquareHeight/2, this.towerSquareWidth, this.towerSquareHeight);
-                }
-                graphic.setColor(java.awt.Color.BLACK);
+                this.renderTowersSquare(graphic);
                 break;
             case SPELL_SELECTED:
-                if (this.mousePosition.getY() < this.getHeight()-2 && this.mousePosition.getX() < this.getWidth()-2
-                        && this.mousePosition.getY() > 0 && this.mousePosition.getX() > 0) {
-                    Sprite asset = new Sprite(0, 0, null);
-                    switch (selectedEntity) {
-                        case FireBall.NAME:
-                            asset = this.fireball;
-                            break;
-                        case SnowStorm.NAME:
-                            asset = this.snowStorm;
-                            break;
-                    }
-                    final Position mPos = this.fromRealPositionToPosition(this.mousePosition);
-                    final Position realPos = this.fromPositionToRealPosition(asset.getApplicationPoint(mPos));
-                    graphic.drawImage(asset.getScaledSprite(), (int)realPos.getX(), (int)realPos.getY() , null);
-                }
+                this.renderSpellMouseRange(graphic);
                 break;
             case IDLE:
                 break;
@@ -246,6 +215,59 @@ public class GamePanel extends JPanel {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
+
+    private void renderBackground(Graphics2D graphic) {
+        Color firstColor = new Color(23, 79, 120);
+        Color secondColor = new Color(21, 95,110);
+        GradientPaint cp = new GradientPaint(0, this.getHeight(), firstColor, this.getWidth(), 0, secondColor);
+        graphic.setPaint(cp);
+        graphic.fillRect(0, 0, this.getWidth(), this.getHeight());
+        graphic.setColor(Color.BLACK);
+    }
+
+    private void renderTowersSquare(Graphics2D graphic) {
+        towerAvailablePositions.stream()
+        .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < mousePosition.getX() && towerSquare.getX() + towerSquareWidth/2 > mousePosition.getX() && towerSquare.getY() - towerSquareHeight/2 < mousePosition.getY() && towerSquare.getY() + towerSquareHeight/2 > mousePosition.getY())
+        .findFirst()
+        .ifPresent(towerSquare -> {
+            int radius = 0;
+            final Position modelP = fromRealPositionToPosition(towerSquare);
+            if (selectedEntity.equals(Hunter.NAME)) {
+                radius = (int)(Hunter.RADIOUS);
+            } else if (selectedEntity.equals(Cannon.NAME)) {
+                radius = (int)(Cannon.RADIOUS);
+            }
+            if (radius != 0) {
+                graphic.setColor(java.awt.Color.GREEN);
+                final Position realPL = fromPositionToRealPosition(new Position(modelP.getX()-radius, modelP.getY()-radius));
+                final Position realPR = fromPositionToRealPosition(new Position(modelP.getX()+radius, modelP.getY()+radius));
+                graphic.drawOval((int)realPL.getX(), (int)realPL.getY(), (int)(realPR.getX()-realPL.getX()), (int)(realPR.getY()-realPL.getY()));
+            }          
+        });
+        graphic.setColor(java.awt.Color.GREEN);
+        for (Position p: this.towerAvailablePositions) {
+            graphic.fillRect((int)p.getX()-this.towerSquareWidth/2, (int)p.getY()-this.towerSquareHeight/2, this.towerSquareWidth, this.towerSquareHeight);
+        }
+        graphic.setColor(java.awt.Color.BLACK);
+    }
+
+    private void renderSpellMouseRange(Graphics2D graphic) {
+        if (this.mousePosition.getY() < this.getHeight()-2 && this.mousePosition.getX() < this.getWidth()-2
+        && this.mousePosition.getY() > 0 && this.mousePosition.getX() > 0) {
+        Sprite asset = new Sprite(0, 0, null);
+        switch (selectedEntity) {
+            case FireBall.NAME:
+                asset = this.fireball;
+                break;
+            case SnowStorm.NAME:
+                asset = this.snowStorm;
+                break;
+        }
+        final Position mPos = this.fromRealPositionToPosition(this.mousePosition);
+        final Position realPos = this.fromPositionToRealPosition(asset.getApplicationPoint(mPos));
+        graphic.drawImage(asset.getScaledSprite(), (int)realPos.getX(), (int)realPos.getY() , null);
+    }
     }
 
     private void renderEntity(Graphics2D graphic, Entity entity) {
@@ -265,17 +287,38 @@ public class GamePanel extends JPanel {
         final Position rayStartPos = this.fromPositionToRealPosition(new Position(tower.getPosition().get().getX(), tower.getPosition().get().getY()-electrodeHeight));
         Position realTargetPosition = new Position(0, 0);
         
+        if(!this.animationMap.containsKey(tower) && target.isPresent()) {
+            this.animationMap.put(tower, new Pair<Pair<Long,Long>,Optional<Enemy>>(new Pair<>(0L, -1L), Optional.of(target.get())));
+        }
+        Pair<Long, Long> timer = new Pair<>(0L, -1L);
+        Optional<Enemy> viewTarget = target;
+        if(this.animationMap.containsKey(tower)) {
+            timer = this.animationMap.get(tower).getFirst();
+            viewTarget = this.animationMap.get(tower).getSecond();
+        }
+         
         switch(tower.getName()) {
+            
             case Cannon.NAME:
-                if (target.isPresent()) {
+                if (target.isPresent() || (timer.getSecond() < 500 && timer.getSecond() != -1)) {
+                    if(timer.getFirst() == 0) {
+                        timer.setFirstElement(System.currentTimeMillis());
+                    }
+                    timer.setSecondElement(System.currentTimeMillis() - timer.getFirst());
                     towerAsset = shootingCannon;
                 } else {
+                    this.animationMap.remove(tower);
                     towerAsset = cannon;
                 }
                 break;
             case Hunter.NAME:
-                if (target.isPresent()) {
-                    realTargetPosition = this.fromPositionToRealPosition(target.get().getPosition().get());
+                if (target.isPresent() || (timer.getSecond() < 500 && timer.getSecond() != -1)) {
+                    if(timer.getFirst() == 0) {
+                        timer.setFirstElement(System.currentTimeMillis());
+                    }
+                    timer.setSecondElement(System.currentTimeMillis() - timer.getFirst());
+                    
+                    realTargetPosition = this.fromPositionToRealPosition(viewTarget.get().getPosition().get());
                     towerAsset = shootingHunter;
                     graphic.setColor(Color.BLUE);
                     graphic.setStroke(new BasicStroke(5));
@@ -284,6 +327,8 @@ public class GamePanel extends JPanel {
                     graphic.setStroke(new BasicStroke(1));
                     graphic.setColor(Color.BLACK);
                 } else {
+
+                    this.animationMap.remove(tower);
                     towerAsset = hunter;
                 }
                 break;
