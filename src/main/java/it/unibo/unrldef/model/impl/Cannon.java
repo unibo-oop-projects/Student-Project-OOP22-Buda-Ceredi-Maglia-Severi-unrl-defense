@@ -18,7 +18,7 @@ public class Cannon extends TowerImpl {
     final private static int DAMAGE = 5;
     final public static String NAME = "sdrogo cannon";
     final public static double RADIOUS = 20;
-    final private static double EXPLOSION_RADIUS = 2;
+    final private static double EXPLOSION_RADIUS = 4;
     private Enemy target;
     
     public Cannon(final Position cannonPosition) {
@@ -39,7 +39,7 @@ public class Cannon extends TowerImpl {
             }
             this.target.reduceHealth(this.getDamage());
             // explosion
-            final List<Enemy> enemiesInExplosionRange = this.getParentWorld().sorroundingEnemies(this.getPosition().get(), EXPLOSION_RADIUS);
+            final List<Enemy> enemiesInExplosionRange = this.getParentWorld().sorroundingEnemies(this.target.getPosition().get(), EXPLOSION_RADIUS);
             if (!enemiesInExplosionRange.isEmpty()) {
                 for (Enemy enemy : enemiesInExplosionRange) {
                     enemy.reduceHealth(this.getDamage());
