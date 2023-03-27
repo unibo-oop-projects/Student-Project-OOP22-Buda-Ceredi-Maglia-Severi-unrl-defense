@@ -1,17 +1,5 @@
 package it.unibo.unrldef;
 
-import java.util.Optional;
-
-import it.unibo.unrldef.common.Position;
-import it.unibo.unrldef.core.GameEngine;
-import it.unibo.unrldef.model.api.Path;
-import it.unibo.unrldef.model.api.Player;
-import it.unibo.unrldef.model.api.World;
-import it.unibo.unrldef.model.impl.Cannon;
-import it.unibo.unrldef.model.impl.Goblin;
-import it.unibo.unrldef.model.impl.Hunter;
-import it.unibo.unrldef.model.impl.LevelBuilder;
-import it.unibo.unrldef.model.impl.Orc;
 import it.unibo.unrldef.model.impl.PlayerImpl;
 import it.unibo.unrldef.model.impl.WorldImpl;
 import it.unibo.unrldef.graphics.api.View;

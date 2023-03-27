@@ -6,11 +6,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.sql.RowId;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
