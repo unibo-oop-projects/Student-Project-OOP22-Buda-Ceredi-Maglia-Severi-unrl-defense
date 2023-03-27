@@ -10,9 +10,13 @@ import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.Cannon;
 import it.unibo.unrldef.model.impl.Goblin;
 import it.unibo.unrldef.model.impl.Hunter;
+import it.unibo.unrldef.model.impl.LevelBuilder;
 import it.unibo.unrldef.model.impl.Orc;
 import it.unibo.unrldef.model.impl.PlayerImpl;
 import it.unibo.unrldef.model.impl.WorldImpl;
+import it.unibo.unrldef.graphics.api.View;
+import it.unibo.unrldef.graphics.impl.MenuPanel;
+import it.unibo.unrldef.graphics.impl.ViewImpl;
 
 /*
  * @author tommaso.ceredi@studio.unibo.it
@@ -23,42 +27,16 @@ import it.unibo.unrldef.model.impl.WorldImpl;
 public class UnrealDefense {
 
 	public static void main(String[] args) {
-		int scale = 2;
+		ViewImpl view = new ViewImpl(new PlayerImpl("DAJE"), null, null);
+		while(true){
+			view.updateMenu();
+		}
+		/*
 		GameEngine engine = new GameEngine();
-		Player p = new PlayerImpl("io");
-
-		World world = new WorldImpl.Builder("mondo1", p, new Position(60, 0), 20, 10000)
-		.addPathSegment(Path.Direction.DOWN, 7*scale)
-		.addPathSegment(Path.Direction.LEFT, 25*scale)
-		.addPathSegment(Path.Direction.DOWN, 10*scale)
-		.addPathSegment(Path.Direction.RIGHT, 12*scale)
-		.addPathSegment(Path.Direction.UP, 2*scale)
-		.addPathSegment(Path.Direction.RIGHT, 8*scale)
-		.addPathSegment(Path.Direction.DOWN, 11*scale)
-		.addPathSegment(Path.Direction.RIGHT, 10*scale)
-		.addPathSegment(Path.Direction.DOWN, 8*scale)
-		.addPathSegment(Path.Direction.LEFT, 20*scale)
-		.addPathSegment(Path.Direction.DOWN, 3*scale)
-		.addPathSegment(Path.Direction.END, 0)
-		.addWave()
-		.addHordeToWave(0, 50000)
-		.addMultipleEnemiesToHorde(0, 0, new Orc(Optional.of(new Position(30*scale, 0))), (short)5)
-		.addMultipleEnemiesToHorde(0, 0, new Goblin(Optional.of(new Position(30*scale, 0))), (short)5)
-		.addAvailableTower(Cannon.NAME, new Cannon(null))
-		.addAvailableTower(Hunter.NAME, new Hunter(null))
-		.addTowerBuildingSpace(14*scale, 3*scale)
-		.addTowerBuildingSpace(24*scale, 3*scale)
-		.addTowerBuildingSpace(34*scale, 4*scale)
-		.addTowerBuildingSpace(9*scale, 12*scale)
-		.addTowerBuildingSpace(19*scale, 11*scale)
-		.addTowerBuildingSpace(3*scale, 21*scale)
-		.addTowerBuildingSpace(29*scale, 21*scale)
-		.addTowerBuildingSpace(17*scale, 30*scale)
-		.addTowerBuildingSpace(31*scale, 30*scale)
-		.addTowerBuildingSpace(23*scale, 38*scale)
-		.addTowerBuildingSpace(33*scale, 38*scale)
-		.build();
-		engine.initGame(p, world);
+		Player p = new PlayerImpl("Sdrogo");
+        LevelBuilder level = new LevelBuilder(p);
+        engine.initGame(p, level.levelOne());
 		engine.GameLoop();
+		 */
 	}
 }

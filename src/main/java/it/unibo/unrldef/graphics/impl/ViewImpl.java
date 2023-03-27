@@ -2,6 +2,7 @@ package it.unibo.unrldef.graphics.impl;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
 
@@ -15,18 +16,33 @@ import java.util.Set;
 
 public class ViewImpl implements View{
 
-    private final GamePanel gamePanel;
-    private final DefenseButtonPanel buttonPanel;
+    private GamePanel gamePanel;
+    private DefenseButtonPanel buttonPanel;
     private final JFrame frame;
     private final Player player;
     private final World world;
-    private final JLabel bank;
-    private final JLabel hearts;
+    private JLabel bank;
+    private JLabel hearts;
+    private final MenuPanel menuPanel;
+    private final Input inputHandler;
 
     public ViewImpl(Player player, World world, Input inputHandler){
         this.player = player;
         this.world = world;
+        this.inputHandler = inputHandler;
         this.frame = new JFrame("Unreal Defense");
+        this.menuPanel = new MenuPanel(inputHandler);
+        this.frame.getContentPane().add(this.menuPanel);
+		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setSize(this.menuPanel.getPreferredSize());
+        this.frame.setMinimumSize(this.menuPanel.getPreferredSize());
+        this.frame.setLocationRelativeTo(null);
+        this.frame.pack();
+		this.frame.setVisible(true);
+    }
+
+    public void initGame() {
+        this.frame.getContentPane().remove(this.menuPanel);
         this.gamePanel = new GamePanel(world, inputHandler);
 		this.buttonPanel = new DefenseButtonPanel(this.gamePanel, this.world);
         this.bank = new JLabel();
@@ -35,12 +51,16 @@ public class ViewImpl implements View{
         this.buttonPanel.add(this.hearts);
 		this.frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
 		this.frame.getContentPane().add(this.buttonPanel, BorderLayout.EAST);
-		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setSize(this.frame.getPreferredSize());
         this.frame.setMinimumSize(this.frame.getPreferredSize());
         this.frame.setLocationRelativeTo(null);
         this.frame.pack();
 		this.frame.setVisible(true);
+    }
+
+    public void updateMenu() {
+        this.menuPanel.repaint();
     }
 
     @Override

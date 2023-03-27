@@ -27,6 +27,9 @@ public class GameEngine {
         this.player = player;
         this.view = new ViewImpl(player, world, this.input);
         this.setGameWorld(world);
+        // System.out.println("Player: " + player.getName());
+        // System.out.println("Level: " + world);
+        // System.out.println("View: " + this.view);
     }
 
     public void setGameWorld(final World world) {
@@ -36,6 +39,7 @@ public class GameEngine {
     public void GameLoop() {
         long previousFrameStartTime = System.currentTimeMillis();
         while (!this.currentWorld.isGameOver()) {
+            // System.out.println("GameLoop");
             final long currentFrameStartTime = System.currentTimeMillis();
             final long elapsed = currentFrameStartTime-previousFrameStartTime;
             processInput();
