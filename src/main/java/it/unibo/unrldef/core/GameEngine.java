@@ -11,7 +11,6 @@ import it.unibo.unrldef.input.impl.PlayerInput;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.api.World.GameState;
-import it.unibo.unrldef.model.impl.PlayerImpl;
 
 public class GameEngine {
 
@@ -22,9 +21,9 @@ public class GameEngine {
     private final View gameView; 
     private boolean started = false;
 
-    public GameEngine(final World world) {
+    public GameEngine(final World world, final Player player) {
         this.input = new PlayerInput();
-        this.player = new PlayerImpl();
+        this.player = player;
         this.setGameWorld(world);
         this.gameView = new ViewImpl(player, this.currentWorld, this.input);
     }

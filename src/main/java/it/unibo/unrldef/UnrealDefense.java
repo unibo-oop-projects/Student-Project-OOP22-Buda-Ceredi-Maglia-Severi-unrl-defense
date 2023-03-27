@@ -16,7 +16,7 @@ public class UnrealDefense {
 	public static void main(String[] args) {
 		final Player p = new PlayerImpl();
         final LevelBuilder level = new LevelBuilder(p);
-		final GameEngine engine = new GameEngine(level.levelOne());
+		final GameEngine engine = new GameEngine(level.levelOne(), p);
 		engine.GameLoop();
 	}
 }
