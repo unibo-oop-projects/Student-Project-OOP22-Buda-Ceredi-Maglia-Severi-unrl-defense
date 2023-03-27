@@ -6,14 +6,11 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.lang.Math;
 
 import javax.imageio.ImageIO;
@@ -47,7 +44,7 @@ public class GamePanel extends JPanel {
 
     private String selectedEntity;
 
-    private List<Position> towerAvailablePositions;
+    private Set<Position> towerAvailablePositions;
 
     private World gameWorld;
     private ViewState viewState;
@@ -62,6 +59,7 @@ public class GamePanel extends JPanel {
     private Sprite shootingCannon;
     private Sprite explosion;
     private Sprite shootingHunter;
+    private Sprite towerPlace;
     private Set<Sprite> sprites = new HashSet<>();
     private double xScale;
     private double yScale;
@@ -111,13 +109,16 @@ public class GamePanel extends JPanel {
             this.sprites.add(this.shootingHunter);
             this.explosion = new Sprite(8, 4, ImageIO.read(new File("assets"+File.separator+"explosion.png")));
             this.sprites.add(this.explosion);
+            this.towerPlace = new Sprite(8, 8, ImageIO.read(new File("assets"+File.separator+"towerPlace.png")));
+            this.sprites.add(this.towerPlace);
             
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.towerAvailablePositions = new ArrayList<>();
+        
         this.animationMap = new HashMap<>();
         this.gameWorld = gameWorld;
+        this.towerAvailablePositions = new HashSet<>(this.gameWorld.getAvailablePositions());
         this.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         this.scaleAll(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         
@@ -125,7 +126,6 @@ public class GamePanel extends JPanel {
             @Override
             public void componentResized(ComponentEvent e) {
                 scaleAll(panelRef.getWidth(), panelRef.getHeight());
-                //scaleAll(panelRef.getSize().width, panelRef.getSize().height);
             }
             @Override
             public void componentMoved(ComponentEvent e) {}
@@ -140,19 +140,24 @@ public class GamePanel extends JPanel {
             
             @Override
             public void mouseClicked(MouseEvent e) {
-                Position p = fromRealPositionToPosition(new Position(e.getX(),e.getY()));
+                Position pView = new Position(e.getX(),e.getY());
+                Position pModel = fromRealPositionToPosition(pView);
                 switch (viewState) {
                     case IDLE:
                         break;
-                    case TOWER_SELECTED: 
-                        towerAvailablePositions.stream()
-                                .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < e.getX() && towerSquare.getX() + towerSquareWidth/2 > e.getX() && towerSquare.getY() - towerSquareHeight/2 < e.getY() && towerSquare.getY() + towerSquareHeight/2 > e.getY())
-                                .findFirst()
-                                .map(towerSquare -> fromRealPositionToPosition(towerSquare))
-                                .ifPresent(modelP -> inputHandler.setLastHit((int)modelP.getX(), (int)modelP.getY(), Input.HitType.PLACE_TOWER, Optional.of(selectedEntity)));
+                    case TOWER_SELECTED:
+                    towerAvailablePositions.stream()
+                            .filter(pos -> {
+                                Position realPos = fromPositionToRealPosition(pos);
+                                return isInSquare(pView, new Position(realPos.getX() - towerSquareWidth/2, realPos.getY() - towerSquareHeight/2), new Position(realPos.getX() + towerSquareWidth/2, realPos.getY() + towerSquareHeight/2));
+                            })
+                            .findFirst().ifPresent(modelP -> {
+                                towerAvailablePositions.remove(modelP);
+                                inputHandler.setLastHit((int)modelP.getX(), (int)modelP.getY(), Input.HitType.PLACE_TOWER, Optional.of(selectedEntity));
+                            });
                         break;
                     case SPELL_SELECTED:
-                        inputHandler.setLastHit((int)p.getX(), (int)p.getY(), Input.HitType.PLACE_SPELL, Optional.of(selectedEntity));
+                        inputHandler.setLastHit((int)pModel.getX(), (int)pModel.getY(), Input.HitType.PLACE_SPELL, Optional.of(selectedEntity));
                         break;
                 }
                 viewState = ViewState.IDLE; // reset the view state every time the mouse is clicked
@@ -228,7 +233,8 @@ public class GamePanel extends JPanel {
 
     private void renderTowersSquare(Graphics2D graphic) {
         towerAvailablePositions.stream()
-        .filter(towerSquare -> towerSquare.getX() - towerSquareWidth/2 < mousePosition.getX() && towerSquare.getX() + towerSquareWidth/2 > mousePosition.getX() && towerSquare.getY() - towerSquareHeight/2 < mousePosition.getY() && towerSquare.getY() + towerSquareHeight/2 > mousePosition.getY())
+        .map(x -> this.fromPositionToRealPosition(x))
+        .filter(pos -> this.isInSquare(mousePosition, new Position(pos.getX() - towerSquareWidth/2, pos.getY() - towerSquareHeight/2), new Position(pos.getX() + towerSquareWidth/2, pos.getY() + towerSquareHeight/2)))
         .findFirst()
         .ifPresent(towerSquare -> {
             int radius = 0;
@@ -245,9 +251,10 @@ public class GamePanel extends JPanel {
                 graphic.drawOval((int)realPL.getX(), (int)realPL.getY(), (int)(realPR.getX()-realPL.getX()), (int)(realPR.getY()-realPL.getY()));
             }          
         });
-        graphic.setColor(java.awt.Color.GREEN);
         for (Position p: this.towerAvailablePositions) {
-            graphic.fillRect((int)p.getX()-this.towerSquareWidth/2, (int)p.getY()-this.towerSquareHeight/2, this.towerSquareWidth, this.towerSquareHeight);
+            Position pos = this.towerPlace.getApplicationPoint(p);
+            Position realPos = fromPositionToRealPosition(pos);
+            graphic.drawImage(this.towerPlace.getScaledSprite(), (int) realPos.getX(), (int) realPos.getY(), null);
         }
         graphic.setColor(java.awt.Color.BLACK);
     }
@@ -381,8 +388,6 @@ public class GamePanel extends JPanel {
     }
 
     private void renderMap(final Graphics2D graphic) {
-        this.towerAvailablePositions.clear();
-        this.towerAvailablePositions = this.gameWorld.getAvailablePositions().stream().map((p) -> this.fromPositionToRealPosition(p)).collect(Collectors.toList());
         graphic.drawImage(this.map.getScaledSprite(), this.xMapPosition, this.yMapPosition, null);
     }
 
@@ -418,8 +423,18 @@ public class GamePanel extends JPanel {
         xScale = (width / MAP_WIDTH_IN_UNITS);
         yScale = (height / MAP_HEIGHT_IN_UNITS);
 
-
         map.scale(xScale, yScale);
         sprites.forEach(x -> x.scale(xScale, yScale));
+        
+        towerSquareWidth = towerPlace.getScaledDimension().getFirst();
+        towerSquareHeight = towerPlace.getScaledDimension().getSecond();
+    }
+
+    private boolean isInSquare(Position pos, Position upLeft, Position downRight) {
+        var ret = (pos.getX() >= upLeft.getX() &&
+               pos.getX() <= downRight.getX() &&
+               pos.getY() <= downRight.getY() &&
+               pos.getY() >= upLeft.getY()); 
+        return ret;
     }
 }
