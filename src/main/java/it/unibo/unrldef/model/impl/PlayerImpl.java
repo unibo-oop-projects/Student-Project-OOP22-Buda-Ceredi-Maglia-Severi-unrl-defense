@@ -16,21 +16,26 @@ import it.unibo.unrldef.model.api.World;
 public class PlayerImpl implements Player{
 
     private World currentWorld;
-    private final String name;
-    private final Set<Spell> spells = new HashSet<>();
+    private String name;
+    private final Set<Spell> spells;
 
     /**
      * Crates a new Player
      * @param name its name
      * @param map where he begins to play
      */
-    public PlayerImpl(final String name) {
-        this.name = Objects.requireNonNull(name);
+    public PlayerImpl() { 
+        this.spells = new HashSet<>();
     }
 
     @Override
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public void setName(final String name) {
+        this.name = Objects.requireNonNull(name);
     }
 
     @Override

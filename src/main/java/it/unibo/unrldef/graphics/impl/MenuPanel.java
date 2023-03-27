@@ -6,12 +6,14 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.util.Optional;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import it.unibo.unrldef.input.api.Input;
+import it.unibo.unrldef.input.api.Input.HitType;
 
 
 public class MenuPanel extends JPanel {
@@ -57,13 +59,13 @@ public class MenuPanel extends JPanel {
         this.startButton.setBounds(DEFAULT_WIDTH / 2 - 70, DEFAULT_HEIGHT / 2 + 30, 140, 20);
         this.startButton.addActionListener(e -> {
                 if (this.nameField.getText().length() > 0) {
-                    //this.inputHandler.setPlayerName(this.nameField.getText());
+                    this.inputHandler.setLastHit(0, 0, HitType.START_GAME, Optional.of(this.nameField.getText()));
                 }
             });
         exitButton = new JButton("Exit");
         exitButton.setBounds(DEFAULT_WIDTH / 2 - 70, DEFAULT_HEIGHT / 2 + 60, 140, 20);
         exitButton.addActionListener(e -> {
-                System.exit(0);
+                this.inputHandler.setLastHit(0, 0, HitType.EXIT_GAME, Optional.empty());
             });
         this.add(nameField);
         this.add(startButton);
@@ -77,7 +79,6 @@ public class MenuPanel extends JPanel {
         int height = (panelRef.getHeight()/2) - 100;
         int fontName = Math.min((int)xScale, (int)yScale) == 0 ? 20 : (int)((20) * Math.min((int)xScale, (int)yScale));
         int fontSubtitle = Math.min((int)xScale, (int)yScale) == 0 ? 15 : (int)((15) * Math.min((int)xScale, (int)yScale));
-        
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, fontName));
         g.drawString("UNREAL DEFENSE", width, height);

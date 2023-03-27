@@ -8,7 +8,7 @@ import it.unibo.unrldef.common.Position;
 public interface Input {
     
     public enum HitType {
-        PLACE_TOWER, PLACE_SPELL, SELECTION
+        START_GAME, EXIT_GAME, PLACE_TOWER, PLACE_SPELL, SELECTION
     }
 
     public void setLastHit(int x, int y, HitType hit, Optional<String> selected);

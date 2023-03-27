@@ -1,10 +1,9 @@
 package it.unibo.unrldef;
 
+import it.unibo.unrldef.model.api.Player;
+import it.unibo.unrldef.model.impl.LevelBuilder;
 import it.unibo.unrldef.model.impl.PlayerImpl;
-import it.unibo.unrldef.model.impl.WorldImpl;
-import it.unibo.unrldef.graphics.api.View;
-import it.unibo.unrldef.graphics.impl.MenuPanel;
-import it.unibo.unrldef.graphics.impl.ViewImpl;
+import it.unibo.unrldef.core.GameEngine;
 
 /*
  * @author tommaso.ceredi@studio.unibo.it
@@ -15,16 +14,9 @@ import it.unibo.unrldef.graphics.impl.ViewImpl;
 public class UnrealDefense {
 
 	public static void main(String[] args) {
-		ViewImpl view = new ViewImpl(new PlayerImpl("DAJE"), null, null);
-		while(true){
-			view.updateMenu();
-		}
-		/*
-		GameEngine engine = new GameEngine();
-		Player p = new PlayerImpl("Sdrogo");
-        LevelBuilder level = new LevelBuilder(p);
-        engine.initGame(p, level.levelOne());
+		final Player p = new PlayerImpl();
+        final LevelBuilder level = new LevelBuilder(p);
+		final GameEngine engine = new GameEngine(level.levelOne());
 		engine.GameLoop();
-		 */
 	}
 }

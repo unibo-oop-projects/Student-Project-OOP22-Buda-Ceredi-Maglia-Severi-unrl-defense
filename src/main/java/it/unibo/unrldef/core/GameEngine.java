@@ -9,27 +9,28 @@ import it.unibo.unrldef.graphics.impl.ViewImpl;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.input.impl.PlayerInput;
 import it.unibo.unrldef.model.api.*;
+import it.unibo.unrldef.model.impl.PlayerImpl;
 
 public class GameEngine {
 
     private final long period = 1000 / 30;
-    private Player player;
+    private final Player player;
     private World currentWorld;
     private final Input input;
-    private View view; 
+    private final View gameView; 
+    private boolean started = false;
 
-
-    public GameEngine() {
+    public GameEngine(final World world) {
         this.input = new PlayerInput();
+        this.player = new PlayerImpl();
+        this.setGameWorld(world);
+        this.gameView = new ViewImpl(player, this.currentWorld, this.input);
     }
 
-    public void initGame(final Player player, final World world) {
-        this.player = player;
-        this.view = new ViewImpl(player, world, this.input);
-        this.setGameWorld(world);
-        // System.out.println("Player: " + player.getName());
-        // System.out.println("Level: " + world);
-        // System.out.println("View: " + this.view);
+    public void initGame(final String playerName) {
+        this.player.setName(playerName);
+        this.gameView.initGame();
+        this.started = true;
     }
 
     public void setGameWorld(final World world) {
@@ -37,14 +38,17 @@ public class GameEngine {
     }
 
     public void GameLoop() {
+        while (!started) {
+            this.processInput();
+            this.gameView.updateMenu();
+        }
         long previousFrameStartTime = System.currentTimeMillis();
         while (!this.currentWorld.isGameOver()) {
-            // System.out.println("GameLoop");
             final long currentFrameStartTime = System.currentTimeMillis();
             final long elapsed = currentFrameStartTime-previousFrameStartTime;
-            processInput();
-            update(elapsed);
-            render();
+            this.processInput();
+            this.update(elapsed);
+            this.render();
             this.waitForNextFrame(currentFrameStartTime);
             previousFrameStartTime = currentFrameStartTime;
         }
@@ -57,7 +61,7 @@ public class GameEngine {
         if (elapsed < this.period) {
             try {
 				Thread.sleep(period - elapsed);
-			} catch (Exception ex){}
+			} catch (Exception ex){ }
         }
     }
 
@@ -73,7 +77,13 @@ public class GameEngine {
                 case PLACE_SPELL:
                     this.player.throwSpell(selectedName.get(), selectedPosition);
                     break;
-                case SELECTION:
+                case START_GAME:
+                    this.initGame(selectedName.get());
+                    break;
+                case EXIT_GAME:
+                    this.exitGame();
+                    break;
+                default:
                     break;
             }
         }
@@ -84,6 +94,10 @@ public class GameEngine {
     }
 
     private void render() {
-        this.view.render();
+        this.gameView.render();
+    }
+
+    private void exitGame() {
+        System.exit(0);
     }
 }

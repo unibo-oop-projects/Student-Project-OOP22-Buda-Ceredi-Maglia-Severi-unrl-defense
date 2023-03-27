@@ -16,6 +16,11 @@ public interface Player {
     public String getName();
 
     /**
+     * @param name the name of the player
+     */
+    public void setName(final String name);
+
+    /**
      * Sets the map where the player will be playing
      * @param map the next map
      */

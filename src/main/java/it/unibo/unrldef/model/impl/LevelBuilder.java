@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Player;
-import it.unibo.unrldef.model.api.Path.Direction;
 import it.unibo.unrldef.model.api.Path;
 
 public class LevelBuilder {
