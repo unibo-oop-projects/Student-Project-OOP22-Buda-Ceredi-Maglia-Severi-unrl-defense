@@ -41,7 +41,6 @@ public class MenuPanel extends JPanel {
                 int currHeight = panelRef.getHeight();
                 xScale = (double)currWidth / DEFAULT_WIDTH;
                 yScale = (double)currHeight / DEFAULT_HEIGHT;
-                System.out.println("new scale: " + xScale + " " + yScale);
             }
             @Override
             public void componentMoved(ComponentEvent e) {}
