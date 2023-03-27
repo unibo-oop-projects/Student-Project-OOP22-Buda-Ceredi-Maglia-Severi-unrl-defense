@@ -23,7 +23,6 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.BasicStroke;
 
-import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Enemy;
@@ -79,7 +78,8 @@ public class GamePanel extends JPanel {
     private final JPanel panelRef;
 
     //TODO: make it a class instead of this garbage
-    private final Map<Entity, Pair<Pair<Long, Long>, Optional<Enemy>>> animationMap; 
+    private final Map<Entity, SpriteAnimation> animationMap; 
+    private final long TOWER_ANIMATION_LENGTH = 500;
 
     public enum ViewState {
         IDLE,
@@ -254,7 +254,7 @@ public class GamePanel extends JPanel {
 
     private void renderSpellMouseRange(Graphics2D graphic) {
         if (this.mousePosition.getY() < this.getHeight()-2 && this.mousePosition.getX() < this.getWidth()-2
-        && this.mousePosition.getY() > 0 && this.mousePosition.getX() > 0) {
+                && this.mousePosition.getY() > 0 && this.mousePosition.getX() > 0) {
         Sprite asset = new Sprite(0, 0, null);
         switch (selectedEntity) {
             case FireBall.NAME:
@@ -272,7 +272,7 @@ public class GamePanel extends JPanel {
 
     private void renderEntity(Graphics2D graphic, Entity entity) {
         if (entity instanceof Enemy) {
-            renderEnemy(graphic, entity);
+            this.renderEnemy(graphic, entity);
         } else if (entity instanceof Spell) {
             this.renderSpell(graphic, entity);
         } else if (entity instanceof Tower) {
@@ -282,62 +282,53 @@ public class GamePanel extends JPanel {
     
     private void renderTower(Graphics2D graphic, Entity tower) {
         Sprite towerAsset = new Sprite(0, 0, null);
+        Sprite explosionAsset = new Sprite(0, 0, null);
+        Position explosionPos = new Position(0, 0);
         final int electrodeHeight = 4;
         Optional<Enemy> target = ((Tower)tower).getTarget();
-        final Position rayStartPos = this.fromPositionToRealPosition(new Position(tower.getPosition().get().getX(), tower.getPosition().get().getY()-electrodeHeight));
-        Position realTargetPosition = new Position(0, 0);
-        
-        if(!this.animationMap.containsKey(tower) && target.isPresent()) {
-            this.animationMap.put(tower, new Pair<Pair<Long,Long>,Optional<Enemy>>(new Pair<>(0L, -1L), Optional.of(target.get())));
+        final Position rayStartPos = this.fromPositionToRealPosition(new Position(
+                tower.getPosition().get().getX(), tower.getPosition().get().getY()-electrodeHeight));
+        this.animationMap.putIfAbsent(tower, new SpriteAnimation(TOWER_ANIMATION_LENGTH));
+        final SpriteAnimation animation = this.animationMap.get(tower);
+        if (target.isPresent()) {
+            animation.startAnimation(System.currentTimeMillis(), target.get());
         }
-        Pair<Long, Long> timer = new Pair<>(0L, -1L);
-        Optional<Enemy> viewTarget = target;
-        if(this.animationMap.containsKey(tower)) {
-            timer = this.animationMap.get(tower).getFirst();
-            viewTarget = this.animationMap.get(tower).getSecond();
-        }
-         
         switch(tower.getName()) {
-            
             case Cannon.NAME:
-                if (target.isPresent() || (timer.getSecond() < 500 && timer.getSecond() != -1)) {
-                    if(timer.getFirst() == 0) {
-                        timer.setFirstElement(System.currentTimeMillis());
-                    }
-                    timer.setSecondElement(System.currentTimeMillis() - timer.getFirst());
-                    towerAsset = shootingCannon;
+                if (animation.isAnimationRunning()) {
+                    towerAsset = this.shootingCannon;
+                    explosionAsset = this.explosion;
+                    explosionPos = this.fromPositionToRealPosition(explosionAsset.getApplicationPoint(
+                            animation.getTarget().getPosition().get()));
+                    graphic.drawImage(explosionAsset.getScaledSprite(), (int)explosionPos.getX(), (int)explosionPos.getY(), null);
+                    animation.updateTimePassed();
                 } else {
-                    this.animationMap.remove(tower);
-                    towerAsset = cannon;
+                    towerAsset = this.cannon;
+                    animation.resetAnimation();
                 }
                 break;
             case Hunter.NAME:
-                if (target.isPresent() || (timer.getSecond() < 500 && timer.getSecond() != -1)) {
-                    if(timer.getFirst() == 0) {
-                        timer.setFirstElement(System.currentTimeMillis());
-                    }
-                    timer.setSecondElement(System.currentTimeMillis() - timer.getFirst());
-                    
-                    realTargetPosition = this.fromPositionToRealPosition(viewTarget.get().getPosition().get());
-                    towerAsset = shootingHunter;
+                if (animation.isAnimationRunning()) {
+                    towerAsset = this.shootingHunter;
+                    final Position realTargetPosition = this.fromPositionToRealPosition(animation.getTarget().getPosition().get());
                     graphic.setColor(Color.BLUE);
                     graphic.setStroke(new BasicStroke(5));
                     graphic.drawLine((int)rayStartPos.getX(), (int)rayStartPos.getY(), 
                             (int)realTargetPosition.getX(), (int)realTargetPosition.getY());
                     graphic.setStroke(new BasicStroke(1));
                     graphic.setColor(Color.BLACK);
+                    animation.updateTimePassed();
                 } else {
-
-                    this.animationMap.remove(tower);
-                    towerAsset = hunter;
+                    towerAsset = this.hunter;
+                    animation.resetAnimation();
                 }
                 break;
             default:
                 break;
         }
-        Position pos = tower.getPosition().get();
-        Position realPos = fromPositionToRealPosition(towerAsset.getApplicationPoint(pos));
-        graphic.drawImage(towerAsset.getScaledSprite(), (int) realPos.getX(), (int) realPos.getY(), null);
+        Position towerPos = tower.getPosition().get();
+        Position realTowerPos = fromPositionToRealPosition(towerAsset.getApplicationPoint(towerPos));
+        graphic.drawImage(towerAsset.getScaledSprite(), (int)realTowerPos.getX(), (int)realTowerPos.getY(), null);
     }
 
     private void renderEnemy(Graphics2D graphic, Entity enemy) {

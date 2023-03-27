@@ -43,7 +43,6 @@ public class Cannon extends TowerImpl {
             if (!enemiesInExplosionRange.isEmpty()) {
                 for (Enemy enemy : enemiesInExplosionRange) {
                     enemy.reduceHealth(this.getDamage());
-                    System.out.println("CANNON: " + enemy.getHealth());
                 }
             }
         } else {
@@ -53,7 +52,6 @@ public class Cannon extends TowerImpl {
 
     @Override
     public Optional<Enemy> getTarget() {
-        //System.out.println("CANNON target: " + this.target);
         if (this.target != null) {
             return this.isAttacking() ? this.target : Optional.empty();
         }
