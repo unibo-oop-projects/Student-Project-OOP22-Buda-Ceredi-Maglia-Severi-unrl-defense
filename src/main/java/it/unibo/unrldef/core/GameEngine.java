@@ -8,7 +8,9 @@ import it.unibo.unrldef.graphics.api.View;
 import it.unibo.unrldef.graphics.impl.ViewImpl;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.input.impl.PlayerInput;
-import it.unibo.unrldef.model.api.*;
+import it.unibo.unrldef.model.api.Player;
+import it.unibo.unrldef.model.api.World;
+import it.unibo.unrldef.model.api.World.GameState;
 import it.unibo.unrldef.model.impl.PlayerImpl;
 
 public class GameEngine {
@@ -43,7 +45,7 @@ public class GameEngine {
             this.gameView.updateMenu();
         }
         long previousFrameStartTime = System.currentTimeMillis();
-        while (!this.currentWorld.isGameOver()) {
+        while (this.currentWorld.gameState() == GameState.PLAYING) {
             final long currentFrameStartTime = System.currentTimeMillis();
             final long elapsed = currentFrameStartTime-previousFrameStartTime;
             this.processInput();
@@ -52,8 +54,7 @@ public class GameEngine {
             this.waitForNextFrame(currentFrameStartTime);
             previousFrameStartTime = currentFrameStartTime;
         }
-        System.out.println("Hai vinto :)");
-        System.exit(0);
+        this.endOfGame(this.currentWorld.gameState());
     }
 
     private void waitForNextFrame(long cycleStartTime) {
@@ -99,5 +100,9 @@ public class GameEngine {
 
     private void exitGame() {
         System.exit(0);
+    }
+
+    private void endOfGame(final GameState state) {
+        this.gameView.renderEndGame(state);
     }
 }

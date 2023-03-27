@@ -18,7 +18,7 @@ public class Hunter extends TowerImpl {
     final private static int DAMAGE = 50;
     final public static String NAME = "sdrogo hunter";
     final public static double RADIOUS = 30;
-    private Enemy target;
+    private Optional<Enemy> target = Optional.empty();
 
     public Hunter(final Position hunterPosition) {
         super(hunterPosition, NAME, RADIOUS, DAMAGE, ATTACK_FOR_SECOND, COST);
@@ -32,20 +32,19 @@ public class Hunter extends TowerImpl {
     @Override
     protected void attack() {
         final List<Enemy> enemiesInRange = this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius());
-        //System.out.println("enemiesInRange: " + enemiesInRange);
         if (!enemiesInRange.isEmpty()) {
-            //System.out.println("C'È QUALCUNO");
-            if (!enemiesInRange.contains(this.target)) {
-              //  System.out.println("HO SETTATO IL TARGET, WUUUUUUUU");
-                this.target = enemiesInRange.get(0);
+            if (this.target.isEmpty() || !enemiesInRange.contains(this.target.get())) {
+                this.target = Optional.of(enemiesInRange.get(0));
             }
-            this.target.reduceHealth(this.getDamage());
+            this.target.get().reduceHealth(this.getDamage());
         }
     }
 
     @Override
     public Optional<Enemy> getTarget() {
-       // System.out.println("target: " + this.target);
-        return this.isAttacking() ? Optional.ofNullable(this.target) : Optional.empty();
+        if (this.target != null) {
+            return this.isAttacking() ? this.target : Optional.empty();
+        }
+        return Optional.empty();
     }
 }

@@ -1,6 +1,7 @@
 package it.unibo.unrldef.graphics.impl;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -33,8 +34,8 @@ import java.util.Set;
  */
 public class DefenseButtonPanel extends JPanel {
     
-    public final static int WIDTH = 80;
-    public final static int HEIGHT = 80;
+    public final static int WIDTH = (int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/16);
+    public final static int HEIGHT = WIDTH;
     private final World world;
     private final Map<String, JButton> buttons = new HashMap<>();
 
@@ -120,5 +121,12 @@ public class DefenseButtonPanel extends JPanel {
             }
             respectiveButton.setEnabled(enableState);
         }
+    }
+
+    /**
+     * Disable all the buttons in the panel
+     */
+    public void disableAllButtons() {
+        this.buttons.values().forEach(b -> b.setEnabled(false));
     }
 }
