@@ -72,7 +72,7 @@ public class GameEngine {
             final Optional<String> selectedName = this.input.getSelectedName();
             switch(lastHit.get().getSecond()) {
                 case PLACE_TOWER:
-                    this.player.buildNewTower(selectedPosition, selectedName.get());
+                    this.currentWorld.tryBuildTower(selectedPosition, selectedName.get());
                     break;
                 case PLACE_SPELL:
                     this.player.throwSpell(selectedName.get(), selectedPosition);

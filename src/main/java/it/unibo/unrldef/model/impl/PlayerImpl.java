@@ -17,16 +17,12 @@ public class PlayerImpl implements Player{
 
     private World currentWorld;
     private String name;
-    private final Set<Spell> spells;
+    private Set<Spell> spells;
 
     /**
      * Crates a new Player
-     * @param name its name
-     * @param map where he begins to play
      */
-    public PlayerImpl() { 
-        this.spells = new HashSet<>();
-    }
+    public PlayerImpl() { }
 
     @Override
     public String getName() {
@@ -41,8 +37,6 @@ public class PlayerImpl implements Player{
     @Override
     public void setGameMap(final World world) {
         this.currentWorld = Objects.requireNonNull(world);
-        this.spells.add(new FireBall(world));
-        this.spells.add(new SnowStorm(world));
     }
 
     @Override
@@ -51,7 +45,7 @@ public class PlayerImpl implements Player{
     }
     
     @Override
-    public void buildNewTower(final Position pos, final String towerName) {
+    public void ifPossibleBuildTower(final Position pos, final String towerName) {
         this.currentWorld.tryBuildTower(pos, towerName);
     }
 
@@ -77,5 +71,10 @@ public class PlayerImpl implements Player{
     @Override
     public Set<Spell> getSpells() {
         return Set.copyOf(this.spells);
+    }
+
+    @Override
+    public void setSpells(final Set<Spell> spells) {
+        this.spells = spells;
     }
 }

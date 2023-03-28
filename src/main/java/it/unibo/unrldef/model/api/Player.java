@@ -32,11 +32,11 @@ public interface Player {
     public World getGameWorld();
 
     /**
-     * Places a new tower on the world map
+     * Places a new tower on the world map if the player has enough money
      * @param pos the position where to place it
      * @param towerName the type of tower to build
      */
-    public void buildNewTower(final Position pos, final String towerName);
+    public void ifPossibleBuildTower(final Position pos, final String towerName);
 
     /**
      * Places a new spell on the world map deling damage to enemies
@@ -55,4 +55,11 @@ public interface Player {
      * @return a set containing all the spells that the player can use
      */
     public Set<Spell> getSpells();
+
+    /**
+     * Sets the spells that the player can use in the game
+     * @param spells a set of spells
+     */
+    public void setSpells(final Set<Spell> spells);
+
 }
