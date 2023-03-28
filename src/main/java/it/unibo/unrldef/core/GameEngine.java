@@ -38,7 +38,7 @@ public class GameEngine {
         this.currentWorld = world;
     }
 
-    public void GameLoop() {
+    public void gameLoop() {
         while (!started) {
             this.processInput();
             this.gameView.updateMenu();
