@@ -23,6 +23,7 @@ public class GameEngine {
     private final Input input;
     private final View gameView; 
     private boolean started;
+    private boolean ended;
 
     /**
      * Builds a new GameEngine.
@@ -35,6 +36,7 @@ public class GameEngine {
         this.currentWorld = world;
         this.gameView = new ViewImpl(player, this.currentWorld, this.input);
         this.started = false;
+        this.ended = false;
     }
 
     /**
@@ -73,7 +75,10 @@ public class GameEngine {
             this.waitForNextFrame(currentFrameStartTime);
             previousFrameStartTime = currentFrameStartTime;
         }
-        this.endOfGame(this.currentWorld.gameState());
+        while (!ended) {
+            this.processInput();
+            this.endOfGame(this.currentWorld.gameState());
+        }
     }
 
     /**
@@ -137,6 +142,7 @@ public class GameEngine {
      * Exits the game.
      */
     private void exitGame() {
+        this.ended = true;
         System.exit(0);
     }
 

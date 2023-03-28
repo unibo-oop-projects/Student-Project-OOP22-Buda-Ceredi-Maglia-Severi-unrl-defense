@@ -34,7 +34,7 @@ import java.util.Set;
  */
 public class DefenseButtonPanel extends JPanel {
     
-    public final static int WIDTH = (int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/16);
+    public final static int WIDTH = (int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/18);
     public final static int HEIGHT = WIDTH;
     private final World world;
     private final Map<String, JButton> buttons = new HashMap<>();

@@ -1,21 +1,31 @@
 package it.unibo.unrldef.graphics.impl;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 import it.unibo.unrldef.graphics.api.View;
 import it.unibo.unrldef.input.api.Input;
+import it.unibo.unrldef.input.api.Input.HitType;
 import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.api.World.GameState;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class ViewImpl implements View{
@@ -49,6 +59,7 @@ public class ViewImpl implements View{
         this.frame.getContentPane().remove(this.menuPanel);
         this.gamePanel = new GamePanel(world, inputHandler);
 		this.buttonPanel = new DefenseButtonPanel(this.gamePanel, this.world);
+        this.buttonPanel.add(this.createExitButton());
         this.bank = new JLabel();
         this.hearts = new JLabel();
         this.buttonPanel.add(this.bank);
@@ -61,6 +72,24 @@ public class ViewImpl implements View{
         this.frame.setLocationRelativeTo(null);
         this.frame.pack();
 		this.frame.setVisible(true);
+    }
+
+    private JButton createExitButton() {
+        JButton exit = null;
+        try {
+            exit = new JButton(new ImageIcon(new ImageIcon(ImageIO.read(new File("assets"+File.separator+"exit.png")))
+                    .getImage().getScaledInstance(DefenseButtonPanel.WIDTH, DefenseButtonPanel.HEIGHT, java.awt.Image.SCALE_SMOOTH)));
+            exit.setPreferredSize(new Dimension(DefenseButtonPanel.WIDTH, DefenseButtonPanel.HEIGHT));
+            exit.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    inputHandler.setLastHit(0, 0, HitType.EXIT_GAME, Optional.empty());
+                }
+            });
+        } catch (IOException e) {
+            new ErrorDialog("Error reading the images files");
+        }
+        return exit;
     }
 
     public void updateMenu() {
@@ -101,7 +130,6 @@ public class ViewImpl implements View{
             default:
                 break;
         }
-        this.frame.setResizable(false);
         this.buttonPanel.disableAllButtons();
         g.drawString(displayState, this.frame.getWidth()/10, this.frame.getHeight()/2);
 		g.setColor(Color.GREEN);
