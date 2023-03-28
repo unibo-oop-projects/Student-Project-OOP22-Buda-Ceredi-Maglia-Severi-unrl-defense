@@ -75,7 +75,6 @@ public class GamePanel extends JPanel {
 
     private final JPanel panelRef;
 
-    //TODO: make it a class instead of this garbage
     private final Map<Entity, SpriteAnimation> animationMap; 
     private final long TOWER_ANIMATION_LENGTH = 500;
 
