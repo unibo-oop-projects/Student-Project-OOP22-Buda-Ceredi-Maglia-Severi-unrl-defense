@@ -10,19 +10,14 @@ import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.World;
 
 /**
- * The main player in a tower defense game
+ * The main player in a tower defense game.
  * @author tommaso.severi2@studio.unibo.it
  */
-public class PlayerImpl implements Player{
+public final class PlayerImpl implements Player {
 
     private World currentWorld;
     private String name;
     private Set<Spell> spells;
-
-    /**
-     * Crates a new Player
-     */
-    public PlayerImpl() { }
 
     @Override
     public String getName() {
@@ -43,7 +38,7 @@ public class PlayerImpl implements Player{
     public World getGameWorld() {
         return this.currentWorld;
     }
-    
+
     @Override
     public void ifPossibleBuildTower(final Position pos, final String towerName) {
         this.currentWorld.tryBuildTower(pos, towerName);
@@ -62,6 +57,9 @@ public class PlayerImpl implements Player{
         this.spells.forEach(sp -> sp.updateState(elapsed));
     }
 
+    /**
+     * @return a set of spells that are active
+     */
     public Set<Spell> getActiveSpells() {
         return new HashSet<Spell>(this.spells.stream()
                 .filter(sp -> sp.isActive())

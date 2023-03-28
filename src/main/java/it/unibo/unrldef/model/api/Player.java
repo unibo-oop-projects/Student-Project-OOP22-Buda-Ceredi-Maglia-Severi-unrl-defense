@@ -5,61 +5,60 @@ import java.util.Set;
 import it.unibo.unrldef.common.Position;
 
 /**
- * A player in a strategic game where his position is irrelevant and spells can be used
+ * A player in a strategic game where his position is irrelevant and spells can be used.
  * @author tommaso.severi2@studio.unibo.it
  */
 public interface Player {
-    
     /**
      * @return the name of the player
      */
-    public String getName();
+    String getName();
 
     /**
      * @param name the name of the player
      */
-    public void setName(final String name);
+    void setName(String name);
 
     /**
-     * Sets the map where the player will be playing
+     * Sets the map where the player will be playing.
      * @param map the next map
      */
-    public void setGameMap(final World map);
+    void setGameMap(World map);
 
     /**
      * @return the map where the player is currently playing
      */
-    public World getGameWorld();
+    World getGameWorld();
 
     /**
-     * Places a new tower on the world map if the player has enough money
+     * Places a new tower on the world map if the player has enough money.
      * @param pos the position where to place it
      * @param towerName the type of tower to build
      */
-    public void ifPossibleBuildTower(final Position pos, final String towerName);
+    void ifPossibleBuildTower(Position pos, String towerName);
 
     /**
-     * Places a new spell on the world map deling damage to enemies
+     * Places a new spell on the world map deling damage to enemies.
      * @param name its name
      * @param pos its position
      */
-    public void throwSpell(final String name, final Position pos);
+    void throwSpell(String name, Position pos);
 
     /**
-     * Updates the state of the spells
+     * Updates the state of the spells.
      * @param elapsed time passed since last frame
      */
-    public void updateSpellState(final long elapsed);
+    void updateSpellState(long elapsed);
 
     /**
      * @return a set containing all the spells that the player can use
      */
-    public Set<Spell> getSpells();
+    Set<Spell> getSpells();
 
     /**
-     * Sets the spells that the player can use in the game
+     * Sets the spells that the player can use in the game.
      * @param spells a set of spells
      */
-    public void setSpells(final Set<Spell> spells);
+    void setSpells(Set<Spell> spells);
 
 }
