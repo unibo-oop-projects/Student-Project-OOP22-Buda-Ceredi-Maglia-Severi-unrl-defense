@@ -2,24 +2,30 @@ package it.unibo.unrldef.graphics.api;
 
 import it.unibo.unrldef.model.api.World.GameState;
 
+/**
+ * Models the view of the game.
+ * @author danilo.maglia@studio.unibo.it
+ * @author tommaso.severi2@studio.unibo.it
+ */
 public interface View {
     /**
      * Render the current state of the game.
      */
-    public void render();
+    void render();
 
     /**
-     * Updates the memu of the game
+     * Updates the memu of the game.
      */
-    public void updateMenu();
+    void updateMenu();
 
     /**
-     * Starts the rendering of the game
+     * Starts the rendering of the game.
      */
-    public void initGame();
+    void initGame();
 
     /**
-     * Renders the end of the game
+     * Renders the end of the game.
+     * @param state the state of the game
      */
-    public void renderEndGame(GameState state);
+    void renderEndGame(GameState state);
 }

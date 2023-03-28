@@ -28,7 +28,12 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public class ViewImpl implements View{
+/**
+ * Implements the view of the game.
+ * @author danilo.maglia@studio.unibo.it
+ * @author tommaso.severi2@studio.unibo.it
+ */
+public final class ViewImpl implements View {
 
     private GamePanel gamePanel;
     private DefenseButtonPanel buttonPanel;
@@ -40,49 +45,72 @@ public class ViewImpl implements View{
     private final MenuPanel menuPanel;
     private final Input inputHandler;
 
-    public ViewImpl(Player player, World world, Input inputHandler){
+    /**
+     * Builds the view of the game starting with the menu.
+     * @param player the player of the game
+     * @param world the world of the game
+     * @param inputHandler the input handler of the game
+     */
+    public ViewImpl(final Player player, final World world, final Input inputHandler) {
         this.player = player;
         this.world = world;
         this.inputHandler = inputHandler;
         this.frame = new JFrame("Unreal Defense");
         this.menuPanel = new MenuPanel(inputHandler);
         this.frame.getContentPane().add(this.menuPanel);
-		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setSize(this.menuPanel.getPreferredSize());
         this.frame.setMinimumSize(this.menuPanel.getPreferredSize());
         this.frame.setLocationRelativeTo(null);
         this.frame.pack();
-		this.frame.setVisible(true);
+        this.frame.setVisible(true);
     }
 
+    @Override
     public void initGame() {
         this.frame.getContentPane().remove(this.menuPanel);
         this.gamePanel = new GamePanel(world, inputHandler);
-		this.buttonPanel = new DefenseButtonPanel(this.gamePanel, this.world);
+        this.buttonPanel = new DefenseButtonPanel(this.gamePanel, this.world);
         this.buttonPanel.add(this.createExitButton());
         this.bank = new JLabel();
         this.hearts = new JLabel();
         this.buttonPanel.add(this.bank);
         this.buttonPanel.add(this.hearts);
-		this.frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
-		this.frame.getContentPane().add(this.buttonPanel, BorderLayout.EAST);
+        this.frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
+        this.frame.getContentPane().add(this.buttonPanel, BorderLayout.EAST);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setSize(this.frame.getPreferredSize());
         this.frame.setMinimumSize(this.frame.getPreferredSize());
         this.frame.setLocationRelativeTo(null);
         this.frame.pack();
-		this.frame.setVisible(true);
+        this.frame.setVisible(true);
     }
 
+    @Override
+    public void render() {
+        this.updateHUD();
+        this.gamePanel.repaint();
+    }
+
+    @Override
+    public void updateMenu() {
+        this.menuPanel.repaint();
+    }
+
+    /**
+     * Creates a new button to exit the game.
+     * @return the button to exit the game
+     */
     private JButton createExitButton() {
         JButton exit = null;
         try {
-            exit = new JButton(new ImageIcon(new ImageIcon(ImageIO.read(new File("assets"+File.separator+"exit.png")))
-                    .getImage().getScaledInstance(DefenseButtonPanel.WIDTH, DefenseButtonPanel.HEIGHT, java.awt.Image.SCALE_SMOOTH)));
+            exit = new JButton(new ImageIcon(new ImageIcon(ImageIO.read(new File("assets" + File.separator + "exit.png")))
+                    .getImage()
+                    .getScaledInstance(DefenseButtonPanel.WIDTH, DefenseButtonPanel.HEIGHT, java.awt.Image.SCALE_SMOOTH)));
             exit.setPreferredSize(new Dimension(DefenseButtonPanel.WIDTH, DefenseButtonPanel.HEIGHT));
             exit.addActionListener(new ActionListener() {
                 @Override
-                public void actionPerformed(ActionEvent e) {
+                public void actionPerformed(final ActionEvent e) {
                     inputHandler.setLastHit(0, 0, HitType.EXIT_GAME, Optional.empty());
                 }
             });
@@ -92,31 +120,21 @@ public class ViewImpl implements View{
         return exit;
     }
 
-    public void updateMenu() {
-        this.menuPanel.repaint();
-    }
-
-    @Override
-    public void render() {
-        this.updateHUD();
-        this.gamePanel.repaint();
-    }
-
     /**
-     * Updates the HUD state
+     * Updates the HUD state.
      */
     private void updateHUD() {
-        final Set<Entity> buttonsEntities = new HashSet<Entity>(this.world.getAvailableTowers());
+        final Set<Entity> buttonsEntities = new HashSet<>(this.world.getAvailableTowers());
         buttonsEntities.addAll(this.player.getSpells());
         this.buttonPanel.update(buttonsEntities);
-        this.bank.setText("€ "+this.world.getMoney());
-        this.hearts.setText("<3 "+this.world.getCastleIntegrity().getHearts());
+        this.bank.setText("€ " + this.world.getMoney());
+        this.hearts.setText("<3 " + this.world.getCastleIntegrity().getHearts());
     }
 
     @Override
     public void renderEndGame(final GameState state) {
-        Graphics g = this.frame.getGraphics(); 
-        g.setFont(new Font("Verdana", Font.PLAIN, this.frame.getWidth()/8));
+        final Graphics g = this.frame.getGraphics();
+        g.setFont(new Font("Verdana", Font.PLAIN, this.frame.getWidth() / 8));
         String displayState = "";
         switch (state) {
             case DEFEAT:
@@ -131,7 +149,7 @@ public class ViewImpl implements View{
                 break;
         }
         this.buttonPanel.disableAllButtons();
-        g.drawString(displayState, this.frame.getWidth()/10, this.frame.getHeight()/2);
-		g.setColor(Color.GREEN);
+        g.drawString(displayState, this.frame.getWidth() / 10, this.frame.getHeight() / 2);
+        g.setColor(Color.GREEN);
     }
 }

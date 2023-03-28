@@ -1,5 +1,6 @@
 package it.unibo.unrldef.graphics.impl;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -28,57 +29,78 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Builds the panel used for the buttons in the game
+ * Builds the panel used for the buttons in the game.
  * @author tommaso.severi2@studio.unibo.it
  * @author danilo.maglia@studio.unibo.it
  */
-public class DefenseButtonPanel extends JPanel {
-    
-    public final static int WIDTH = (int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/18);
-    public final static int HEIGHT = WIDTH;
+public final class DefenseButtonPanel extends JPanel {
+
+    private static final long serialVersionUID = 1L;
+    /**
+     * The width used by this type of buttons.
+     */
+    public static final int WIDTH = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 18);
+    /**
+     * The height used by this type of buttons.
+     */
+    public static final int HEIGHT = WIDTH;
+    private static final Color BACKGROUND_COLOR = new Color(194, 148, 103);
+    private static final String ASSETS_FOLDER = "assets" + File.separator;
     private final World world;
     private final Map<String, JButton> buttons = new HashMap<>();
 
+    /**
+     * Builds a new Panel for the defensive buttons.
+     * @param gamePanel the game panel
+     * @param world the world of the game
+     */
     public DefenseButtonPanel(final GamePanel gamePanel, final World world) {
         super();
         this.world = world;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBackground(new java.awt.Color(194, 148, 103));
+        this.setBackground(BACKGROUND_COLOR);
         JButton cannon = null;
         JButton hunter = null;
         JButton fireBall = null;
         JButton snowStorm = null;
         try {
             cannon = this.placeDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Cannon.NAME, gamePanel, 
-                    new ImageIcon(ImageIO.read(new File("assets"+File.separator+"cannonIcon.png"))));
+                    new ImageIcon(ImageIO.read(new File(ASSETS_FOLDER + "cannonIcon.png"))));
             hunter = this.placeDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Hunter.NAME, gamePanel, 
-                    new ImageIcon(ImageIO.read(new File("assets"+File.separator+"hunterIcon.png"))));
+                    new ImageIcon(ImageIO.read(new File(ASSETS_FOLDER + "hunterIcon.png"))));
             fireBall = this.placeDefenseButton(GamePanel.ViewState.SPELL_SELECTED, FireBall.NAME, gamePanel, 
-                    new ImageIcon(ImageIO.read(new File("assets"+File.separator+"fireballIcon.png"))));
+                    new ImageIcon(ImageIO.read(new File(ASSETS_FOLDER + "fireballIcon.png"))));
             snowStorm = this.placeDefenseButton(GamePanel.ViewState.SPELL_SELECTED, SnowStorm.NAME, gamePanel, 
-                    new ImageIcon(ImageIO.read(new File("assets"+File.separator+"snowstormIcon.png"))));
+                    new ImageIcon(ImageIO.read(new File(ASSETS_FOLDER + "snowstormIcon.png"))));
         } catch (IOException e) {
-            e.printStackTrace();
+            new ErrorDialog("Error reading icon's images");
         }
         this.add(cannon);
         this.buttons.put(Cannon.NAME, cannon);
-		this.add(hunter);
+        this.add(hunter);
         this.buttons.put(Hunter.NAME, hunter);
-		this.add(fireBall);
+        this.add(fireBall);
         this.buttons.put(FireBall.NAME, fireBall);
-		this.add(snowStorm);
+        this.add(snowStorm);
         this.buttons.put(SnowStorm.NAME, snowStorm);
     }
 
     /**
-     * Creates a defensive type button and sets its parameters
+     * Creates a defensive type button and sets its parameters.
+     * @param state the state the button sets when pressed
+     * @param selectedEntity the entity selected by the button
+     * @param gamePanel the game panel
+     * @param icon the icon of the button
+     * @return the defense button
      */
-    private JButton placeDefenseButton(GamePanel.ViewState state, String selectedEntity, GamePanel gamePanel, ImageIcon icon) {
-        final JButton button = new JButton(new ImageIcon(icon.getImage().getScaledInstance(WIDTH, HEIGHT, java.awt.Image.SCALE_SMOOTH)));
+    private JButton placeDefenseButton(final GamePanel.ViewState state, final String selectedEntity, 
+            final GamePanel gamePanel, final ImageIcon icon) {
+        final JButton button = new JButton(new ImageIcon(icon.getImage()
+                .getScaledInstance(WIDTH, HEIGHT, java.awt.Image.SCALE_SMOOTH)));
         button.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         button.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(final ActionEvent e) {
                 gamePanel.setState(state);
                 gamePanel.setSelectedEntity(selectedEntity);
             }
@@ -87,15 +109,15 @@ public class DefenseButtonPanel extends JPanel {
     }
 
     /**
-     * Updates the state of the buttons
+     * Updates the state of the buttons.
      * @param referenceEntities the entities from which are taken the informations used to update the buttons
      */
-    public void update(Set<Entity> referenceEntities) {
-        for (Entity entity : referenceEntities) {
-            boolean enableState = false;
+    public void update(final Set<Entity> referenceEntities) {
+        for (final Entity entity : referenceEntities) {
+            boolean enableState;
             JButton respectiveButton = new JButton();
             if (entity instanceof Tower) {
-                enableState = ((TowerImpl)entity).getCost() <= this.world.getMoney();
+                enableState = ((TowerImpl) entity).getCost() <= this.world.getMoney();
                 switch (entity.getName()) {
                     case Hunter.NAME:
                         respectiveButton = this.buttons.get(Hunter.NAME);
@@ -107,7 +129,7 @@ public class DefenseButtonPanel extends JPanel {
                         break;
                 }
             } else {
-                enableState = ((SpellImpl)entity).isReady();
+                enableState = ((SpellImpl) entity).isReady();
                 switch (entity.getName()) {
                     case FireBall.NAME:
                         respectiveButton = this.buttons.get(FireBall.NAME);
@@ -124,7 +146,7 @@ public class DefenseButtonPanel extends JPanel {
     }
 
     /**
-     * Disable all the buttons in the panel
+     * Disable all the buttons in the panel.
      */
     public void disableAllButtons() {
         this.buttons.values().forEach(b -> b.setEnabled(false));
