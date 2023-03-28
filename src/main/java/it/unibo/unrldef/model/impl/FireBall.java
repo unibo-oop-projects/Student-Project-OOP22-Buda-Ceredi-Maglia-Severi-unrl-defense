@@ -4,22 +4,28 @@ import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.World;
 
 /**
- * A fireball spell used in a tower defense game
+ * A fireball spell used in a tower defense game.
  * @author tommaso.severi2@studio.unibo.it
  */
-public class FireBall extends SpellImpl {
+public final class FireBall extends SpellImpl {
 
+    /**
+     * The name of the spell unique to the object type.
+     */
     public static final String NAME = "fireball";
+    /**
+     * The radius of the spell unique to the object type.
+     */
+    public static final double RAD = 4.0;
     private static final long ATTACK_RATE = 8 * 1000;
     private static final double DMG = 15.0;
-    public static final double RAD = 4.0;
     private static final long LINGERING_EFFECT_TIME = 3 * 1000;
     private static final long LINGERING_EFFECT_FREQ = 1 * 1000;
 
     private final double lingeringDamage = 3.0;
 
     /**
-     * Creates a new spell of type fireball
+     * Creates a new spell of type fireball.
      * @param parentWorld the world where it'll be having effect
      */
     public FireBall(final World parentWorld) {
