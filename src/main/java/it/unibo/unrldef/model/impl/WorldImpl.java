@@ -7,8 +7,11 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
@@ -17,8 +20,10 @@ import it.unibo.unrldef.model.api.Path.Direction;
 
 public class WorldImpl implements World{
 
-    private final static long SPAWNING_TIME = 1000;
+    private final static long SPAWNING_TIME = 1500;
     private final static int ENEMY_POWER = 1;
+    private final static int PATH_DEPHT = 3;
+    private final static double SAFETY_MARGIN = 0.2;
 
     private final String name;
     private final Player player;
@@ -58,11 +63,12 @@ public class WorldImpl implements World{
     public void updateState(long time){
         this.timeToNextHorde = (this.timeToNextHorde - time < 0) ? 0 : (this.timeToNextHorde - time);
         this.timeToNextSpawn = (this.timeToNextSpawn - time < 0) ? 0 : (this.timeToNextSpawn - time);
-        //this.livingEnemies.stream().filter(Enemy::isDead).forEach(x -> this.bank.addMoney(x.getDrop));
+        this.livingEnemies.stream().filter(Enemy::isDead).forEach(x -> this.bank.addMoney(x.getDropAmount()));
         this.livingEnemies.removeAll(this.livingEnemies.stream().filter(Enemy::isDead).toList());
         this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath).forEach(x -> this.castleIntegrity.damage(ENEMY_POWER));
         this.livingEnemies.removeAll(this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath).toList());
-        this.getSceneEntities().forEach(x -> x.updateState(time));
+        this.livingEnemies.forEach(x -> x.updateState(time));
+        this.placedTowers.forEach(x -> x.updateState(time));
         this.player.updateSpellState(time);
         if (timeToNextHorde == 0 && !this.areWavesEnded()) {
             if (this.waves.get(this.waveCounter).isWaveOver()) {
@@ -76,7 +82,8 @@ public class WorldImpl implements World{
             timeToNextSpawn = SPAWNING_TIME;
             Enemy newEnemy = this.spawningQueue.poll();
             Position spawningPoint = this.path.getSpawningPoint();
-            newEnemy.setPosition(spawningPoint.getX(), spawningPoint.getY());
+            Random rand = new Random();
+            newEnemy.setPosition(spawningPoint.getX() + rand.nextInt(-PATH_DEPHT/2, PATH_DEPHT/2), spawningPoint.getY() + rand.nextInt(-PATH_DEPHT/2, PATH_DEPHT/2));
             this.livingEnemies.add(newEnemy);
         }   
     }
@@ -85,50 +92,82 @@ public class WorldImpl implements World{
                 this.waves.get(this.waveCounter).isWaveOver());
     }
 
+    private List<Enemy> enemiesInArea(Position upLeft, Position downRight) {
+        return this.livingEnemies.stream()
+                            .filter(x -> x.getPosition().get().getX() >= upLeft.getX() )
+                            .filter(x -> x.getPosition().get().getX() <= downRight.getX())
+                            .filter(x -> x.getPosition().get().getY() >= upLeft.getY())
+                            .filter(x -> x.getPosition().get().getY() <= downRight.getY())
+                            .toList();
+    }
 
-    private double distanceFromSpawn(Position pos) {
-        Position pathCur = this.path.getSpawningPoint();
-        Pair<Direction, Double> curSeg;
-        double distance = 0;
-        int i = 0;
-        boolean fownd = false;
+    public List<Enemy> sorroundingEnemies(Position center, double radius) {
+        Position pathCur = this.path.getSpawningPoint().copy();
         boolean end = false;
-        boolean distanceIsCompatible;
-        while(!fownd && !end) {
-            curSeg = this.path.getDirection(i);
-            distanceIsCompatible = this.distance(pathCur, pos) <= curSeg.getSecond();
-            if (curSeg.getFirst() == Direction.UP) {
-                if (Double.valueOf(pathCur.getX()).equals(pos.getX()) && distanceIsCompatible && pos.getY() < pathCur.getY()) {
-                    fownd = true;
-                }
-                pathCur.setY(pathCur.getY() - curSeg.getSecond());
-            } else if (curSeg.getFirst() == Direction.DOWN) {
-                if (Double.valueOf(pathCur.getX()).equals(pos.getX()) && distanceIsCompatible && pos.getY() > pathCur.getY()) {
-                    fownd = true;
-                }
-                pathCur.setY(pathCur.getY() + curSeg.getSecond());
-            } else if (curSeg.getFirst() == Direction.LEFT) {
-                if (Double.valueOf(pathCur.getY()).equals(pos.getY()) && distanceIsCompatible && pos.getX() < pathCur.getX()) {
-                    fownd = true;
-                }
-                pathCur.setX(pathCur.getX() - curSeg.getSecond());
-            } else if (curSeg.getFirst() == Direction.RIGHT){
-                if (Double.valueOf(pathCur.getY()).equals(pos.getY()) && distanceIsCompatible && pos.getX() > pathCur.getX()) {
-                    fownd = true;
-                }
-                pathCur.setX(pathCur.getX() + curSeg.getSecond());
-            } else {
-                end = true;
+        Optional<Enemy> firstInLine = Optional.empty();
+        int i = 0;
+        List<Enemy> sorroundingEnemies = this.livingEnemies.stream().filter(x -> (distance(center, x.getPosition().get()) <= radius )).collect(Collectors.toList());
+        while (!end) {
+            Pair<Direction, Double> dir = this.path.getDirection(i);
+            Position A;
+            Position B = new Position(0, 0);
+            Position ul;
+            Position dr;
+            Optional<Enemy> tmp = Optional.empty();
+            switch (dir.getFirst()) {
+                case UP:
+                    A = pathCur;
+                    B = new Position(A.getX(), A.getY() - dir.getSecond());
+                    ul = new Position(B.getX() - (PATH_DEPHT + SAFETY_MARGIN)/2, B.getY());
+                    dr = new Position(A.getX() + (PATH_DEPHT + SAFETY_MARGIN)/2, A.getY());
+                    tmp = sorroundingEnemies.stream()
+                            .filter(x -> this.enemiesInArea(ul, dr).contains(x))
+                            .reduce((a, b) -> a.getPosition().get().getY() < b.getPosition().get().getY() ? a : b);
+                    break;
+                case DOWN:
+                    A = pathCur;
+                    B = new Position(A.getX(), A.getY() + dir.getSecond());
+                    ul = new Position(A.getX() - (PATH_DEPHT + SAFETY_MARGIN)/2, A.getY());
+                    dr = new Position(B.getX() + (PATH_DEPHT + SAFETY_MARGIN)/2, B.getY());
+                    tmp = sorroundingEnemies.stream()
+                            .filter(x -> this.enemiesInArea(ul, dr).contains(x))
+                            .reduce((a, b) -> a.getPosition().get().getY() > b.getPosition().get().getY() ? a : b);
+                    break;
+                case RIGHT:
+                    A = pathCur;
+                    B = new Position(A.getX() + dir.getSecond(), A.getY());
+                    ul = new Position(A.getX(), A.getY() - (PATH_DEPHT + SAFETY_MARGIN)/2 );
+                    dr = new Position(B.getX(), B.getY() + (PATH_DEPHT + SAFETY_MARGIN)/2);
+                    tmp = sorroundingEnemies.stream()
+                            .filter(x -> this.enemiesInArea(ul, dr).contains(x))
+                            .reduce((a, b) -> a.getPosition().get().getX() > b.getPosition().get().getX() ? a : b);
+                    break;
+                case LEFT:
+                    A = pathCur;
+                    B = new Position(A.getX() - dir.getSecond(), A.getY());
+                    ul = new Position(B.getX(), B.getY() - (PATH_DEPHT + SAFETY_MARGIN)/2);
+                    dr = new Position(A.getX(), A.getY() + (PATH_DEPHT + SAFETY_MARGIN)/2);
+                    tmp = sorroundingEnemies.stream()
+                            .filter(x -> this.enemiesInArea(ul, dr).contains(x))
+                            .reduce((a, b) -> a.getPosition().get().getX() < b.getPosition().get().getX() ? a : b);
+                    break;
+                default:
+                    end = true;
+                    break;            
             }
             if (!end) {
-                distance+=curSeg.getSecond();
-                i++;
-                if (fownd) {
-                    distance-=this.distance(pathCur, pos);
+                if (tmp.isPresent()) {
+                    firstInLine = tmp;
                 }
+                pathCur = B;
+                i++;
             }
         }
-        return distance;
+        if (firstInLine.isPresent()) {
+                sorroundingEnemies.remove(firstInLine.get());
+                sorroundingEnemies.add(0, firstInLine.get());
+        }
+            return sorroundingEnemies;
     }
 
     private void addToQueue(List<Enemy> Enemies) {
@@ -141,20 +180,37 @@ public class WorldImpl implements World{
 
     @Override
     public Boolean tryBuildTower(Position pos, String towerName) {
-        //if(this.availablePositions.contains(pos)) {
-          //  this.availablePositions.remove(pos);
+        if(this.availablePositions.contains(pos)) {
             Tower newTower = this.availableTowers.get(towerName).copy();
-            this.placedTowers.add(newTower);
-            newTower.setParentWorld(this);
-            newTower.setPosition(pos.getX(), pos.getY());
-            return true;
-        //}
-        //return false;
+            if (this.bank.trySpend(newTower.getCost())) {
+                this.availablePositions.remove(pos);
+                this.placedTowers.add(newTower);
+                newTower.setParentWorld(this);
+                newTower.setPosition(pos.getX(), pos.getY());
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public List<Entity> getSceneEntities() {
         List<Entity> ret = new ArrayList<Entity>();
+        this.livingEnemies.sort((a, b) -> {
+            if (a.getPosition().get().getY() > b.getPosition().get().getY()) {
+                return 1;
+            } else if (a.getPosition().get().getY() < b.getPosition().get().getY()) {
+                return -1;
+            } else {
+                if (a.getPosition().get().getX() > b.getPosition().get().getX()) {
+                    return 1;
+                } else if (a.getPosition().get().getX() < b.getPosition().get().getX()) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
         ret.addAll(this.placedTowers);
         ret.addAll(this.livingEnemies);
         ret.addAll(((PlayerImpl) this.player).getActiveSpells());
@@ -168,46 +224,43 @@ public class WorldImpl implements World{
 
      
     @Override
-    public int getMoney() {
-        // TODO Auto-generated method stub
-        return 0;
+    public double getMoney() {
+        return this.bank.getMoney();
     } 
 
     @Override
-    public Map<String, Tower> getAvailableTowers() {
-        return this.availableTowers;
+    public Set<Tower> getAvailableTowers() {
+        return this.availableTowers.entrySet().stream().map(x -> x.getValue()).collect(Collectors.toSet());
     }
 
     @Override
     public Path getPath() {
         return this.path;
     }
-
-	@Override
-	public List<Enemy> sorroundingEnemies(Position center, double radius) {
-		return this.livingEnemies.stream().filter(x -> (distance(center, x.getPosition().get()) <= radius )).sorted((a,b) -> {
-            double distanceDifference = this.distanceFromSpawn(a.getPosition().get()) - this.distanceFromSpawn(b.getPosition().get());
-            if(distanceDifference < 0) {
-                return -1;
-            } else if (distanceDifference > 0) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }).toList();
-	}  
+    
     
     private double distance(Position a, Position b ) {
         return Math.sqrt(Math.pow((a.getX() - b.getX()), 2) + Math.pow((a.getY() - b.getY()), 2));
     }
 
     @Override
-    public boolean isGameOver() {
-        return (this.areWavesEnded() && this.livingEnemies.size() == 0) || this.castleIntegrity.isCompromised();
+    public GameState gameState() {
+        if (this.areWavesEnded() && this.livingEnemies.size() == 0) {
+            return GameState.VICTORY;
+        } else if ( this.castleIntegrity.isCompromised() ) {
+            return GameState.DEFEAT;
+        } else {
+            return GameState.PLAYING;
+        }
     }
 
     public String getName() {
         return this.name;
+    }
+    
+    @Override
+    public Set<Position> getAvailablePositions() {
+        return this.availablePositions;
     }
 
     public static class Builder {
@@ -289,12 +342,9 @@ public class WorldImpl implements World{
                 }
             }
 
+            this.player.setGameMap(ret);
+
             return ret;
         }
-    }
-
-    @Override
-    public Set<Position> getAvailablePositions() {
-        return this.availablePositions;
-    }
+    }    
 }

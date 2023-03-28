@@ -14,7 +14,9 @@ import it.unibo.unrldef.model.api.World;
 public abstract class SpellImpl extends DefenseEntity implements Spell {
 
     private boolean active;
-    private final long lingeringEffect;
+    private final long lingeringEffectTime;
+    private final long lingeringEffectFrequency;
+    private long lingerTime = 0;
 
     /**
      * Creates a new spell 
@@ -22,10 +24,12 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
      * @param lingeringDamage the number of times the spell deals its damage before fading away
      */
     public SpellImpl(final String name, final World parentWorld, final double radius,
-            final double damage, final long attackRate, final long lingeringEffect) {
+            final double damage, final long attackRate, final long lingeringEffectTime, 
+            final long lingeringEffectFrequency) {
         super(Optional.empty(), name, radius, damage, attackRate);
         this.setParentWorld(parentWorld);
-        this.lingeringEffect = lingeringEffect;
+        this.lingeringEffectTime = lingeringEffectTime;
+        this.lingeringEffectFrequency = lingeringEffectFrequency;
         this.active = false;
     }
 
@@ -56,6 +60,7 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
         this.incrementTime(time);
         if (this.isActive()) {
             this.ifPossibleApplyEffect();
+            this.lingerTime += time;
         }
     }
 
@@ -72,15 +77,20 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
     private void deactivate() {
         this.active = false;
         this.resetElapsedTime();
+        this.lingerTime = 0;
+        this.resetEffect();
     }
 
     /**
      * Applies the affect of the spell to the enemies in range if possible
      */
     private void ifPossibleApplyEffect() {
-        if (this.getTimeSinceLastAction() <= this.lingeringEffect) {
-            this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius())
-                .forEach(e -> this.effect(e));
+        if (this.getTimeSinceLastAction() <= this.lingeringEffectTime) {
+            if (this.lingerTime >= this.lingeringEffectFrequency) {
+                this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius())
+                    .forEach(e -> this.effect(e));
+                this.lingerTime = 0;
+            }
         } else {
             this.deactivate();
         }
@@ -90,4 +100,9 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
      * The effect of the spell while lingering
      */
     protected abstract void effect(final Enemy enemy);
+
+    /**
+     * Resets the effect applied by the spell
+     */
+    protected abstract void resetEffect();
 }

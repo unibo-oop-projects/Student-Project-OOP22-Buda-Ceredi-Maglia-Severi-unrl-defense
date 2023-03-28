@@ -13,7 +13,7 @@ import it.unibo.unrldef.model.api.Path;
  */
 public class PathImpl implements Path{
     private List<Pair<Path.Direction, Double>> path;
-    private Position spawingPoint;
+    private final Position spawingPoint;
 
     public PathImpl(Position spawningPoint) {
         this.path = new ArrayList<Pair<Path.Direction, Double>>();

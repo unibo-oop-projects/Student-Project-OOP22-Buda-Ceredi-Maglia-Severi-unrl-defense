@@ -3,7 +3,6 @@ package it.unibo.unrldef.model.api;
 import java.util.Set;
 
 import it.unibo.unrldef.common.Position;
-import it.unibo.unrldef.model.impl.Bank;
 
 /**
  * A player in a strategic game where his position is irrelevant and spells can be used
@@ -15,6 +14,11 @@ public interface Player {
      * @return the name of the player
      */
     public String getName();
+
+    /**
+     * @param name the name of the player
+     */
+    public void setName(final String name);
 
     /**
      * Sets the map where the player will be playing
@@ -52,15 +56,4 @@ public interface Player {
      */
     public Set<Spell> getSpells();
 
-    /**
-     * Sets the bank of the player
-     * @param bank
-     */
-    public void setBank(final Bank bank);
-
-    /**
-     * Gets the bank of the player
-     * @return the bank
-     */
-    public Bank getBank();
 }
