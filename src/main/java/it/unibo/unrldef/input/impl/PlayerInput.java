@@ -6,11 +6,17 @@ import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
 
-public class PlayerInput implements Input{
+/**
+ * Implementation of the the player input handler.
+ */
+public final class PlayerInput implements Input {
 
     private Optional<Pair<Position, HitType>> lastHit;
     private Optional<String> selectedName;
 
+    /**
+     * Creates a new player input handler.
+     */
     public PlayerInput() {
         this.lastHit = Optional.empty();
         this.selectedName = Optional.empty();
@@ -18,7 +24,7 @@ public class PlayerInput implements Input{
 
     @Override
     public void setLastHit(final int x, final int y, final HitType hit, final Optional<String> selected) {
-        this.lastHit = Optional.of(new Pair<Position,Input.HitType>(new Position(x, y), hit));
+        this.lastHit = Optional.of(new Pair<Position, Input.HitType>(new Position(x, y), hit));
         this.selectedName = selected;
     }
 
