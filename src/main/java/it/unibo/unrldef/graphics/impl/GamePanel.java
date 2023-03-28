@@ -391,7 +391,7 @@ public final class GamePanel extends JPanel {
                 }
                 break;
             case Hunter.NAME:
-                final int strokeWidth = 3;
+                final int strokeWidth = 5;
                 if (animation.isAnimationRunning()) {
                     towerAsset = this.shootingHunter;
                     final Position realTargetPosition = this
@@ -410,6 +410,9 @@ public final class GamePanel extends JPanel {
                 break;
             default:
                 break;
+        }
+        if (animation.isAnimationRunning() && animation.getTarget().isDead()) {
+            renderEnemy(graphic, animation.getTarget());
         }
         final Position towerPos = tower.getPosition().get();
         final Position realTowerPos = fromPositionToRealPosition(towerAsset.getApplicationPoint(towerPos));

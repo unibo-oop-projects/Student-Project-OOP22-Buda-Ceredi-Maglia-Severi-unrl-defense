@@ -2,7 +2,7 @@ package it.unibo.unrldef.graphics.impl;
 
 import java.util.Optional;
 
-import it.unibo.unrldef.model.api.Entity;
+import it.unibo.unrldef.model.api.Enemy;
 
 /**
  * Handles the attck animation of a game entity
@@ -15,7 +15,7 @@ public class SpriteAnimation {
     private long startTime;
     private long timePassed;
     private final long animationLength;
-    private Optional<Entity> target;
+    private Optional<Enemy> target;
 
     /**
      * Builds a new animation handler
@@ -31,7 +31,7 @@ public class SpriteAnimation {
      * @param startTime the current time in which the animation is starting
      * @param target the target towards the animation is referred to 
      */
-    public void startAnimation(final long startTime, final Entity target) {
+    public void startAnimation(final long startTime, final Enemy target) {
         this.startTime = startTime;
         this.target = Optional.of(target);
         this.updateTimePassed();
@@ -62,7 +62,7 @@ public class SpriteAnimation {
     /**
      * @return The target of the animation
      */
-    public Entity getTarget() {
+    public Enemy getTarget() {
         return this.target.get();
     }
 
