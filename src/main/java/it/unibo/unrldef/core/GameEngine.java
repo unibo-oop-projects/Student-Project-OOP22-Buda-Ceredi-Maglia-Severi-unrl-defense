@@ -5,6 +5,7 @@ import java.util.Optional;
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.graphics.api.View;
+import it.unibo.unrldef.graphics.impl.ErrorDialog;
 import it.unibo.unrldef.graphics.impl.ViewImpl;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.input.impl.PlayerInput;
@@ -12,6 +13,9 @@ import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.api.World.GameState;
 
+/**
+ * This class modules the engine that updates the game.
+ */
 public class GameEngine {
 
     private final long period = 1000 / 30;
@@ -21,6 +25,11 @@ public class GameEngine {
     private final View gameView; 
     private boolean started = false;
 
+    /**
+     * Builds a new GameEngine.
+     * @param world the world of the game
+     * @param player the player of the game
+     */
     public GameEngine(final World world, final Player player) {
         this.input = new PlayerInput();
         this.player = player;
@@ -28,16 +37,27 @@ public class GameEngine {
         this.gameView = new ViewImpl(player, this.currentWorld, this.input);
     }
 
+    /**
+     * Initializes the game.
+     * @param playerName the name of the player
+     */
     public void initGame(final String playerName) {
         this.player.setName(playerName);
         this.gameView.initGame();
         this.started = true;
     }
 
+    /**
+     * Sets the world of the game.
+     * @param world the world of the game
+     */
     public void setGameWorld(final World world) {
         this.currentWorld = world;
     }
 
+    /**
+     * Starts the game loop.
+     */
     public void gameLoop() {
         while (!started) {
             this.processInput();
@@ -46,7 +66,7 @@ public class GameEngine {
         long previousFrameStartTime = System.currentTimeMillis();
         while (this.currentWorld.gameState() == GameState.PLAYING) {
             final long currentFrameStartTime = System.currentTimeMillis();
-            final long elapsed = currentFrameStartTime-previousFrameStartTime;
+            final long elapsed = currentFrameStartTime - previousFrameStartTime;
             this.processInput();
             this.update(elapsed);
             this.render();
@@ -56,21 +76,30 @@ public class GameEngine {
         this.endOfGame(this.currentWorld.gameState());
     }
 
-    private void waitForNextFrame(long cycleStartTime) {
+    /**
+     * Waits for the next frame.
+     * @param cycleStartTime the start time of the cycle
+     */
+    private void waitForNextFrame(final long cycleStartTime) {
         final long elapsed = System.currentTimeMillis() - cycleStartTime;
         if (elapsed < this.period) {
             try {
-				Thread.sleep(period - elapsed);
-			} catch (Exception ex){ }
+                Thread.sleep(period - elapsed);
+            } catch (Exception e) {
+                new ErrorDialog("Error while waiting for next frame");
+            }
         }
     }
 
+    /**
+     * Processes the input.
+     */
     private void processInput() {
         Optional<Pair<Position, Input.HitType>> lastHit = input.getLastHit();
         if (lastHit.isPresent()) {
             final Position selectedPosition = lastHit.get().getFirst();
             final Optional<String> selectedName = this.input.getSelectedName();
-            switch(lastHit.get().getSecond()) {
+            switch (lastHit.get().getSecond()) {
                 case PLACE_TOWER:
                     this.currentWorld.tryBuildTower(selectedPosition, selectedName.get());
                     break;
@@ -89,18 +118,32 @@ public class GameEngine {
         }
     }
 
+    /**
+     * Updates the game world.
+     * @param elapsed the elapsed time since last frame
+     */
     private void update(final long elapsed) {
         this.currentWorld.updateState(elapsed);
     }
 
+    /**
+     * Renders the game.
+     */
     private void render() {
         this.gameView.render();
     }
 
+    /**
+     * Exits the game.
+     */
     private void exitGame() {
         System.exit(0);
     }
 
+    /**
+     * Renders the end of the game.
+     * @param state the final state of the game
+     */
     private void endOfGame(final GameState state) {
         this.gameView.renderEndGame(state);
     }
