@@ -56,4 +56,10 @@ public interface Player {
      */
     public Set<Spell> getSpells();
 
+    /**
+     * Sets the spells that the player can use in the game
+     * @param spells a set of spells
+     */
+    public void setSpells(final Set<Spell> spells);
+
 }
