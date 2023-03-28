@@ -5,7 +5,6 @@ import java.util.Optional;
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.graphics.api.View;
-import it.unibo.unrldef.graphics.impl.ErrorDialog;
 import it.unibo.unrldef.graphics.impl.ViewImpl;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.input.impl.PlayerInput;
@@ -23,7 +22,7 @@ public class GameEngine {
     private World currentWorld;
     private final Input input;
     private final View gameView; 
-    private boolean started = false;
+    private boolean started;
 
     /**
      * Builds a new GameEngine.
@@ -33,8 +32,9 @@ public class GameEngine {
     public GameEngine(final World world, final Player player) {
         this.input = new PlayerInput();
         this.player = player;
-        this.setGameWorld(world);
+        this.currentWorld = world;
         this.gameView = new ViewImpl(player, this.currentWorld, this.input);
+        this.started = false;
     }
 
     /**
@@ -85,8 +85,8 @@ public class GameEngine {
         if (elapsed < this.period) {
             try {
                 Thread.sleep(period - elapsed);
-            } catch (Exception e) {
-                new ErrorDialog("Error while waiting for next frame");
+            } catch (InterruptedException e) {
+                e.printStackTrace(); // NOPMD if this fails the game has to stop
             }
         }
     }
@@ -95,7 +95,7 @@ public class GameEngine {
      * Processes the input.
      */
     private void processInput() {
-        Optional<Pair<Position, Input.HitType>> lastHit = input.getLastHit();
+        final Optional<Pair<Position, Input.HitType>> lastHit = input.getLastHit();
         if (lastHit.isPresent()) {
             final Position selectedPosition = lastHit.get().getFirst();
             final Optional<String> selectedName = this.input.getSelectedName();
