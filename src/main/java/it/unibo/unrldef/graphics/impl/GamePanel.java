@@ -3,6 +3,7 @@ package it.unibo.unrldef.graphics.impl;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -89,6 +90,8 @@ public final class GamePanel extends JPanel {
     private transient Sprite explosion;
     private transient Sprite shootingHunter;
     private transient Sprite towerPlace;
+    private transient Sprite heart;
+    private transient Sprite money;
     private final Set<Sprite> sprites = new HashSet<>();
     private double xScale;
     private double yScale;
@@ -144,6 +147,12 @@ public final class GamePanel extends JPanel {
             this.towerPlace = new Sprite(SpriteDimensions.TOWER_PLACE_WIDTH, SpriteDimensions.TOWER_PLACE_HEIGHT, 
                     ImageIO.read(new File(ASSETS_FOLDER + "towerPlace.png")));
             this.sprites.add(this.towerPlace);
+            this.heart = new Sprite(SpriteDimensions.HEART_WIDTH, SpriteDimensions.HEART_HEIGHT, 
+                    ImageIO.read(new File(ASSETS_FOLDER + "heart.png")));
+            this.sprites.add(this.heart);
+            this.money = new Sprite(SpriteDimensions.MONEY_WIDTH, SpriteDimensions.MONEY_HEIGHT, 
+                    ImageIO.read(new File(ASSETS_FOLDER + "money.png")));
+            this.sprites.add(this.money);
 
 
         } catch (final IOException e) {
@@ -266,6 +275,8 @@ public final class GamePanel extends JPanel {
 
         this.renderBackground(graphic);
         this.renderMap(graphic);
+        this.renderHearts(graphic);
+        this.renderMoney(graphic);
 
         for (final Entity entity : gameWorld.getSceneEntities()) {
             this.renderEntity(graphic, entity);
@@ -467,6 +478,28 @@ public final class GamePanel extends JPanel {
         final Position pos = spell.getPosition().get();
         final Position realPos = this.fromPositionToRealPosition(asset.getApplicationPoint(pos));
         graphic.drawImage(asset.getScaledSprite(), (int) realPos.getX(), (int) realPos.getY(), null);
+    }
+
+    private void renderHearts(final Graphics2D graphic) {
+        int n = this.gameWorld.getCastleIntegrity().getHearts();
+        final int denominator = 4;
+        final int startX = this.xMapPosition + this.heart.getScaledDimension().getFirst() / denominator;
+        final int startY = this.yMapPosition + this.heart.getScaledDimension().getSecond() / denominator;
+        for (int i = 0; i < n; i++) {
+            graphic.drawImage(this.heart.getScaledSprite(),
+            startX + i * this.heart.getScaledDimension().getFirst(), startY, null);
+        }
+    }
+
+    private void renderMoney(final Graphics2D graphic) {
+        final int denominator = 6;
+        final int startX = this.xMapPosition + this.money.getScaledDimension().getFirst() / 4;
+        final int startY = this.yMapPosition + this.money.getScaledDimension().getSecond() * 4 / 3;
+        graphic.drawImage(this.money.getScaledSprite(), startX, startY, null);
+        graphic.setFont(new Font("", Font.PLAIN, this.money.getScaledDimension().getSecond() / 2));
+        graphic.drawString(" " + this.gameWorld.getMoney() + " ",
+        startX + this.money.getScaledDimension().getFirst(),
+        startY + this.money.getScaledDimension().getSecond() * 4 / denominator);
     }
 
     private void renderMap(final Graphics2D graphic) {
