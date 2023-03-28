@@ -16,7 +16,7 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
     private boolean active;
     private final long lingeringEffectTime;
     private final long lingeringEffectFrequency;
-    private long lingerTime = 0;
+    private long lingerTime;
 
     /**
      * Creates a new spell.
@@ -36,6 +36,7 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
         this.lingeringEffectTime = lingeringEffectTime;
         this.lingeringEffectFrequency = lingeringEffectFrequency;
         this.active = false;
+        this.lingerTime = 0;
     }
 
     @Override
