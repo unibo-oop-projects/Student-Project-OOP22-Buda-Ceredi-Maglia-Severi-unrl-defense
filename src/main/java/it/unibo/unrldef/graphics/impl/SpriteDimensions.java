@@ -23,4 +23,8 @@ public class SpriteDimensions {
     public static final int EXPLOSION_HEIGHT = 4;
     public static final int TOWER_PLACE_WIDTH = 8;
     public static final int TOWER_PLACE_HEIGHT = 8;
+    public static final int HEART_WIDTH = 4;
+    public static final int HEART_HEIGHT = 4;
+    public static final int MONEY_WIDTH = 4;
+    public static final int MONEY_HEIGHT = 4;
 }
