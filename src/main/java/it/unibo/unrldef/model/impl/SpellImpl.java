@@ -1,5 +1,6 @@
 package it.unibo.unrldef.model.impl;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import it.unibo.unrldef.common.Position;
@@ -33,8 +34,8 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
             final long lingeringEffectFrequency) {
         super(Optional.empty(), name, radius, damage, attackRate);
         this.setParentWorld(parentWorld);
-        this.lingeringEffectTime = lingeringEffectTime;
-        this.lingeringEffectFrequency = lingeringEffectFrequency;
+        this.lingeringEffectTime = Objects.requireNonNull(lingeringEffectTime);
+        this.lingeringEffectFrequency = Objects.requireNonNull(lingeringEffectFrequency);
         this.active = false;
         this.lingerTime = 0;
     }
