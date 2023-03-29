@@ -27,7 +27,7 @@ public class IntegrityImpl implements Integrity {
 
     @Override
     public void damage(final int val) {
-        int tmp = this.hearts - val;
+        final int tmp = this.hearts - val;
         this.hearts = tmp > 0 ? tmp : 0;
     }
 
