@@ -19,18 +19,13 @@ public class BankImpl implements Bank {
     public BankImpl(final double startingMoney) {
         this.money = startingMoney;
     }
-    /**
-     * @param money the money to add to the bank
-     */
+
+    @Override
     public void addMoney(final double money) {
         this.money += money;
     }
 
-    /**
-     * subtract the price of the item from the money in the bank.
-     * @param price the price of the item
-     * @return true if the player can afford the item, false otherwise
-     */
+    @Override
     public Boolean trySpend(final double price) {
         if (this.money >= price) {
             this.money -= price;
@@ -39,9 +34,7 @@ public class BankImpl implements Bank {
         return false;
     }
 
-    /**
-     * @return the money in the bank
-     */
+    @Override
     public double getMoney() {
         return this.money;
     }

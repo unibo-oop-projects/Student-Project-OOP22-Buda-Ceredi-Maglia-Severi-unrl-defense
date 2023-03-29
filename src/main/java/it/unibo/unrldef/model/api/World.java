@@ -14,19 +14,19 @@ import it.unibo.unrldef.common.Position;
 public interface World {
 
     /**
-     * the possible states of the world
+     * the possible states of the world.
      */
     enum GameState {
         /**
-         * the game is in progress
+         * the game is in progress.
          */
         PLAYING,
         /**
-         * the game is over, and the player won
+         * the game is over, and the player won.
          */
         VICTORY,
         /**
-         * the game is over, and the player lost
+         * the game is over, and the player lost.
          */
         DEFEAT
     }
