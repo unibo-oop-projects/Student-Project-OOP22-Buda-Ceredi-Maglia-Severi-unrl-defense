@@ -3,8 +3,7 @@ package it.unibo.unrldef.model.api;
 import java.util.Optional;
 
 /**
- * A tower that can be placed in a world.
- * 
+ * A tower that can be placed in a world
  * @author tommaso.ceredi@studio.unibo.it
  */
 public interface Tower extends Entity {
@@ -12,15 +11,21 @@ public interface Tower extends Entity {
     /**
      * @return the cost of the tower
      */
-    int getCost();
+    public int getCost();
 
     /**
      * @return a copy of the tower
      */
-    Tower copy();
+    public Tower copy();
+
+    /**
+     * @param world the world where the tower is placed
+     */
+    public void setParentWorld(final World world);
 
     /**
      * @return the Enemy that the tower is attacking
      */
-    Optional<Enemy> getTarget();
+    public abstract Optional<Enemy> getTarget();
+    
 }
