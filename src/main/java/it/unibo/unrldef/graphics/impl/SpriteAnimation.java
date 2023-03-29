@@ -2,6 +2,7 @@ package it.unibo.unrldef.graphics.impl;
 
 import java.util.Optional;
 
+import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
 
 /**
@@ -16,6 +17,7 @@ public class SpriteAnimation {
     private long timePassed;
     private final long animationLength;
     private Optional<Enemy> target;
+    private Optional<Position> startPosition;
 
     /**
      * Builds a new animation handler
@@ -35,6 +37,7 @@ public class SpriteAnimation {
         this.startTime = startTime;
         this.target = Optional.of(target);
         this.updateTimePassed();
+        this.setStartTargetPosition();
     }
 
     /**
@@ -73,5 +76,20 @@ public class SpriteAnimation {
         this.startTime = DEFAULT_TIME;
         this.timePassed = DEFAULT_TIME;
         this.target = Optional.empty();
+        this.startPosition = Optional.empty();
+    }
+
+    /**
+     * Sets the starting position of the animation
+     */
+    private void setStartTargetPosition() {
+        this.startPosition = this.target.get().getPosition();
+    }
+
+    /**
+     * @return the starting position of the animation
+     */
+    public Position getStartTargetPosition() {
+        return this.startPosition.get();
     }
 }

@@ -68,11 +68,8 @@ public final class GamePanel extends JPanel {
     }
 
     private static final int MAP_WIDTH_IN_UNITS = 80;
-
     private static final int MAP_HEIGHT_IN_UNITS = 80;
-
     private static final int DEFAULT_WIDTH = 600;
-
     private static final int DEFAULT_HEIGHT = 600;
     private static final long TOWER_ANIMATION_LENGTH = 500;
 
@@ -380,7 +377,6 @@ public final class GamePanel extends JPanel {
 
     private void renderTower(final Graphics2D graphic, final Entity tower) {
         Sprite towerAsset = new Sprite(0, 0, null);
-        Position explosionPos;
         final int electrodeHeight = 4;
         final Optional<Enemy> target = ((Tower) tower).getTarget();
         final Position rayStartPos = this.fromPositionToRealPosition(new Position(
@@ -428,8 +424,8 @@ public final class GamePanel extends JPanel {
                 break;
             case Cannon.NAME:
                 if (animation.isAnimationRunning()) {
-                    explosionPos = this.fromPositionToRealPosition(this.explosion.getApplicationPoint(
-                            animation.getTarget().getPosition().get()));
+                    final Position explosionPos = this.fromPositionToRealPosition(
+                            this.explosion.getApplicationPoint(animation.getStartTargetPosition()));
                     graphic.drawImage(this.explosion.getScaledSprite(), (int) explosionPos.getX(),
                             (int) explosionPos.getY(), null);
                     animation.updateTimePassed();
