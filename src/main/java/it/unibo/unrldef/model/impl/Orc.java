@@ -21,7 +21,7 @@ public class Orc extends EnemyImpl {
     /**
      * The amount of money that the enemy drops when it dies.
      */
-    public static final double DROP = 70.0;
+    public static final double DROP = 50.0;
 
     /**
      * Create a new Orc.

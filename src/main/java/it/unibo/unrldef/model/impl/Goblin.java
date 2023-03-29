@@ -13,7 +13,7 @@ public class Goblin extends EnemyImpl {
     /**
      * The speed of the enemy.
      */
-    public static final double SPEED = 3.0;
+    public static final double SPEED = 5.0;
     /**
      * The health of the enemy.
      */
@@ -21,7 +21,7 @@ public class Goblin extends EnemyImpl {
     /**
      * The amount of money that the enemy drops when it dies.
      */
-    public static final double DROP = 50.0;
+    public static final double DROP = 30.0;
 
     /**
      * Create a new Goblin.

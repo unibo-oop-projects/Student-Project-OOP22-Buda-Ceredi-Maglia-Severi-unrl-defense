@@ -12,11 +12,11 @@ import it.unibo.unrldef.model.api.Tower;
  */
 public class Hunter extends TowerImpl {
 
-    final private static int COST = 80;
-    final private static long ATTACK_FOR_SECOND = 1000;
-    final private static int DAMAGE = 50;
+    final private static int COST = 100;
+    final private static long ATTACK_FOR_SECOND = 750;
+    final private static int DAMAGE = 5;
     final public static String NAME = "sdrogo hunter";
-    final public static double RADIOUS = 30;
+    final public static double RADIOUS = 15;
     private Optional<Enemy> target = Optional.empty();
 
     public Hunter() {

@@ -14,7 +14,7 @@ public class LevelBuilder {
     }
 
     public WorldImpl levelOne() {
-        return new WorldImpl.Builder("River Castle", this.player, new Position(60 , 0), 5, 100)
+        return new WorldImpl.Builder("River Castle", this.player, new Position(60 , 0), 5, 250)
         .addPathSegment(Direction.DOWN, 15)
 		.addPathSegment(Direction.LEFT, 50)
 		.addPathSegment(Direction.DOWN, 20)

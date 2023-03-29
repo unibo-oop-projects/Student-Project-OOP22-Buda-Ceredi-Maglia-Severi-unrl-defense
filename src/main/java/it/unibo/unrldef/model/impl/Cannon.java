@@ -12,12 +12,12 @@ import it.unibo.unrldef.model.api.Tower;
  */
 public class Cannon extends TowerImpl {
 
-    final private static int COST = 100;
-    final private static long ATTACK_FOR_SECOND = 1000;
-    final private static int DAMAGE = 5;
+    final private static int COST = 200;
+    final private static long ATTACK_FOR_SECOND = 2000;
+    final private static int DAMAGE = 10;
     final public static String NAME = "sdrogo cannon";
     final public static double RADIOUS = 20;
-    final private static double EXPLOSION_RADIUS = 4;
+    final private static double EXPLOSION_RADIUS = 5;
     private Optional<Enemy> target = Optional.empty();
     
     public Cannon() {

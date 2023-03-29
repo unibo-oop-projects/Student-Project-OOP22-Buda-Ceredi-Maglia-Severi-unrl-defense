@@ -16,13 +16,13 @@ public final class FireBall extends SpellImpl {
     /**
      * The radius of the spell unique to the object type.
      */
-    public static final double RAD = 4.0;
+    public static final double RAD = 6.0;
     private static final long ATTACK_RATE = 8 * 1000;
-    private static final double DMG = 15.0;
-    private static final long LINGERING_EFFECT_TIME = 3 * 1000;
+    private static final double DMG = 20.0;
+    private static final long LINGERING_EFFECT_TIME = 5 * 1000;
     private static final long LINGERING_EFFECT_FREQ = 1 * 1000;
 
-    private final double lingeringDamage = 3.0;
+    private final double lingeringDamage = 4.0;
 
     /**
      * Creates a new spell of type fireball.
