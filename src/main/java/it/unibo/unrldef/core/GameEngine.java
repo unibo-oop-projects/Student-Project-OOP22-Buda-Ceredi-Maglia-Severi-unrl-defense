@@ -15,7 +15,7 @@ import it.unibo.unrldef.model.api.World.GameState;
 /**
  * This class modules the engine that updates the game.
  */
-public class GameEngine {
+public final class GameEngine {
 
     private final long period = 1000 / 30;
     private final Player player;
@@ -53,7 +53,7 @@ public class GameEngine {
      * Sets the world of the game.
      * @param world the world of the game
      */
-    public final void setGameWorld(final World world) {
+    public void setGameWorld(final World world) {
         this.currentWorld = world;
     }
 
@@ -68,6 +68,9 @@ public class GameEngine {
         this.gameLoop();
     }
 
+    /**
+     * Starts the end loop.
+     */
     public void endLoop() {
         while (!ended) {
             this.processInput();
