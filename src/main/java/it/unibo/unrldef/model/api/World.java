@@ -18,7 +18,6 @@ public interface World {
         DEFEAT
     }
 
-    void startGame();
     Boolean tryBuildTower(Position pos, String towerName);
     List<Entity> getSceneEntities();
     Integrity getCastleIntegrity();
