@@ -33,7 +33,7 @@ public class GameEngine {
     public GameEngine(final World world, final Player player) {
         this.input = new PlayerInput();
         this.player = player;
-        this.currentWorld = world;
+        this.setGameWorld(world);
         this.gameView = new ViewImpl(player, this.currentWorld, this.input);
         this.started = false;
         this.ended = false;
@@ -53,18 +53,31 @@ public class GameEngine {
      * Sets the world of the game.
      * @param world the world of the game
      */
-    public void setGameWorld(final World world) {
+    public final void setGameWorld(final World world) {
         this.currentWorld = world;
+    }
+
+    /**
+     * Starts the menu loop.
+     */
+    public void menuLoop() {
+        while (!started) {
+            this.processInput();
+            this.gameView.updateMenu();
+        }
+        this.gameLoop();
+    }
+
+    public void endLoop() {
+        while (!ended) {
+            this.processInput();
+        }
     }
 
     /**
      * Starts the game loop.
      */
     public void gameLoop() {
-        while (!started) {
-            this.processInput();
-            this.gameView.updateMenu();
-        }
         long previousFrameStartTime = System.currentTimeMillis();
         while (this.currentWorld.gameState() == GameState.PLAYING) {
             final long currentFrameStartTime = System.currentTimeMillis();
@@ -75,10 +88,8 @@ public class GameEngine {
             this.waitForNextFrame(currentFrameStartTime);
             previousFrameStartTime = currentFrameStartTime;
         }
-        while (!ended) {
-            this.processInput();
-            this.endOfGame(this.currentWorld.gameState());
-        }
+        this.renderEndState(this.currentWorld.gameState());
+        this.endLoop();
     }
 
     /**
@@ -150,7 +161,7 @@ public class GameEngine {
      * Renders the end of the game.
      * @param state the final state of the game
      */
-    private void endOfGame(final GameState state) {
+    private void renderEndState(final GameState state) {
         this.gameView.renderEndGame(state);
     }
 }
