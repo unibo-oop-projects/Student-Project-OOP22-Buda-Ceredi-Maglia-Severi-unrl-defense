@@ -21,7 +21,7 @@ public final class UnrealDefense {
 	 * 
 	 * @param args the arguments of the main method
 	 */
-	public void main(final String[] args) {
+	public static void main(final String[] args) {
 		final Player p = new PlayerImpl();
 		final LevelBuilder level = new LevelBuilder(p);
 		final GameEngine engine = new GameEngine(level.levelOne(), p);

@@ -45,14 +45,13 @@ public final class Hunter extends TowerImpl {
     @Override
     protected void attack() {
         final List<Enemy> enemiesInRange = this.getParentWorld().sorroundingEnemies(this.getPosition().get(),
-                this.getRadius());
+            this.getRadius());
         if (!enemiesInRange.isEmpty()) {
-            this.target = enemiesInRange.stream()
-                    .filter(enemy -> this.target.isEmpty() || !this.target.get().equals(enemy))
-                    .findFirst();
+            this.target = enemiesInRange.stream().findFirst();
             this.target.ifPresent(enemy -> enemy.reduceHealth(this.getDamage()));
+        } else {
+            this.target = Optional.empty();
         }
-
     }
 
     @Override

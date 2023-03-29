@@ -48,18 +48,12 @@ public final class Cannon extends TowerImpl {
         final List<Enemy> enemiesInRange = this.getParentWorld().sorroundingEnemies(this.getPosition().get(),
                 this.getRadius());
         if (!enemiesInRange.isEmpty()) {
-            if (this.target.isEmpty() || !enemiesInRange.contains(this.target.get())) {
-                this.target = Optional.of(enemiesInRange.get(0));
-            }
-            this.target.get().reduceHealth(this.getDamage());
-            // explosion
-            final List<Enemy> enemiesInExplosionRange = this.getParentWorld()
-                    .sorroundingEnemies(this.target.get().getPosition().get(), EXPLOSION_RADIUS);
-            if (!enemiesInExplosionRange.isEmpty()) {
-                for (final Enemy enemy : enemiesInExplosionRange) {
-                    enemy.reduceHealth(this.getDamage());
-                }
-            }
+            this.target = enemiesInRange.stream().findAny();
+            this.target.ifPresent(enemy -> enemy.reduceHealth(this.getDamage()));
+            final List<Enemy> enemiesInExplosionRange = this.getParentWorld().sorroundingEnemies(
+                    this.getPosition().get(),
+                    EXPLOSION_RADIUS);
+            enemiesInExplosionRange.stream().forEach(enemy -> enemy.reduceHealth(this.getDamage()));
         } else {
             this.target = Optional.empty();
         }
