@@ -1,62 +1,65 @@
 package it.unibo.unrldef.model.api;
 
 /**
- * An enemy in a strategic game
+ * An enemy in a strategic game.
+ * 
  * @author danilo.maglia@studio.unibo.it
  */
-public interface Enemy extends Entity{
+public interface Enemy extends Entity {
     /**
-     * @return the health of the enemy
+     * @return the health of the enemy.
      */
-    public double getHealth();
+    double getHealth();
 
     /**
-     * @return the speed of the enemy
+     * @return the speed of the enemy.
      */
-    public double getSpeed();
-    
+    double getSpeed();
+
     /**
      * 
-     * @return the amount of money that the enemy will drop on death
+     * @return the amount of money that the enemy will drop on death.
      */
-    public double getDropAmount();
+    double getDropAmount();
 
     /**
-     * Method that reduces the health of the enemy
+     * Method that reduces the health of the enemy.
+     * 
      * @param amount the amount of health to reduce
      */
-    public void reduceHealth(final double amount);
+    void reduceHealth(double amount);
 
     /**
      * 
      * @param speed the new speed of the enemy
      */
-    public void setSpeed(final double speed);
+    void setSpeed(double speed);
 
     /**
-     * Method that resets the speed of the enemy to the default speed
+     * Method that resets the speed of the enemy to the default speed.
      */
-    public void resetSpeed();
+    void resetSpeed();
 
     /**
      * @return true if the enemy is dead, false otherwise
      */
-    public boolean isDead();
+    boolean isDead();
 
     /**
      * 
      * @return true if the enemy has reached the end of the path, false otherwise
      */
-    public boolean hasReachedEndOfPath();
+    boolean hasReachedEndOfPath();
 
     /**
-     * Method that moves the enemy following the path
+     * Method that moves the enemy following the path.
      * 
+     * @param time the time elapsed since the last move
      */
-    public void move(long time);
+    void move(long time);
 
     /**
-     * @return a copy of the enemy
+     * @return a copy of the enemy.
      */
-    public Enemy copy();
+    Enemy copy();
 }

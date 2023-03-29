@@ -18,6 +18,7 @@ import it.unibo.unrldef.input.api.Input.HitType;
 
 public class MenuPanel extends JPanel {
 
+    private static final long serialVersionUID = 1L;
     private final JButton exitButton, startButton;
     private final JTextField nameField;
     private final Input inputHandler;

@@ -1,7 +1,4 @@
 package it.unibo.unrldef.model.impl;
-
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 
 import it.unibo.unrldef.common.Position;
@@ -23,7 +20,7 @@ public class EnemyImplTest {
         testPath.addDirection(Path.Direction.END, 0);
         // testWorld doesn't need waves, available_towers, bank, and all the other stuff since the only thing it needs is a path
         World testWorld = new WorldImpl("", null, null, testPath, null, null, null, null);
-        Enemy enemy = new EnemyImpl(Optional.of(new Position(0, 0)), "orc", 100, enemyInitialSpeed, 1);
+        Enemy enemy = new EnemyImpl("orc", 100, enemyInitialSpeed, 1);
         enemy.setParentWorld(testWorld);
 
         enemy.updateState(SECOND);

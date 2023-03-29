@@ -40,6 +40,7 @@ import it.unibo.unrldef.model.impl.SnowStorm;
 /**
  * 
  * This is the game panel where game gets rendered on the screen.
+ * 
  * @author danilo.maglia@studio.unibo.it
  */
 public final class GamePanel extends JPanel {
@@ -48,6 +49,7 @@ public final class GamePanel extends JPanel {
 
     /**
      * Each state in which the game can be.
+     * 
      * @author danilo.maglia@studio.unibo.it
      */
     public enum ViewState {
@@ -107,7 +109,7 @@ public final class GamePanel extends JPanel {
 
     /**
      * 
-     * @param gameWorld the game world
+     * @param gameWorld    the game world
      * @param inputHandler the input handler
      */
     public GamePanel(final World gameWorld, final Input inputHandler) {
@@ -115,45 +117,44 @@ public final class GamePanel extends JPanel {
         this.panelRef = this;
         this.mousePosition = new Position(0, 0);
         try {
-            this.map = new Sprite(SpriteDimensions.MAP_WIDTH, SpriteDimensions.MAP_HEIGHT, 
+            this.map = new Sprite(SpriteDimensions.MAP_WIDTH, SpriteDimensions.MAP_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "firstMap.png")));
-            this.fireball = new Sprite(SpriteDimensions.FIREBALL_WIDHT, SpriteDimensions.FIREBALL_HEIGHT, 
+            this.fireball = new Sprite(SpriteDimensions.FIREBALL_WIDHT, SpriteDimensions.FIREBALL_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "fireball.png")));
             this.sprites.add(this.fireball);
-            this.snowStorm = new Sprite(SpriteDimensions.SNOWSTORM_WIDTH, SpriteDimensions.SNOWSTORM_HEIGHT, 
+            this.snowStorm = new Sprite(SpriteDimensions.SNOWSTORM_WIDTH, SpriteDimensions.SNOWSTORM_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "snowstorm.png")));
             this.sprites.add(this.snowStorm);
-            this.orc = new Sprite(SpriteDimensions.ORC_WIDTH, SpriteDimensions.ORC_HEIGHT, 
+            this.orc = new Sprite(SpriteDimensions.ORC_WIDTH, SpriteDimensions.ORC_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "orc.png")));
             this.sprites.add(this.orc);
-            this.goblin = new Sprite(SpriteDimensions.GOBLIN_WIDTH, SpriteDimensions.GOBLIN_HEIGHT, 
+            this.goblin = new Sprite(SpriteDimensions.GOBLIN_WIDTH, SpriteDimensions.GOBLIN_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "goblin.png")));
             this.sprites.add(this.goblin);
-            this.cannon = new Sprite(SpriteDimensions.CANNON_WIDTH, SpriteDimensions.CANNON_HEIGHT, 
+            this.cannon = new Sprite(SpriteDimensions.CANNON_WIDTH, SpriteDimensions.CANNON_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "cannon.png")));
             this.sprites.add(this.cannon);
-            this.hunter = new Sprite(SpriteDimensions.HUNTER_WIDTH, SpriteDimensions.HUNTER_HEIGHT, 
+            this.hunter = new Sprite(SpriteDimensions.HUNTER_WIDTH, SpriteDimensions.HUNTER_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "Hunter.png")));
             this.sprites.add(this.hunter);
-            this.shootingCannon = new Sprite(SpriteDimensions.CANNON_WIDTH, SpriteDimensions.CANNON_HEIGHT, 
+            this.shootingCannon = new Sprite(SpriteDimensions.CANNON_WIDTH, SpriteDimensions.CANNON_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "shootingCannon.png")));
             this.sprites.add(this.shootingCannon);
-            this.explosion = new Sprite(SpriteDimensions.EXPLOSION_WIDTH, SpriteDimensions.EXPLOSION_HEIGHT, 
+            this.explosion = new Sprite(SpriteDimensions.EXPLOSION_WIDTH, SpriteDimensions.EXPLOSION_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "explosion.png")));
             this.sprites.add(this.explosion);
-            this.shootingHunter = new Sprite(SpriteDimensions.HUNTER_WIDTH, SpriteDimensions.HUNTER_HEIGHT, 
+            this.shootingHunter = new Sprite(SpriteDimensions.HUNTER_WIDTH, SpriteDimensions.HUNTER_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "shootingHunter.png")));
             this.sprites.add(this.shootingHunter);
-            this.towerPlace = new Sprite(SpriteDimensions.TOWER_PLACE_WIDTH, SpriteDimensions.TOWER_PLACE_HEIGHT, 
+            this.towerPlace = new Sprite(SpriteDimensions.TOWER_PLACE_WIDTH, SpriteDimensions.TOWER_PLACE_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "towerPlace.png")));
             this.sprites.add(this.towerPlace);
-            this.heart = new Sprite(SpriteDimensions.HEART_WIDTH, SpriteDimensions.HEART_HEIGHT, 
+            this.heart = new Sprite(SpriteDimensions.HEART_WIDTH, SpriteDimensions.HEART_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "heart.png")));
             this.sprites.add(this.heart);
-            this.money = new Sprite(SpriteDimensions.MONEY_WIDTH, SpriteDimensions.MONEY_HEIGHT, 
+            this.money = new Sprite(SpriteDimensions.MONEY_WIDTH, SpriteDimensions.MONEY_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "money.png")));
             this.sprites.add(this.money);
-
 
         } catch (final IOException e) {
             new ErrorDialog("error loading assets");
@@ -251,6 +252,7 @@ public final class GamePanel extends JPanel {
 
     /**
      * Set the state of the panel.
+     * 
      * @param state the state to set
      */
     public void setState(final ViewState state) {
@@ -259,6 +261,7 @@ public final class GamePanel extends JPanel {
 
     /**
      * Set the selected entity.
+     * 
      * @param entity the entity to set
      */
     public void setSelectedEntity(final String entity) {
@@ -314,8 +317,10 @@ public final class GamePanel extends JPanel {
         towerAvailablePositions.stream()
                 .map(x -> this.fromPositionToRealPosition(x))
                 .filter(pos -> this.isInSquare(mousePosition,
-                        new Position(pos.getX() - towerPlace.getScaledDimension().getFirst() / 2, pos.getY() - towerWidth / 2),
-                        new Position(pos.getX() + towerPlace.getScaledDimension().getFirst() / 2, pos.getY() + towerHeight / 2)))
+                        new Position(pos.getX() - towerPlace.getScaledDimension().getFirst() / 2,
+                                pos.getY() - towerWidth / 2),
+                        new Position(pos.getX() + towerPlace.getScaledDimension().getFirst() / 2,
+                                pos.getY() + towerHeight / 2)))
                 .findFirst()
                 .ifPresent(towerSquare -> {
                     int radius = 0;
@@ -375,7 +380,6 @@ public final class GamePanel extends JPanel {
 
     private void renderTower(final Graphics2D graphic, final Entity tower) {
         Sprite towerAsset = new Sprite(0, 0, null);
-        Sprite explosionAsset;
         Position explosionPos;
         final int electrodeHeight = 4;
         final Optional<Enemy> target = ((Tower) tower).getTarget();
@@ -386,25 +390,29 @@ public final class GamePanel extends JPanel {
         if (target.isPresent()) {
             animation.startAnimation(System.currentTimeMillis(), target.get());
         }
+        // switch for the tower asset
         switch (tower.getName()) {
             case Cannon.NAME:
-                if (animation.isAnimationRunning()) {
-                    towerAsset = this.shootingCannon;
-                    explosionAsset = this.explosion;
-                    explosionPos = this.fromPositionToRealPosition(explosionAsset.getApplicationPoint(
-                            animation.getTarget().getPosition().get()));
-                    graphic.drawImage(explosionAsset.getScaledSprite(), (int) explosionPos.getX(),
-                            (int) explosionPos.getY(), null);
-                    animation.updateTimePassed();
-                } else {
-                    towerAsset = this.cannon;
-                    animation.resetAnimation();
-                }
+                towerAsset = animation.isAnimationRunning() ? this.shootingCannon : this.cannon;
                 break;
+            case Hunter.NAME:
+                towerAsset = animation.isAnimationRunning() ? this.shootingHunter : this.hunter;
+                break;
+            default:
+                break;
+        }
+
+        if (animation.isAnimationRunning() && animation.getTarget().isDead()) {
+            renderEnemy(graphic, animation.getTarget());
+        }
+        final Position towerPos = tower.getPosition().get();
+        final Position realTowerPos = fromPositionToRealPosition(towerAsset.getApplicationPoint(towerPos));
+        graphic.drawImage(towerAsset.getScaledSprite(), (int) realTowerPos.getX(), (int) realTowerPos.getY(), null);
+        // switch for the tower attack animation
+        switch (tower.getName()) {
             case Hunter.NAME:
                 final int strokeWidth = 5;
                 if (animation.isAnimationRunning()) {
-                    towerAsset = this.shootingHunter;
                     final Position realTargetPosition = this
                             .fromPositionToRealPosition(animation.getTarget().getPosition().get());
                     graphic.setColor(Color.BLUE);
@@ -415,19 +423,23 @@ public final class GamePanel extends JPanel {
                     graphic.setColor(Color.BLACK);
                     animation.updateTimePassed();
                 } else {
-                    towerAsset = this.hunter;
+                    animation.resetAnimation();
+                }
+                break;
+            case Cannon.NAME:
+                if (animation.isAnimationRunning()) {
+                    explosionPos = this.fromPositionToRealPosition(this.explosion.getApplicationPoint(
+                            animation.getTarget().getPosition().get()));
+                    graphic.drawImage(this.explosion.getScaledSprite(), (int) explosionPos.getX(),
+                            (int) explosionPos.getY(), null);
+                    animation.updateTimePassed();
+                } else {
                     animation.resetAnimation();
                 }
                 break;
             default:
                 break;
         }
-        if (animation.isAnimationRunning() && animation.getTarget().isDead()) {
-            renderEnemy(graphic, animation.getTarget());
-        }
-        final Position towerPos = tower.getPosition().get();
-        final Position realTowerPos = fromPositionToRealPosition(towerAsset.getApplicationPoint(towerPos));
-        graphic.drawImage(towerAsset.getScaledSprite(), (int) realTowerPos.getX(), (int) realTowerPos.getY(), null);
     }
 
     private void renderEnemy(final Graphics2D graphic, final Entity enemy) {
@@ -481,13 +493,13 @@ public final class GamePanel extends JPanel {
     }
 
     private void renderHearts(final Graphics2D graphic) {
-        int n = this.gameWorld.getCastleIntegrity().getHearts();
+        final int n = this.gameWorld.getCastleIntegrity().getHearts();
         final int denominator = 4;
         final int startX = this.xMapPosition + this.heart.getScaledDimension().getFirst() / denominator;
         final int startY = this.yMapPosition + this.heart.getScaledDimension().getSecond() / denominator;
         for (int i = 0; i < n; i++) {
             graphic.drawImage(this.heart.getScaledSprite(),
-            startX + i * this.heart.getScaledDimension().getFirst(), startY, null);
+                    startX + i * this.heart.getScaledDimension().getFirst(), startY, null);
         }
     }
 
@@ -498,8 +510,8 @@ public final class GamePanel extends JPanel {
         graphic.drawImage(this.money.getScaledSprite(), startX, startY, null);
         graphic.setFont(new Font("", Font.PLAIN, this.money.getScaledDimension().getSecond() / 2));
         graphic.drawString(" " + this.gameWorld.getMoney() + " ",
-        startX + this.money.getScaledDimension().getFirst(),
-        startY + this.money.getScaledDimension().getSecond() * 4 / denominator);
+                startX + this.money.getScaledDimension().getFirst(),
+                startY + this.money.getScaledDimension().getSecond() * 4 / denominator);
     }
 
     private void renderMap(final Graphics2D graphic) {
@@ -541,9 +553,9 @@ public final class GamePanel extends JPanel {
     }
 
     private boolean isInSquare(final Position pos, final Position upLeft, final Position downRight) {
-        return pos.getX() >= upLeft.getX() 
-            && pos.getX() <= downRight.getX()
-            && pos.getY() <= downRight.getY()
-            && pos.getY() >= upLeft.getY();
+        return pos.getX() >= upLeft.getX()
+                && pos.getX() <= downRight.getX()
+                && pos.getY() <= downRight.getY()
+                && pos.getY() >= upLeft.getY();
     }
 }

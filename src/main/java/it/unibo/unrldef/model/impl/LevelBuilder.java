@@ -1,6 +1,5 @@
 package it.unibo.unrldef.model.impl;
 
-import java.util.Optional;
 
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Player;
@@ -30,20 +29,20 @@ public class LevelBuilder {
 		.addPathSegment(Direction.END, 0)
 		.addWave()
 		.addHordeToWave(0, 10000)
-		.addMultipleEnemiesToHorde(0, 0, new Orc(Optional.of(new Position(60, 0))), (short)5)
-		.addMultipleEnemiesToHorde(0, 0, new Goblin(Optional.of(new Position(60, 0))), (short)5)
+		.addMultipleEnemiesToHorde(0, 0, new Orc(), (short)5)
+		.addMultipleEnemiesToHorde(0, 0, new Goblin(), (short)5)
 		.addHordeToWave(0, 10000)
-		.addMultipleEnemiesToHorde(0, 1, new Orc(Optional.of(new Position(60, 0))), (short)5)
-		.addMultipleEnemiesToHorde(0, 1, new Goblin(Optional.of(new Position(60, 0))), (short)5)
+		.addMultipleEnemiesToHorde(0, 1, new Orc(), (short)5)
+		.addMultipleEnemiesToHorde(0, 1, new Goblin(), (short)5)
 		.addWave()
 		.addHordeToWave(1, 10000)
-		.addMultipleEnemiesToHorde(1, 0, new Orc(Optional.of(new Position(60, 0))), (short)5)
-		.addMultipleEnemiesToHorde(1, 0, new Goblin(Optional.of(new Position(60, 0))), (short)5)
+		.addMultipleEnemiesToHorde(1, 0, new Orc(), (short)5)
+		.addMultipleEnemiesToHorde(1, 0, new Goblin(), (short)5)
 		.addHordeToWave(1, 10000)
-		.addMultipleEnemiesToHorde(1, 1, new Orc(Optional.of(new Position(60, 0))), (short)5)
-		.addMultipleEnemiesToHorde(1, 1, new Goblin(Optional.of(new Position(60, 0))), (short)5)
-		.addAvailableTower(Cannon.NAME, new Cannon(null))
-		.addAvailableTower(Hunter.NAME, new Hunter(null))
+		.addMultipleEnemiesToHorde(1, 1, new Orc(), (short)5)
+		.addMultipleEnemiesToHorde(1, 1, new Goblin(), (short)5)
+		.addAvailableTower(Cannon.NAME, new Cannon())
+		.addAvailableTower(Hunter.NAME, new Hunter())
 		.addTowerBuildingSpace(28, 6)
 		.addTowerBuildingSpace(48, 6)
 		.addTowerBuildingSpace(68, 8)

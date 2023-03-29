@@ -7,15 +7,19 @@ import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Horde;
 
 /**
- * Implementation of a horde of enemies in the game Unreal Defense
+ * Implementation of a horde of enemies in the game Unreal Defense.
+ * 
  * @author danilo.maglia@studio.unibo.it
  */
-public class HordeImpl implements Horde {
+public final class HordeImpl implements Horde {
 
-    private List<Enemy> enemies;
+    private final List<Enemy> enemies;
 
+    /**
+     * Create a new horde.
+     */
     public HordeImpl() {
-        this.enemies = new ArrayList<Enemy>();
+        this.enemies = new ArrayList<>();
     }
 
     @Override
@@ -24,16 +28,16 @@ public class HordeImpl implements Horde {
     }
 
     @Override
-    public void addEnemy(Enemy enemy) {
+    public void addEnemy(final Enemy enemy) {
         this.enemies.add(enemy.copy());
-        
+
     }
 
     @Override
-    public void addMultipleEnemies(Enemy enemy, short numberOfEnemy) {
-        for(int i = 0; i < numberOfEnemy; i++) {
+    public void addMultipleEnemies(final Enemy enemy, final short numberOfEnemy) {
+        for (int i = 0; i < numberOfEnemy; i++) {
             this.addEnemy(enemy);
         }
     }
-   
+
 }

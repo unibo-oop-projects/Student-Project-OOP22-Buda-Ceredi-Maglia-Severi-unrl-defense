@@ -10,7 +10,20 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * A dialog that shows an error message and exits the program.
+ * 
+ * @author danilo.maglia@studio.unibo.it
+ */
 public class ErrorDialog extends JDialog {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Creates a new ErrorDialog.
+     * 
+     * @param error the error message to show
+     */
     public ErrorDialog(final String error) {
         super();
         final JPanel dialogPanel = new JPanel(new BorderLayout());

@@ -3,7 +3,6 @@ package it.unibo.unrldef.model.impl;
 import java.util.List;
 import java.util.Optional;
 
-import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Tower;
 
@@ -20,13 +19,13 @@ public class Hunter extends TowerImpl {
     final public static double RADIOUS = 30;
     private Optional<Enemy> target = Optional.empty();
 
-    public Hunter(final Position hunterPosition) {
-        super(hunterPosition, NAME, RADIOUS, DAMAGE, ATTACK_FOR_SECOND, COST);
+    public Hunter() {
+        super(NAME, RADIOUS, DAMAGE, ATTACK_FOR_SECOND, COST);
     }
 
     @Override
     public Tower copy() {
-        return new Hunter(null);
+        return new Hunter();
     }
 
     @Override

@@ -1,32 +1,63 @@
 package it.unibo.unrldef.common;
 
-public class Pair<T,S> {
+/**
+ * A pair of two elements.
+ * 
+ * @param <T> the type of the first element
+ * @param <S> the type of the second element
+ * @author danilo.maglia@studio.unibo.it
+ */
+public final class Pair<T, S> {
     private T firstElement;
     private S secondElement;
 
-    public Pair(T firstElement, S secondElement) {
+    /**
+     * 
+     * @param firstElement  the first element of the pair
+     * @param secondElement the second element of the pair
+     */
+    public Pair(final T firstElement, final S secondElement) {
         this.firstElement = firstElement;
         this.secondElement = secondElement;
     }
 
+    /**
+     * @return the first element of the pair
+     */
     public T getFirst() {
         return this.firstElement;
     }
 
+    /**
+     * @return the second element of the pair
+     */
     public S getSecond() {
         return this.secondElement;
     }
 
-    public void setFirstElement(T firstElement) {
+    /**
+     * Sets the first element of the pair.
+     * 
+     * @param firstElement
+     */
+    public void setFirstElement(final T firstElement) {
         this.firstElement = firstElement;
     }
 
-    public void setSecondElement(S secondElement) {
+    /**
+     * Sets the second element of the pair.
+     * 
+     * @param secondElement
+     */
+    public void setSecondElement(final S secondElement) {
         this.secondElement = secondElement;
     }
 
-    public Pair<T,S> copy() {
-        return new Pair<T,S>(firstElement, secondElement);
+    /**
+     * @return a copy of the pair
+     */
+    public Pair<T, S> copy() {
+        return new Pair<T, S>(firstElement, secondElement);
     }
-    
+
 }

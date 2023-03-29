@@ -3,7 +3,6 @@ package it.unibo.unrldef.model.impl;
 import java.util.List;
 import java.util.Optional;
 
-import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Tower;
 
@@ -21,13 +20,13 @@ public class Cannon extends TowerImpl {
     final private static double EXPLOSION_RADIUS = 4;
     private Optional<Enemy> target = Optional.empty();
     
-    public Cannon(final Position cannonPosition) {
-        super(cannonPosition, NAME, RADIOUS, DAMAGE, ATTACK_FOR_SECOND, COST);
+    public Cannon() {
+        super(NAME, RADIOUS, DAMAGE, ATTACK_FOR_SECOND, COST);
     }
 
     @Override
     public Tower copy() {
-        return new Cannon(null);
+        return new Cannon();
     }
 
     @Override

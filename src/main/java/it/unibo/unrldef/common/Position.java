@@ -1,13 +1,19 @@
 package it.unibo.unrldef.common;
 
-/** 
+/**
  * the coordinates of a point in a 2d world.
+ * 
  * @author francesco.buda3@studio.unibo.it
  */
 public final class Position {
 
     private double x, y;
 
+    /**
+     * 
+     * @param x the abscissa
+     * @param y the ordinate
+     */
     public Position(final double x, final double y) {
         this.x = x;
         this.y = y;
@@ -27,13 +33,13 @@ public final class Position {
      */
     public double getY() {
         return this.y;
-    } 
+    }
 
     /**
      * 
      * @param x the new x value
      */
-    public void setX(double x) {
+    public void setX(final double x) {
         this.x = x;
     }
 
@@ -41,7 +47,7 @@ public final class Position {
      * 
      * @param y the new y value
      */
-    public void setY(double y) {
+    public void setY(final double y) {
         this.y = y;
     }
 
@@ -55,7 +61,7 @@ public final class Position {
         temp = Double.doubleToLongBits(y);
         result = prime * result + (int) (temp ^ (temp >>> 32));
         return result;
-    } 
+    }
 
     @Override
     public boolean equals(final Object obj) {
@@ -72,17 +78,21 @@ public final class Position {
         if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x)) {
             return false;
         }
-        if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y)) { //NOPMD
+        if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y)) { // NOPMD
             return false;
         }
         return true;
-    } 
+    }
 
     @Override
     public String toString() {
         return "[" + x + ", " + y + "]";
-    } 
+    }
 
+    /**
+     * 
+     * @return a copy of the position
+     */
     public Position copy() {
         return new Position(x, y);
     }

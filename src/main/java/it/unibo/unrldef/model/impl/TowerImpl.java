@@ -2,7 +2,6 @@ package it.unibo.unrldef.model.impl;
 
 import java.util.Optional;
 
-import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
@@ -16,9 +15,9 @@ public abstract class TowerImpl extends DefenseEntity implements Tower {
     private final int cost;
     private World parentWorld;
 
-    public TowerImpl(Position position, String name, double radius, double damage,
+    public TowerImpl(String name, double radius, double damage,
             long attackRate, final int cost) {
-        super(Optional.ofNullable(position), name, radius, damage, attackRate);
+        super( name, radius, damage, attackRate);
         this.cost = cost;
         this.setParentWorld(parentWorld);
     }
