@@ -6,12 +6,12 @@ import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
 
 /**
- * Handles the attck animation of a game entity
+ * Handles the attck animation of a game entity.
  * @author tommaso.severi2@studio.unibo.it
  */
 public class SpriteAnimation {
-    
-    private final long DEFAULT_TIME = -1;
+
+    private static final long DEFAULT_TIME = -1;
 
     private long startTime;
     private long timePassed;
@@ -20,7 +20,7 @@ public class SpriteAnimation {
     private Optional<Position> startPosition;
 
     /**
-     * Builds a new animation handler
+     * Builds a new animation handler.
      * @param animationLength the length of the animation
      */
     public SpriteAnimation(final long animationLength) {
@@ -29,7 +29,7 @@ public class SpriteAnimation {
     }
 
     /**
-     * Sets up the start of the animation
+     * Sets up the start of the animation.
      * @param startTime the current time in which the animation is starting
      * @param target the target towards the animation is referred to 
      */
@@ -41,21 +41,21 @@ public class SpriteAnimation {
     }
 
     /**
-     * Updates the time that has passed since the starting time
+     * Updates the time that has passed since the starting time.
      */
     public void updateTimePassed() {
         this.timePassed = System.currentTimeMillis() - this.startTime;
     }
 
     /**
-     * @return the time passed since the starting time
+     * @return the time passed since the starting time.
      */
     public long getTimePassed() {
         return this.timePassed != DEFAULT_TIME ? this.timePassed : 0;
     }
 
     /**
-     * Checks if the animation is still running
+     * Checks if the animation is still running.
      * @return true if it is, false otherwise
      */
     public boolean isAnimationRunning() {
@@ -70,9 +70,9 @@ public class SpriteAnimation {
     }
 
     /**
-     * Resets the animation to iss deafult state
+     * Resets the animation to iss deafult state.
      */
-    public void resetAnimation() {
+    public final void resetAnimation() {
         this.startTime = DEFAULT_TIME;
         this.timePassed = DEFAULT_TIME;
         this.target = Optional.empty();
@@ -80,7 +80,7 @@ public class SpriteAnimation {
     }
 
     /**
-     * Sets the starting position of the animation
+     * Sets the starting position of the animation.
      */
     private void setStartTargetPosition() {
         this.startPosition = this.target.get().getPosition();
