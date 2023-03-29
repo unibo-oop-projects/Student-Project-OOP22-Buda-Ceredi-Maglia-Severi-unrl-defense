@@ -39,7 +39,7 @@ public final class WorldImpl implements World {
     private final String name;
     private final Player player;
     private final Integrity castleIntegrity;
-    private final Bank bank;
+    private final BankImpl bank;
     private final Path path;
     private final List<Wave> waves;
     private int waveCounter;
@@ -53,7 +53,7 @@ public final class WorldImpl implements World {
 
     private WorldImpl(final String name, final Player player, final Integrity castleIntegrity, final Path path,
             final List<Wave> waves,
-            final Map<String, Tower> availableTowers, final Set<Position> validPositions, final Bank bank) {
+            final Map<String, Tower> availableTowers, final Set<Position> validPositions, final BankImpl bank) {
         this.name = name;
         this.player = player;
         this.castleIntegrity = castleIntegrity;
@@ -287,7 +287,7 @@ public final class WorldImpl implements World {
         private final Player player;
         private final Integrity castleIntegrity;
         private final Path path;
-        private final Bank bank;
+        private final BankImpl bank;
         private final List<List<Pair<Horde, Long>>> wavesTemp;
         private final Map<String, Tower> availableTowers;
         private final Set<Position> validTowersPositions;
@@ -307,7 +307,7 @@ public final class WorldImpl implements World {
             this.path = new PathImpl(spawnPoint);
             this.wavesTemp = new ArrayList<>();
             this.castleIntegrity = new IntegrityImpl(castleHearts);
-            this.bank = new Bank(startingMoney);
+            this.bank = new BankImpl(startingMoney);
             this.availableTowers = new HashMap<>();
             this.validTowersPositions = new HashSet<>();
         }
