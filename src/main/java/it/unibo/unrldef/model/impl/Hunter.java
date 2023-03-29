@@ -8,18 +8,31 @@ import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Tower;
 
 /**
- * A Tower of archers that can attack enemies
+ * 
+ * A Tower of archers that can attack enemies.
+ * 
  * @author tommaso.ceredi@studio.unibo.it
  */
-public class Hunter extends TowerImpl {
+public final class Hunter extends TowerImpl {
 
-    final private static int COST = 80;
-    final private static long ATTACK_FOR_SECOND = 1000;
-    final private static int DAMAGE = 50;
-    final public static String NAME = "sdrogo hunter";
-    final public static double RADIOUS = 30;
+    private static final int COST = 80;
+    private static final long ATTACK_FOR_SECOND = 1000;
+    private static final int DAMAGE = 50;
+    /**
+     * The name of the tower.
+     */
+    public static final String NAME = "sdrogo hunter";
+    /**
+     * The radius of the tower.
+     */
+    public static final double RADIOUS = 30;
     private Optional<Enemy> target = Optional.empty();
 
+    /**
+     * Constructor of the Hunter.
+     * 
+     * @param hunterPosition
+     */
     public Hunter(final Position hunterPosition) {
         super(hunterPosition, NAME, RADIOUS, DAMAGE, ATTACK_FOR_SECOND, COST);
     }
@@ -31,13 +44,15 @@ public class Hunter extends TowerImpl {
 
     @Override
     protected void attack() {
-        final List<Enemy> enemiesInRange = this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius());
+        final List<Enemy> enemiesInRange = this.getParentWorld().sorroundingEnemies(this.getPosition().get(),
+                this.getRadius());
         if (!enemiesInRange.isEmpty()) {
-            if (this.target.isEmpty() || !enemiesInRange.contains(this.target.get())) {
-                this.target = Optional.of(enemiesInRange.get(0));
-            }
-            this.target.get().reduceHealth(this.getDamage());
+            this.target = enemiesInRange.stream()
+                    .filter(enemy -> this.target.isEmpty() || !this.target.get().equals(enemy))
+                    .findFirst();
+            this.target.ifPresent(enemy -> enemy.reduceHealth(this.getDamage()));
         }
+
     }
 
     @Override
