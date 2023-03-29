@@ -3,23 +3,36 @@ package it.unibo.unrldef.model.api;
 import java.util.List;
 import java.util.Set;
 
-import it.unibo.unrldef.common.*;
+import it.unibo.unrldef.common.Position;
 
 /**
- * the world of a tower defense game
+ * the world of a tower defense game.
+ * 
  * @author francesco.buda3@studio.unibo.it
  * 
  */
 public interface World {
 
-    public enum GameState {
+    /**
+     * the possible states of the world
+     */
+    enum GameState {
+        /**
+         * the game is in progress
+         */
         PLAYING,
+        /**
+         * the game is over, and the player won
+         */
         VICTORY,
+        /**
+         * the game is over, and the player lost
+         */
         DEFEAT
     }
 
     /**
-     * @param pos the position of the tower to build
+     * @param pos       the position of the tower to build
      * @param towerName the name of the tower to build
      * @return true if the construction of the tower was successful
      */
@@ -76,7 +89,8 @@ public interface World {
     GameState gameState();
 
     /**
-     * update the state of the world
+     * update the state of the world.
+     * 
      * @param time time elapsed since last update
      */
     void updateState(long time);
