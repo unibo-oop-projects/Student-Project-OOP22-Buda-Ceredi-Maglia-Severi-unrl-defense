@@ -4,7 +4,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -40,8 +39,6 @@ public final class ViewImpl implements View {
     private final JFrame frame;
     private final Player player;
     private final World world;
-    private JLabel bank;
-    private JLabel hearts;
     private final MenuPanel menuPanel;
     private final Input inputHandler;
 
@@ -72,10 +69,6 @@ public final class ViewImpl implements View {
         this.gamePanel = new GamePanel(world, inputHandler);
         this.buttonPanel = new DefenseButtonPanel(this.gamePanel, this.world);
         this.buttonPanel.add(this.createExitButton());
-        this.bank = new JLabel();
-        this.hearts = new JLabel();
-        this.buttonPanel.add(this.bank);
-        this.buttonPanel.add(this.hearts);
         this.frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
         this.frame.getContentPane().add(this.buttonPanel, BorderLayout.EAST);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -127,8 +120,6 @@ public final class ViewImpl implements View {
         final Set<Entity> buttonsEntities = new HashSet<>(this.world.getAvailableTowers());
         buttonsEntities.addAll(this.player.getSpells());
         this.buttonPanel.update(buttonsEntities);
-        this.bank.setText("€ " + this.world.getMoney());
-        this.hearts.setText("<3 " + this.world.getCastleIntegrity().getHearts());
     }
 
     @Override
