@@ -19,7 +19,8 @@ public class EnemyImplTest {
         testPath.addDirection(Path.Direction.RIGHT, pathMostRight);
         testPath.addDirection(Path.Direction.END, 0);
         // testWorld doesn't need waves, available_towers, bank, and all the other stuff since the only thing it needs is a path
-        World testWorld = new WorldImpl("", null, null, testPath, null, null, null, null);
+        LevelBuilder testLevel = new LevelBuilder(null);
+        World testWorld = testLevel.levelOne();
         Enemy enemy = new EnemyImpl("orc", 100, enemyInitialSpeed, 1);
         enemy.setParentWorld(testWorld);
 
