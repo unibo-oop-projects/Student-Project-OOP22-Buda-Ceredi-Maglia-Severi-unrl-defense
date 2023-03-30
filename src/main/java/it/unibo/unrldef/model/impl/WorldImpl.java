@@ -28,7 +28,7 @@ import it.unibo.unrldef.model.api.Path.Direction;
 
 /**
  * The world of the game Unreal Defense.
-*/
+ */
 public final class WorldImpl implements World {
 
     private static final long SPAWNING_TIME = 1500;
@@ -95,9 +95,10 @@ public final class WorldImpl implements World {
             final Enemy newEnemy = this.spawningQueue.poll();
             final Position spawningPoint = this.path.getSpawningPoint();
             final Random rand = new Random();
-            newEnemy.setPosition(spawningPoint.getX() + rand.nextInt(-PATH_DEPHT / 2, PATH_DEPHT / 2),
+            final Position pos = new Position(spawningPoint.getX() + rand.nextInt(-PATH_DEPHT / 2, PATH_DEPHT / 2),
                     spawningPoint.getY() + rand.nextInt(-PATH_DEPHT / 2, PATH_DEPHT / 2));
             this.livingEnemies.add(newEnemy);
+            this.spawnEnemy(newEnemy, pos);
         }
     }
 
@@ -126,15 +127,18 @@ public final class WorldImpl implements World {
                 .filter(x -> distance(center, x.getPosition().get()) <= radius).collect(Collectors.toList());
         while (!end) {
             final Pair<Direction, Double> dir = this.path.getDirection(i);
-            /* this while loop cycles through the path segment by segment,
+            /*
+             * this while loop cycles through the path segment by segment,
              * in order to find the enemy who is the most advanced in the path.
              * a and b are the ends of the current segment
-              */
+             */
             Position a;
             Position b = new Position(0, 0);
-            /* ul and dr are respectively the up-left and down-right vertices of the rectangle
+            /*
+             * ul and dr are respectively the up-left and down-right vertices of the
+             * rectangle
              * witch describes the path segment thickness
-              */
+             */
             Position ul;
             Position dr;
             Optional<Enemy> tmp = Optional.empty();
@@ -214,6 +218,13 @@ public final class WorldImpl implements World {
     }
 
     @Override
+    public void spawnEnemy(final Enemy enemy, final Position pos) {
+        this.livingEnemies.add(enemy);
+        enemy.setParentWorld(this);
+        enemy.setPosition(pos.getX(), pos.getY());
+    }
+
+    @Override
     public List<Entity> getSceneEntities() {
         final List<Entity> ret = new ArrayList<>();
         this.livingEnemies.sort((a, b) -> {
@@ -287,6 +298,7 @@ public final class WorldImpl implements World {
 
     /**
      * the world's builder.
+     * 
      * @author francesco.buda3@studio.unibo.it
      */
     public static class Builder {
@@ -301,10 +313,11 @@ public final class WorldImpl implements World {
 
         /**
          * the builder's constructor.
-         * @param worldName the name of the world
-         * @param player the player
-         * @param spawnPoint the spawn point of the enemies
-         * @param castleHearts castle's number of hearts
+         * 
+         * @param worldName     the name of the world
+         * @param player        the player
+         * @param spawnPoint    the spawn point of the enemies
+         * @param castleHearts  castle's number of hearts
          * @param startingMoney the starting money of the player
          */
         public Builder(final String worldName, final Player player, final Position spawnPoint, final int castleHearts,
@@ -321,8 +334,9 @@ public final class WorldImpl implements World {
 
         /**
          * adds a path segment to the path.
+         * 
          * @param direction the direction of the segment
-         * @param lenght the lenght of the segment
+         * @param lenght    the lenght of the segment
          * @return the builder
          */
         public Builder addPathSegment(final Direction direction, final double lenght) {
@@ -332,6 +346,7 @@ public final class WorldImpl implements World {
 
         /**
          * adds a wave to the world.
+         * 
          * @return the builder
          */
         public Builder addWave() {
@@ -341,7 +356,8 @@ public final class WorldImpl implements World {
 
         /**
          * adds an horde to a wave.
-         * @param waveIndex the index of the wave in which to add the horde
+         * 
+         * @param waveIndex     the index of the wave in which to add the horde
          * @param hordeDuration the duration of the horde in milliseconds
          * @return the builder
          */
@@ -352,9 +368,11 @@ public final class WorldImpl implements World {
 
         /**
          * adds an enemy to a horde.
-         * @param waveIndex the wave index where the horde to add the enemy to is located
+         * 
+         * @param waveIndex  the wave index where the horde to add the enemy to is
+         *                   located
          * @param hordeIndex the index of the horde to add the enemy to
-         * @param enemy the enemy to add
+         * @param enemy      the enemy to add
          * @return the builder
          */
         public Builder addEnemyToHorde(final int waveIndex, final int hordeIndex, final Enemy enemy) {
@@ -365,7 +383,8 @@ public final class WorldImpl implements World {
         /**
          * adds multiple enemies to a horde.
          * 
-         * @param waveIndex       the wave index where the horde to add enemies to is located
+         * @param waveIndex       the wave index where the horde to add enemies to is
+         *                        located
          * @param hordeIndex      the index of the horde to add the enemies to
          * @param enemy           the enemy to add
          * @param numberOfEnemies the number of enemies to add
