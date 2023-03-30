@@ -7,7 +7,7 @@ import it.unibo.unrldef.model.api.Bank;
  * 
  * @author francesco.buda3@studio.unibo.it
  */
-public class BankImpl implements Bank {
+public final class BankImpl implements Bank {
 
     private double money;
 

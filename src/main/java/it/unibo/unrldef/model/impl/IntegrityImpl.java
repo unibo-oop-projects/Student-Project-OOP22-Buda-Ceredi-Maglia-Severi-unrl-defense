@@ -7,7 +7,7 @@ import it.unibo.unrldef.model.api.Integrity;
  * 
  * @author francesco.buda3@studio.unibo.it
  */
-public class IntegrityImpl implements Integrity {
+public final class IntegrityImpl implements Integrity {
 
     private int hearts;
 

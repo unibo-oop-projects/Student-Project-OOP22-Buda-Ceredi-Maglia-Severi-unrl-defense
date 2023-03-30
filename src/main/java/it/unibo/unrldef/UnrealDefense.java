@@ -12,16 +12,20 @@ import it.unibo.unrldef.core.GameEngine;
  * @author francesco.buda3@studio.uniboit
  * @author danilo.maglia@studio.unibo.it
  */
-public class UnrealDefense {
+public final class UnrealDefense {
 
-	/**
-	 * Main method.
-	 * @param args unused
-	 */
-	public static void main(final String[] args) {
-		final Player p = new PlayerImpl();
+    private UnrealDefense() {
+
+    }
+
+    /**
+     * Main method.
+     * @param args unused
+     */
+    public static void main(final String[] args) {
+        final Player p = new PlayerImpl();
         final LevelBuilder level = new LevelBuilder(p);
-		final GameEngine engine = new GameEngine(level.levelOne(), p);
-		engine.menuLoop();
-	}
+        final GameEngine engine = new GameEngine(level.levelOne(), p);
+        engine.menuLoop();
+    }
 }
