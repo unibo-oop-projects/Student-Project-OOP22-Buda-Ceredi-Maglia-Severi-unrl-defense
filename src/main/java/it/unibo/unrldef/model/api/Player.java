@@ -34,15 +34,17 @@ public interface Player {
      * Places a new tower on the world map if the player has enough money.
      * @param pos the position where to place it
      * @param towerName the type of tower to build
+     * @return true if the tower has been built, false otherwise
      */
-    void ifPossibleBuildTower(Position pos, String towerName);
+    boolean BuildTower(Position pos, String towerName);
 
     /**
      * Places a new spell on the world map deling damage to enemies.
      * @param name its name
      * @param pos its position
+     * @return true if the spell has been thrown, false otherwise
      */
-    void throwSpell(String name, Position pos);
+    boolean throwSpell(Position pos, String name);
 
     /**
      * Updates the state of the spells.

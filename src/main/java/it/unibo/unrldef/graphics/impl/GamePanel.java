@@ -73,7 +73,7 @@ public final class GamePanel extends JPanel {
     private static final int DEFAULT_HEIGHT = 600;
     private static final long TOWER_ANIMATION_LENGTH = 500;
 
-    private static final String ASSETS_FOLDER = "assets" + File.separator;
+    private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
     private String selectedEntity;
     private final Set<Position> towerAvailablePositions;
     private final World gameWorld;

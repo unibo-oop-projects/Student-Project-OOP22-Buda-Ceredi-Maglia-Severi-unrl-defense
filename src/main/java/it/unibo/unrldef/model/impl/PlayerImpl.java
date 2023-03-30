@@ -40,13 +40,13 @@ public final class PlayerImpl implements Player {
     }
 
     @Override
-    public void ifPossibleBuildTower(final Position pos, final String towerName) {
-        this.currentWorld.tryBuildTower(pos, towerName);
+    public boolean BuildTower(final Position pos, final String towerName) {
+        return this.currentWorld.tryBuildTower(pos, towerName);
     }
 
     @Override
-    public void throwSpell(final String name, final Position pos) {
-        this.spells.stream()
+    public boolean throwSpell(final Position pos, final String name) {
+        return this.spells.stream()
                 .filter(p -> Objects.equals(p.getName(), name))
                 .findFirst().get()
                 .ifPossibleActivate(pos);
