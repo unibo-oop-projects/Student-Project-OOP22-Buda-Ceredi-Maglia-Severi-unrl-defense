@@ -97,7 +97,6 @@ public final class WorldImpl implements World {
             final Random rand = new Random();
             final Position pos = new Position(spawningPoint.getX() + rand.nextInt(-PATH_DEPHT / 2, PATH_DEPHT / 2),
                     spawningPoint.getY() + rand.nextInt(-PATH_DEPHT / 2, PATH_DEPHT / 2));
-            this.livingEnemies.add(newEnemy);
             this.spawnEnemy(newEnemy, pos);
         }
     }
