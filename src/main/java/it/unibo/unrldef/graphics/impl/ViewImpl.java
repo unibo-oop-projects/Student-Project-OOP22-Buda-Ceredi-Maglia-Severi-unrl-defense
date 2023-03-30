@@ -97,7 +97,7 @@ public final class ViewImpl implements View {
     private JButton createExitButton() {
         JButton exit = null;
         try {
-            exit = new JButton(new ImageIcon(new ImageIcon(ImageIO.read(new File("assets" + File.separator + "exit.png")))
+            exit = new JButton(new ImageIcon(new ImageIcon(ImageIO.read(new File("resources/assets" + File.separator + "exit.png")))
                     .getImage()
                     .getScaledInstance(DefenseButtonPanel.WIDTH, DefenseButtonPanel.HEIGHT, java.awt.Image.SCALE_SMOOTH)));
             exit.setPreferredSize(new Dimension(DefenseButtonPanel.WIDTH, DefenseButtonPanel.HEIGHT));
