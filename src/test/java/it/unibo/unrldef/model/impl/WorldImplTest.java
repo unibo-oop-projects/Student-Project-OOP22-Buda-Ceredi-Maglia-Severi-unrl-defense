@@ -1,5 +1,7 @@
 package it.unibo.unrldef.model.impl;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,26 +20,31 @@ public class WorldImplTest {
     }
 
     @Test
-    void testEneiesInRange () {
+    void testEnemiesInRange() {
         Position testPos1 = new Position(14, 14);
         Position testPos2 = new Position(10, 24);
         Position testPos3 = new Position(4, 4);
         Position testPos4 = new Position(16, 34);
+        Position testPos5 = new Position(34, 68);
+        Position testPos6 = new Position(18, 24);
 
-        Enemy testOrc1 = new Orc();
-        testOrc1.setPosition(testPos1.getX(), testPos1.getY());
-        testOrc1.setParentWorld(this.testWorld);
+        Enemy testEnemy1 = new Orc();
+        Enemy testEnemy2 = new Orc();
+        Enemy testEnemy3 = new Goblin();
+        Enemy testEnemy4 = new Goblin();
+        Enemy testEnemy5 = new Goblin();
 
-        Enemy testOrc2 = new Orc();
-        testOrc2.setPosition(testPos2.getX(), testPos2.getY());
-        testOrc2.setParentWorld(this.testWorld);
+        this.testWorld.spawnEnemy(testEnemy1, testPos1); //spawning the first enemy in the path
+        this.testWorld.spawnEnemy(testEnemy2, testPos2); //spawning the second enemy in the path
+        this.testWorld.spawnEnemy(testEnemy3, testPos3); //spawning the third enemy out of the path
+        this.testWorld.spawnEnemy(testEnemy4, testPos4); //spawning the fourth enemy in the path and more advanced than the others
+        this.testWorld.spawnEnemy(testEnemy5, testPos5); //spawning the fifth enemy in the path, but too far 
 
-        Enemy testGoblin1 = new Goblin();
-        testGoblin1.setPosition(testPos3.getX(), testPos3.getY());
-        testGoblin1.setParentWorld(this.testWorld);
+        var sorroundingEnemies = this.testWorld.sorroundingEnemies(testPos6, 14);
 
-        Enemy testGoblin2 = new Goblin();
-        testGoblin2.setPosition(testPos4.getX(), testPos4.getY());
-        testGoblin2.setParentWorld(this.testWorld);
+        assert(sorroundingEnemies.containsAll(List.of(testEnemy1, testEnemy2, testEnemy4)));
+        assert(!sorroundingEnemies.contains(testEnemy3));
+        assert(!sorroundingEnemies.contains(testEnemy5));
+        assert(sorroundingEnemies.get(0).equals(testEnemy4));
     }
 }
