@@ -109,14 +109,28 @@ public class LevelBuilder {
 		if(json == null) {
 			return null;
 		}
+		worldBuilder = this.loadBuilderFromJson(json);
+		this.loadPathFromJson(json, worldBuilder);
+		// loading waves
+		this.loadWavesFromJson(json, worldBuilder);
+		// loading available towers
+		this.loadAvailableTowers(json, worldBuilder);
+		// loading tower building spaces
+		this.loadTowerBuildingSpacesFromJson(json, worldBuilder);
+		return worldBuilder.build();
+	}
+
+	private WorldImpl.Builder loadBuilderFromJson(JSONObject json) {
 		JSONObject position = (JSONObject) json.get("startingPosition");
 		String worldName = (String) json.get("worldName");
 		int castleHearth = ((Long) json.get("castleHearts")).intValue();
 		int startingMoney = ((Long) json.get("startingMoney")).intValue();
-		worldBuilder = new WorldImpl.Builder(worldName, this.player,
+		return new WorldImpl.Builder(worldName, this.player,
 				new Position(((Long) position.get("x")).doubleValue(), ((Long) position.get("y")).doubleValue()),
 				castleHearth, startingMoney);
-		// path segment
+	}
+
+	private void loadPathFromJson(JSONObject json, WorldImpl.Builder worldBuilder) {
 		JSONArray path = (JSONArray) json.get("path");
 		for (Object p : path) {
 			JSONObject pathSegment = (JSONObject) p;
@@ -124,18 +138,25 @@ public class LevelBuilder {
 			int length = ((Long) pathSegment.get("length")).intValue();
 			worldBuilder.addPathSegment(Direction.valueOf(direction), length);
 		}
-		// loading waves
+	}
+	
+	private void loadWavesFromJson(JSONObject json, WorldImpl.Builder worldBuilder) {
 		JSONArray waves = (JSONArray) json.get("waves");
+		int waveIndex = 0;
 		for (Object wave : waves) {
 			JSONObject waveObj = (JSONObject) wave;
 			JSONArray hordes = (JSONArray) waveObj.get("hordes");
 			worldBuilder.addWave();
+
 			// loading hordes
+			int hordeIndex = 0;
 			for (Object horde : hordes) {
+				
 				JSONObject hordeObj = (JSONObject) horde;
 				int delay = ((Long) hordeObj.get("delay")).intValue();
-				worldBuilder.addHordeToWave(waves.indexOf(wave), delay);
+				worldBuilder.addHordeToWave(waveIndex, delay);
 				JSONArray enemies = (JSONArray) hordeObj.get("enemies");
+				System.out.println(hordeIndex);
 				// loading enemies
 				for (Object enemy : enemies) {
 					JSONObject enemyObj = (JSONObject) enemy;
@@ -152,12 +173,26 @@ public class LevelBuilder {
 						default:
 							break;
 					}
-					worldBuilder.addMultipleEnemiesToHorde(waves.indexOf(wave), hordes.indexOf(horde), enemyType,
+					worldBuilder.addMultipleEnemiesToHorde(waveIndex, hordeIndex, enemyType,
 							(short) enemyNumber);
+					
 				}
+				hordeIndex++;
 			}
+			waveIndex++;
 		}
-		// loading available towers
+	}
+	private void loadTowerBuildingSpacesFromJson(JSONObject json, WorldImpl.Builder worldBuilder) {
+		JSONArray towerBuildingSpaces = (JSONArray) json.get("towerBuildingSpaces");
+		for (Object space : towerBuildingSpaces) {
+			JSONObject spaceObj = (JSONObject) space;
+			int x = ((Long) spaceObj.get("x")).intValue();
+			int y = ((Long) spaceObj.get("y")).intValue();
+			worldBuilder.addTowerBuildingSpace(x, y);
+		}
+	}
+
+	private void loadAvailableTowers(JSONObject json, WorldImpl.Builder worldBuilder) {
 		JSONArray availableTowers = (JSONArray) json.get("availableTowers");
 		for (Object tower : availableTowers) {
 			String towerName = (String) tower;
@@ -174,14 +209,5 @@ public class LevelBuilder {
 			}
 			worldBuilder.addAvailableTower(towerName, towerType);
 		}
-		// loading tower building spaces
-		JSONArray towerBuildingSpaces = (JSONArray) json.get("towerBuildingSpaces");
-		for (Object space : towerBuildingSpaces) {
-			JSONObject spaceObj = (JSONObject) space;
-			int x = ((Long) spaceObj.get("x")).intValue();
-			int y = ((Long) spaceObj.get("y")).intValue();
-			worldBuilder.addTowerBuildingSpace(x, y);
-		}
-		return worldBuilder.build();
 	}
 }
