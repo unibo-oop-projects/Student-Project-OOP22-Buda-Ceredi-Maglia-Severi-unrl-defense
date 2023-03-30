@@ -11,7 +11,7 @@ import java.awt.Image;
 public class Sprite {
     private final Pair<Integer, Integer> dim;
     private Pair<Integer, Integer> scaledDim;
-    private final Image sprite;
+    private final Image spriteImage;
     private Image scaledSprite;
 
     /**
@@ -22,7 +22,7 @@ public class Sprite {
      */
     public Sprite(final int width, final int height, final Image sprite) {
         this.dim = new Pair<>(width, height);
-        this.sprite = sprite;
+        this.spriteImage = sprite;
     }
 
     /**
@@ -31,10 +31,10 @@ public class Sprite {
      * @param yScale the scale factor for the y axis
      */
     public void scale(final double xScale, final double yScale) {
-        this.scaledDim = new Pair<Integer, Integer>((int) (this.dim.getFirst() * xScale),
+        this.scaledDim = new Pair<>((int) (this.dim.getFirst() * xScale),
                 (int) (this.dim.getSecond() * yScale));
-        this.scaledSprite = sprite.getScaledInstance(this.scaledDim.getFirst(), this.scaledDim.getSecond(),
-                java.awt.Image.SCALE_SMOOTH);
+        this.scaledSprite = spriteImage.getScaledInstance(this.scaledDim.getFirst(), this.scaledDim.getSecond(),
+                Image.SCALE_SMOOTH);
     }
 
     /**
