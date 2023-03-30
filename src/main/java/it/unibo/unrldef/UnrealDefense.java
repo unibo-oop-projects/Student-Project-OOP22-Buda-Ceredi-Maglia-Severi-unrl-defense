@@ -1,6 +1,7 @@
 package it.unibo.unrldef;
 
 import it.unibo.unrldef.model.api.Player;
+import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.LevelBuilder;
 import it.unibo.unrldef.model.impl.PlayerImpl;
 import it.unibo.unrldef.core.GameEngine;
@@ -21,7 +22,13 @@ public class UnrealDefense {
 	public static void main(final String[] args) {
 		final Player p = new PlayerImpl();
         final LevelBuilder level = new LevelBuilder(p);
-		final GameEngine engine = new GameEngine(level.levelOne(), p);
-		engine.menuLoop();
+		final World world = level.fromFile("resources/config/levelOne.json");
+		if(world != null) {
+			final GameEngine engine = new GameEngine(world, p);
+			engine.menuLoop();
+		} else {
+			System.err.println("Error loading the level");
+		}
+		
 	}
 }

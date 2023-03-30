@@ -1,8 +1,21 @@
 package it.unibo.unrldef.model.impl;
 
 import it.unibo.unrldef.common.Position;
+import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Player;
+import it.unibo.unrldef.model.api.Tower;
+import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.api.Path.Direction;
+
+import org.json.simple.JSONObject;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import org.json.simple.JSONArray;
+import org.json.simple.parser.ParseException;
+import org.json.simple.parser.JSONParser;
 
 /**
  * Class that builds the levels of the game.
@@ -12,23 +25,24 @@ import it.unibo.unrldef.model.api.Path.Direction;
  */
 public class LevelBuilder {
 
-    private final Player player;
+	private final Player player;
 
-    /**
-     * the constructor of the class.
-     * @param player
-     */
-    public LevelBuilder(final Player player) {
-        this.player = player;
-    }
+	/**
+	 * the constructor of the class.
+	 * 
+	 * @param player
+	 */
+	public LevelBuilder(final Player player) {
+		this.player = player;
+	}
 
-    /**
-     * @return the world of the first level
-     */
-    public WorldImpl levelOne() {
-        return new WorldImpl.Builder("River Castle", this.player, new Position(60, 0), 5, 250)
-                .addPathSegment(Direction.DOWN, 15)
-                .addPathSegment(Direction.LEFT, 50)
+	/**
+	 * @return the world of the first level
+	 */
+	public WorldImpl levelOne() {
+		return new WorldImpl.Builder("River Castle", this.player, new Position(60, 0), 5, 250)
+				.addPathSegment(Direction.DOWN, 15)
+				.addPathSegment(Direction.LEFT, 50)
 				.addPathSegment(Direction.DOWN, 20)
 				.addPathSegment(Direction.RIGHT, 24)
 				.addPathSegment(Direction.UP, 6)
@@ -69,4 +83,105 @@ public class LevelBuilder {
 				.build();
 	}
 
+	/**
+	 * Method that creates a world from a JSON config file.
+	 * 
+	 * @author danilo.maglia@studio.unibo.it
+	 *
+	 * @param fileName the json file path
+	 * @return the world created from the file
+	 */
+	public World fromFile(String fileName) {
+		JSONParser parser = new JSONParser();
+		WorldImpl.Builder worldBuilder = null;
+		JSONObject json = null;
+		
+		String fileContent = "";
+		try {
+			// read the whole file passed as argument and put the content in a string
+			fileContent = new String(Files.readAllBytes(Paths.get(fileName)));
+			json = (JSONObject) parser.parse(fileContent);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		if(json == null) {
+			return null;
+		}
+		JSONObject position = (JSONObject) json.get("startingPosition");
+		String worldName = (String) json.get("worldName");
+		int castleHearth = ((Long) json.get("castleHearts")).intValue();
+		int startingMoney = ((Long) json.get("startingMoney")).intValue();
+		worldBuilder = new WorldImpl.Builder(worldName, this.player,
+				new Position(((Long) position.get("x")).doubleValue(), ((Long) position.get("y")).doubleValue()),
+				castleHearth, startingMoney);
+		// path segment
+		JSONArray path = (JSONArray) json.get("path");
+		for (Object p : path) {
+			JSONObject pathSegment = (JSONObject) p;
+			String direction = (String) pathSegment.get("direction");
+			int length = ((Long) pathSegment.get("length")).intValue();
+			worldBuilder.addPathSegment(Direction.valueOf(direction), length);
+		}
+		// loading waves
+		JSONArray waves = (JSONArray) json.get("waves");
+		for (Object wave : waves) {
+			JSONObject waveObj = (JSONObject) wave;
+			JSONArray hordes = (JSONArray) waveObj.get("hordes");
+			worldBuilder.addWave();
+			// loading hordes
+			for (Object horde : hordes) {
+				JSONObject hordeObj = (JSONObject) horde;
+				int delay = ((Long) hordeObj.get("delay")).intValue();
+				worldBuilder.addHordeToWave(waves.indexOf(wave), delay);
+				JSONArray enemies = (JSONArray) hordeObj.get("enemies");
+				// loading enemies
+				for (Object enemy : enemies) {
+					JSONObject enemyObj = (JSONObject) enemy;
+					String enemyName = (String) enemyObj.get("type");
+					int enemyNumber = ((Long) enemyObj.get("count")).intValue();
+					Enemy enemyType = null;
+					switch (enemyName) {
+						case "orc":
+							enemyType = new Orc();
+							break;
+						case "goblin":
+							enemyType = new Goblin();
+							break;
+						default:
+							break;
+					}
+					worldBuilder.addMultipleEnemiesToHorde(waves.indexOf(wave), hordes.indexOf(horde), enemyType,
+							(short) enemyNumber);
+				}
+			}
+		}
+		// loading available towers
+		JSONArray availableTowers = (JSONArray) json.get("availableTowers");
+		for (Object tower : availableTowers) {
+			String towerName = (String) tower;
+			Tower towerType = null;
+			switch (towerName) {
+				case "cannon":
+					towerType = new Cannon();
+					break;
+				case "hunter":
+					towerType = new Hunter();
+					break;
+				default:
+					break;
+			}
+			worldBuilder.addAvailableTower(towerName, towerType);
+		}
+		// loading tower building spaces
+		JSONArray towerBuildingSpaces = (JSONArray) json.get("towerBuildingSpaces");
+		for (Object space : towerBuildingSpaces) {
+			JSONObject spaceObj = (JSONObject) space;
+			int x = ((Long) spaceObj.get("x")).intValue();
+			int y = ((Long) spaceObj.get("y")).intValue();
+			worldBuilder.addTowerBuildingSpace(x, y);
+		}
+		return worldBuilder.build();
+	}
 }

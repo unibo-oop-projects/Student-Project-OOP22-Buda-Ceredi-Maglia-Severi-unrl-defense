@@ -15,7 +15,7 @@ public class Cannon extends TowerImpl {
     final private static int COST = 200;
     final private static long ATTACK_FOR_SECOND = 2000;
     final private static int DAMAGE = 10;
-    final public static String NAME = "sdrogo cannon";
+    final public static String NAME = "cannon";
     final public static double RADIOUS = 20;
     final private static double EXPLOSION_RADIUS = 5;
     private Optional<Enemy> target = Optional.empty();

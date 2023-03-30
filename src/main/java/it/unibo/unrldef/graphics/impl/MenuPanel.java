@@ -22,7 +22,7 @@ import it.unibo.unrldef.input.api.Input.HitType;
 
 public class MenuPanel extends JPanel {
 
-    private static final String ASSETS_FOLDER = "assets" + File.separator;
+    private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
     private final JButton exitButton, startButton;
     private final JTextField nameField;
     private final Input inputHandler;
