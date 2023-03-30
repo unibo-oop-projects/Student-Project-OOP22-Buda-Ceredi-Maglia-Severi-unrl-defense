@@ -5,7 +5,6 @@ import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Path;
 import it.unibo.unrldef.model.api.World;
-import it.unibo.unrldef.model.impl.WorldImpl.Builder;
 
 public class EnemyImplTest {
     @Test
