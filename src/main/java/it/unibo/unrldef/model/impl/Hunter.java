@@ -36,6 +36,8 @@ public class Hunter extends TowerImpl {
                 this.target = Optional.of(enemiesInRange.get(0));
             }
             this.target.get().reduceHealth(this.getDamage());
+        } else {
+            this.target = Optional.empty();
         }
     }
 
