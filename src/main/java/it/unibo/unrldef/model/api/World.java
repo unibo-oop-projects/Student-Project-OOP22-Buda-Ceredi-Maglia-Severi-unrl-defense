@@ -39,7 +39,9 @@ public interface World {
     Boolean tryBuildTower(Position pos, String towerName);
 
     /**
-     * 
+     * the method returns all the entities currently present in the world.
+     * enemies are sorted from the one whose y and x coordinates are lowest
+     * to the one whose x and y coordinates are highest.
      * @return the list of the entities in the world
      */
     List<Entity> getSceneEntities();
@@ -69,7 +71,8 @@ public interface World {
     Set<Tower> getAvailableTowers();
 
     /**
-     * 
+     * the method finds the enemies in the given circle. the firts enemy
+     * of the list is the most advanced in the path.
      * @param center the center of the circle
      * @param radius the radius of the circle
      * @return the enemies sorrounding the center

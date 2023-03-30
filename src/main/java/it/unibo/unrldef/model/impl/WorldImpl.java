@@ -126,8 +126,15 @@ public final class WorldImpl implements World {
                 .filter(x -> distance(center, x.getPosition().get()) <= radius).collect(Collectors.toList());
         while (!end) {
             final Pair<Direction, Double> dir = this.path.getDirection(i);
+            /* this while loop cycles through the path segment by segment,
+             * in order to find the enemy who is the most advanced in the path.
+             * a and b are the ends of the current segment
+              */
             Position a;
             Position b = new Position(0, 0);
+            /* ul and dr are respectively the up-left and down-right vertices of the rectangle
+             * witch describes the path segment thickness
+              */
             Position ul;
             Position dr;
             Optional<Enemy> tmp = Optional.empty();
