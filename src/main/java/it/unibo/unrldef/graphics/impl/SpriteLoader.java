@@ -96,9 +96,9 @@ public class SpriteLoader {
             fileContent = new String(Files.readAllBytes(Paths.get(fileName)));
             json = (JSONObject) parser.parse(fileContent);
         } catch (IOException e) {
-            e.printStackTrace(); //NOPMD
+            new ErrorDialog("Error loading the sprites");
         } catch (ParseException e) {
-            e.printStackTrace(); //NOPMD
+            new ErrorDialog("Error parsing the sprites");
         }
 
         final JSONArray sprites = (JSONArray) json.get("sprites");
@@ -112,7 +112,7 @@ public class SpriteLoader {
             try {
                 spriteImage = ImageIO.read(new File(ASSETS_FOLDER + sprite.get("fileName").toString()));
             } catch (IOException e) {
-                e.printStackTrace(); //NOPMD
+                new ErrorDialog("Error loading the sprite " + sprite.get("name").toString());
             }
             final Sprite newSprite = new Sprite(width, height, spriteImage);
             this.sprites.put(sprite.get("name").toString(), newSprite);
