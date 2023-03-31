@@ -35,7 +35,8 @@ import java.util.Set;
  */
 public final class ViewImpl implements View {
 
-    private final int maxPlayerNameLength = 8;
+    private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
+    private static final int MAX_NAME_LENGTH = 8;
 
     private GamePanel gamePanel;
     private DefenseButtonPanel buttonPanel;
@@ -100,7 +101,7 @@ public final class ViewImpl implements View {
      */
     private JLabel addPlayerName() {
         final JLabel playerName = new JLabel();
-        if (this.player.getName().length() > this.maxPlayerNameLength) {
+        if (this.player.getName().length() > MAX_NAME_LENGTH) {
             playerName.setText("Player: " 
                     + this.player.getName().substring(0, 8) 
                     + "...");
@@ -117,7 +118,8 @@ public final class ViewImpl implements View {
     private JButton createExitButton() {
         JButton exit = null;
         try {
-            exit = new JButton(new ImageIcon(new ImageIcon(ImageIO.read(new File("resources/assets" + File.separator + "exit.png")))
+            exit = new JButton(new ImageIcon(new ImageIcon(ImageIO.read(
+                    new File(ASSETS_FOLDER + "exit.png")))
                     .getImage()
                     .getScaledInstance(DefenseButtonPanel.WIDTH, DefenseButtonPanel.HEIGHT, java.awt.Image.SCALE_SMOOTH)));
             exit.setPreferredSize(new Dimension(DefenseButtonPanel.WIDTH, DefenseButtonPanel.HEIGHT));
