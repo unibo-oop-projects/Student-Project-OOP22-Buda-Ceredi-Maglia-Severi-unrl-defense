@@ -38,7 +38,7 @@ public final class MenuPanel extends JPanel {
     private double yScale = 1;
     private static final int DEFAULT_WIDTH = 600;
     private static final int DEFAULT_HEIGHT = 400;
-    private static final Color BACKGROUND_COLOR = new Color(194, 148, 103);
+    private static final Color BACKGROUND_COLOR = new Color(255, 255, 255);
     private static final int FONT_SUBTITLE_SIZE = 15;
     private static final int PADDING = 15;
     private static final int BUTTON_WIDTH = 140;
