@@ -1,5 +1,6 @@
 package it.unibo.unrldef.model.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import it.unibo.unrldef.model.api.Enemy;
@@ -14,6 +15,7 @@ public abstract class TowerImpl extends DefenseEntity implements Tower {
 
     private final int cost;
     private World parentWorld;
+    private Optional<Enemy> target = Optional.empty();
 
     public TowerImpl(String name, double radius, double damage,
             long attackRate, final int cost) {
@@ -35,5 +37,27 @@ public abstract class TowerImpl extends DefenseEntity implements Tower {
         this.checkAttack();
     }
 
-    public abstract Optional<Enemy> getTarget();
+    @Override
+    protected void attack() {
+        final List<Enemy> enemiesInRange = this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius());
+        if (!enemiesInRange.isEmpty()) {
+            if (this.target.isEmpty() || !enemiesInRange.contains(this.target.get())) {
+                this.target = Optional.of(enemiesInRange.get(0));
+            }
+            this.target.get().reduceHealth(this.getDamage());
+            this.additionAttack(this.target.get());
+        } else {
+            this.target = Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<Enemy> getTarget() {
+        if (this.target != null) {
+            return this.isAttacking() ? this.target : Optional.empty();
+        }
+        return Optional.empty();
+    }
+
+    protected abstract void additionAttack(final Enemy target);
 }
