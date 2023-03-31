@@ -39,8 +39,6 @@ public final class MenuPanel extends JPanel {
     private static final int DEFAULT_WIDTH = 600;
     private static final int DEFAULT_HEIGHT = 400;
     private static final Color BACKGROUND_COLOR = new Color(194, 148, 103);
-
-    private static final int FONT_SIZE = 20;
     private static final int FONT_SUBTITLE_SIZE = 15;
     private static final int PADDING = 15;
     private static final int BUTTON_WIDTH = 140;
@@ -116,13 +114,11 @@ public final class MenuPanel extends JPanel {
         super.paint(g);
         final int width = panelRef.getWidth() / 2 - TITLE_CENTER.getFirst();
         final int height = panelRef.getHeight() / 2 - TITLE_CENTER.getSecond();
-        final int fontName = Math.min((int) xScale, (int) yScale) == 0 ? FONT_SIZE
-                : (int) ((FONT_SIZE) * Math.min((int) xScale, (int) yScale));
         final int fontSubtitle = Math.min((int) xScale, (int) yScale) == 0 ? FONT_SUBTITLE_SIZE
                 : (int) ((FONT_SUBTITLE_SIZE) * Math.min((int) xScale, (int) yScale));
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Arial", Font.BOLD, fontName));
-        g.drawString("UNREAL DEFENSE", width, height);
+        g.drawImage(this.title, this.getWidth() / 4, this.getHeight() / 10,
+                panelRef.getWidth() / 2, panelRef.getHeight() / 3, null);
+        g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, fontSubtitle));
         g.drawString("Inserisci il tuo nome:", width + PADDING, height + CENTER);
         this.nameField.setBounds((int) ((DEFAULT_WIDTH / 2 - CENTER) * xScale), (int) ((DEFAULT_HEIGHT / 2) * yScale),
