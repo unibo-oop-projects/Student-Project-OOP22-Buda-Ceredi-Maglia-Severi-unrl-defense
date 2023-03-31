@@ -114,42 +114,42 @@ public final class GamePanel extends JPanel {
         this.panelRef = this;
         this.mousePosition = new Position(0, 0);
         try {
-            this.map = new Sprite(SpriteDimensions.MAP_WIDTH, SpriteDimensions.MAP_HEIGHT,
+            this.map = new Sprite(SpriteLoader.MAP_WIDTH, SpriteLoader.MAP_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "firstMap.png")));
-            this.fireball = new Sprite(SpriteDimensions.FIREBALL_WIDHT, SpriteDimensions.FIREBALL_HEIGHT,
+            this.fireball = new Sprite(SpriteLoader.FIREBALL_WIDHT, SpriteLoader.FIREBALL_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "fireball.png")));
             this.sprites.add(this.fireball);
-            this.snowStorm = new Sprite(SpriteDimensions.SNOWSTORM_WIDTH, SpriteDimensions.SNOWSTORM_HEIGHT,
+            this.snowStorm = new Sprite(SpriteLoader.SNOWSTORM_WIDTH, SpriteLoader.SNOWSTORM_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "snowstorm.png")));
             this.sprites.add(this.snowStorm);
-            this.orc = new Sprite(SpriteDimensions.ORC_WIDTH, SpriteDimensions.ORC_HEIGHT,
+            this.orc = new Sprite(SpriteLoader.ORC_WIDTH, SpriteLoader.ORC_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "orc.png")));
             this.sprites.add(this.orc);
-            this.goblin = new Sprite(SpriteDimensions.GOBLIN_WIDTH, SpriteDimensions.GOBLIN_HEIGHT,
+            this.goblin = new Sprite(SpriteLoader.GOBLIN_WIDTH, SpriteLoader.GOBLIN_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "goblin.png")));
             this.sprites.add(this.goblin);
-            this.cannon = new Sprite(SpriteDimensions.CANNON_WIDTH, SpriteDimensions.CANNON_HEIGHT,
+            this.cannon = new Sprite(SpriteLoader.CANNON_WIDTH, SpriteLoader.CANNON_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "cannon.png")));
             this.sprites.add(this.cannon);
-            this.hunter = new Sprite(SpriteDimensions.HUNTER_WIDTH, SpriteDimensions.HUNTER_HEIGHT,
+            this.hunter = new Sprite(SpriteLoader.HUNTER_WIDTH, SpriteLoader.HUNTER_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "Hunter.png")));
             this.sprites.add(this.hunter);
-            this.shootingCannon = new Sprite(SpriteDimensions.CANNON_WIDTH, SpriteDimensions.CANNON_HEIGHT,
+            this.shootingCannon = new Sprite(SpriteLoader.CANNON_WIDTH, SpriteLoader.CANNON_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "shootingCannon.png")));
             this.sprites.add(this.shootingCannon);
-            this.explosion = new Sprite(SpriteDimensions.EXPLOSION_WIDTH, SpriteDimensions.EXPLOSION_HEIGHT,
+            this.explosion = new Sprite(SpriteLoader.EXPLOSION_WIDTH, SpriteLoader.EXPLOSION_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "explosion.png")));
             this.sprites.add(this.explosion);
-            this.shootingHunter = new Sprite(SpriteDimensions.HUNTER_WIDTH, SpriteDimensions.HUNTER_HEIGHT,
+            this.shootingHunter = new Sprite(SpriteLoader.HUNTER_WIDTH, SpriteLoader.HUNTER_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "shootingHunter.png")));
             this.sprites.add(this.shootingHunter);
-            this.towerPlace = new Sprite(SpriteDimensions.TOWER_PLACE_WIDTH, SpriteDimensions.TOWER_PLACE_HEIGHT,
+            this.towerPlace = new Sprite(SpriteLoader.TOWER_PLACE_WIDTH, SpriteLoader.TOWER_PLACE_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "towerPlace.png")));
             this.sprites.add(this.towerPlace);
-            this.heart = new Sprite(SpriteDimensions.HEART_WIDTH, SpriteDimensions.HEART_HEIGHT,
+            this.heart = new Sprite(SpriteLoader.HEART_WIDTH, SpriteLoader.HEART_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "heart.png")));
             this.sprites.add(this.heart);
-            this.money = new Sprite(SpriteDimensions.MONEY_WIDTH, SpriteDimensions.MONEY_HEIGHT,
+            this.money = new Sprite(SpriteLoader.MONEY_WIDTH, SpriteLoader.MONEY_HEIGHT,
                     ImageIO.read(new File(ASSETS_FOLDER + "money.png")));
             this.sprites.add(this.money);
 

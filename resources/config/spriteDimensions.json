@@ -1,0 +1,69 @@
+{
+    "dimensions": [
+        {
+            "name": "map",
+            "width": 80,
+            "height": 80
+        },
+        {
+            "name": "fireBall",
+            "width": 8,
+            "height": 8
+        },
+        {
+            "name": "snowStorm",
+            "width": 14,
+            "height": 14
+        },
+        {
+            "name": "orc",
+            "width": 6,
+            "height": 6
+        },
+        {
+            "name": "goblin",
+            "width": 4,
+            "height": 4
+        },
+        {
+            "name": "hunter",
+            "width": 9,
+            "height": 12
+        },
+        {
+            "name": "cannon",
+            "width": 14,
+            "height": 14
+        },
+        {
+            "name": "shooting_hunter",
+            "width": 9,
+            "height": 12
+        },
+        {
+            "name": "shooting_cannon",
+            "width": 14,
+            "height": 14
+        },
+        {
+            "name": "explosion",
+            "width": 8,
+            "height": 4
+        },
+        {
+            "name": "tower_place",
+            "width": 8,
+            "height": 8
+        },
+        {
+            "name": "heart",
+            "width": 4,
+            "height": 4
+        },
+        {
+            "name": "money",
+            "width": 4,
+            "height": 4
+        }
+    ]
+}

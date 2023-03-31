@@ -4,7 +4,7 @@ package it.unibo.unrldef.graphics.impl;
  * Class that contains the dimensions of the sprites in the game.
  * @author danilo.maglia@studio.unibo.it
  */
-public class SpriteDimensions {
+public class SpriteLoader {
     public static final int MAP_WIDTH = 80;
     public static final int MAP_HEIGHT = 80;
     public static final int FIREBALL_WIDHT = 8;
