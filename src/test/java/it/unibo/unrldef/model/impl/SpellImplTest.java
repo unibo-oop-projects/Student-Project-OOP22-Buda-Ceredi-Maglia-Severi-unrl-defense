@@ -52,14 +52,12 @@ public final class SpellImplTest {
         this.testWorld.updateState(1 * 1000);
         this.testSpell.updateState(1 * 1000);
         assert (this.testSpell.isReady());
-        // Once ready it takes a random enemy from the world and places the spell on it 
-        final Enemy testTarget = (Enemy) this.testWorld.getSceneEntities().stream()
-                .filter(e -> e instanceof Enemy)
-                .findAny().get();
-        final double testTargetInitialHealth = testTarget.getHealth();
+        // Once ready it spawns an enemy with the same health as the spell damage and places the spell on it 
+        final Enemy testTarget = new EnemyImpl("test", this.testDamage, 0, 0);
+        this.testWorld.spawnEnemy(testTarget, testPosition);
         assert (this.testSpell.ifPossibleActivate(testTarget.getPosition().get()));
-        // Checks if the enemy targeted actually takes damage
-        assert (testTarget.getHealth() != testTargetInitialHealth);
+        // Checks if the enemy targeted actually took damage and is now dead
+        assert (testTarget.isDead());
         assert (this.testSpell.isActive());
         this.testSpell.updateState(this.testLingeringEffectTime + 1 * 1000);
         // After the spell activation time has passed the spell should deactivate
