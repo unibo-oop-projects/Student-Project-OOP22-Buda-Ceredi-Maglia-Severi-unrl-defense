@@ -45,7 +45,7 @@ public final class MenuPanel extends JPanel {
     private static final int BUTTON_HEIGHT = 20;
     private static final int BUTTON_PADDING = 30;
     private static final int CENTER = 70;
-    private static final Pair<Integer, Integer> TITLE_CENTER = new Pair<>(85, 100);
+    private static final Pair<Integer, Integer> TITLE_CENTER = new Pair<>(85, 80);
 
     @Override
     public Dimension getPreferredSize() {
