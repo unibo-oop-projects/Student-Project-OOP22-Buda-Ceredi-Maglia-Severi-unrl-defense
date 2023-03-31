@@ -16,7 +16,7 @@ import it.unibo.unrldef.model.api.World.GameState;
  * This class modules the engine that updates the game.
  * @author tommaso.severi2@studio.unibo.it
  */
-public class GameEngine {
+public final class GameEngine {
 
     private final long period = 1000 / 30;
     private final Player player;
@@ -34,7 +34,7 @@ public class GameEngine {
     public GameEngine(final World world, final Player player) {
         this.input = new PlayerInput();
         this.player = player;
-        this.currentWorld = world;
+        this.setGameWorld(world);
         this.gameView = new ViewImpl(player, this.currentWorld, this.input);
         this.started = false;
         this.ended = false;
@@ -59,13 +59,29 @@ public class GameEngine {
     }
 
     /**
-     * Starts the game loop.
+     * Starts the menu loop.
      */
-    public void gameLoop() {
+    public void menuLoop() {
         while (!started) {
             this.processInput();
             this.gameView.updateMenu();
         }
+        this.gameLoop();
+    }
+
+    /**
+     * Starts the end loop.
+     */
+    public void endLoop() {
+        while (!ended) {
+            this.processInput();
+        }
+    }
+
+    /**
+     * Starts the game loop.
+     */
+    public void gameLoop() {
         long previousFrameStartTime = System.currentTimeMillis();
         while (this.currentWorld.gameState() == GameState.PLAYING) {
             final long currentFrameStartTime = System.currentTimeMillis();
@@ -76,10 +92,8 @@ public class GameEngine {
             this.waitForNextFrame(currentFrameStartTime);
             previousFrameStartTime = currentFrameStartTime;
         }
-        while (!ended) {
-            this.processInput();
-            this.endOfGame(this.currentWorld.gameState());
-        }
+        this.renderEndState(this.currentWorld.gameState());
+        this.endLoop();
     }
 
     /**
@@ -107,10 +121,10 @@ public class GameEngine {
             final Optional<String> selectedName = this.input.getSelectedName();
             switch (lastHit.get().getSecond()) {
                 case PLACE_TOWER:
-                    this.currentWorld.tryBuildTower(selectedPosition, selectedName.get());
+                    this.player.BuildTower(selectedPosition, selectedName.get());
                     break;
                 case PLACE_SPELL:
-                    this.player.throwSpell(selectedName.get(), selectedPosition);
+                    this.player.throwSpell(selectedPosition, selectedName.get());
                     break;
                 case START_GAME:
                     this.initGame(selectedName.get());
@@ -151,7 +165,7 @@ public class GameEngine {
      * Renders the end of the game.
      * @param state the final state of the game
      */
-    private void endOfGame(final GameState state) {
+    private void renderEndState(final GameState state) {
         this.gameView.renderEndGame(state);
     }
 }

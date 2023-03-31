@@ -24,14 +24,14 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
      * @param parentWorld the world where it'll be having effect
      * @param radius the radius of the spell
      * @param damage the damage of the spell
-     * @param attackRate the attack rate of the spell
+     * @param rechargeTime the recharge time of the spell
      * @param lingeringEffectTime the time the spell will be active
      * @param lingeringEffectFrequency the frequency of the effect
      */
     public SpellImpl(final String name, final World parentWorld, final double radius,
-            final double damage, final long attackRate, final long lingeringEffectTime, 
+            final double damage, final long rechargeTime, final long lingeringEffectTime, 
             final long lingeringEffectFrequency) {
-        super(name, radius, damage, attackRate);
+        super(name, radius, damage, rechargeTime);
         this.setParentWorld(parentWorld);
         this.lingeringEffectTime = Objects.requireNonNull(lingeringEffectTime);
         this.lingeringEffectFrequency = Objects.requireNonNull(lingeringEffectFrequency);

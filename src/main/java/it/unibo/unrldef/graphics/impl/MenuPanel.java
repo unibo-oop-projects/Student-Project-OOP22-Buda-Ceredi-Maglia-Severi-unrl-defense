@@ -4,10 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -21,6 +25,8 @@ import it.unibo.unrldef.input.api.Input.HitType;
  * @author tommaso.ceredi@studio.unibo.it
  */
 public final class MenuPanel extends JPanel {
+
+public class MenuPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private final JButton exitButton, startButton;
@@ -55,6 +61,12 @@ public final class MenuPanel extends JPanel {
     public MenuPanel(final Input inputHandler) {
         super();
         this.panelRef = this;
+        try {
+            this.title = ImageIO.read(new File(ASSETS_FOLDER + "logo.png"));
+        } catch (IOException e) {
+            new ErrorDialog("Error while loading the logo");
+        }
+
         this.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(final ComponentEvent e) {
@@ -88,9 +100,15 @@ public final class MenuPanel extends JPanel {
                 this.inputHandler.setLastHit(0, 0, HitType.START_GAME, Optional.of(this.nameField.getText()));
             }
         });
+            if (this.nameField.getText().length() > 0) {
+                this.inputHandler.setLastHit(0, 0, HitType.START_GAME, Optional.of(this.nameField.getText()));
+            }
+        });
         exitButton = new JButton("Exit");
         exitButton.setBounds(DEFAULT_HEIGHT / 2, DEFAULT_HEIGHT / 2, BUTTON_WIDTH, BUTTON_HEIGHT);
         exitButton.addActionListener(e -> {
+            this.inputHandler.setLastHit(0, 0, HitType.EXIT_GAME, Optional.empty());
+        });
             this.inputHandler.setLastHit(0, 0, HitType.EXIT_GAME, Optional.empty());
         });
         this.add(nameField);

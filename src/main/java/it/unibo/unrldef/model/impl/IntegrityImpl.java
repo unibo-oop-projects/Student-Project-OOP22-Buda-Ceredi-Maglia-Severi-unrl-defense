@@ -2,12 +2,21 @@ package it.unibo.unrldef.model.impl;
 
 import it.unibo.unrldef.model.api.Integrity;
 
-
-public class IntegrityImpl implements Integrity{
+/**
+ * the integrity of a game entity in Unreal Defense.
+ * 
+ * @author francesco.buda3@studio.unibo.it
+ */
+public final class IntegrityImpl implements Integrity {
 
     private int hearts;
 
-    public IntegrityImpl(int value) {
+    /**
+     * the constructor.
+     * 
+     * @param value the starting number of hearts
+     */
+    public IntegrityImpl(final int value) {
         this.hearts = value;
     }
 
@@ -17,14 +26,13 @@ public class IntegrityImpl implements Integrity{
     }
 
     @Override
-    public void damage(int val) {
-        int tmp = this.hearts-val;
-        this.hearts = tmp > 0 ? tmp : 0;        
+    public void damage(final int val) {
+        final int tmp = this.hearts - val;
+        this.hearts = tmp > 0 ? tmp : 0;
     }
 
     @Override
     public Boolean isCompromised() {
         return this.hearts == 0;
     }
-    
 }

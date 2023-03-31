@@ -44,8 +44,8 @@ public final class DefenseButtonPanel extends JPanel {
      * The height used by this type of buttons.
      */
     public static final int HEIGHT = WIDTH;
-    private static final Color BACKGROUND_COLOR = new Color(194, 148, 103);
-    private static final String ASSETS_FOLDER = "assets" + File.separator;
+    private static final Color BACKGROUND_COLOR = new Color(255, 255, 255);
+    private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
     private final World world;
     private final Map<String, JButton> buttons = new HashMap<>();
 

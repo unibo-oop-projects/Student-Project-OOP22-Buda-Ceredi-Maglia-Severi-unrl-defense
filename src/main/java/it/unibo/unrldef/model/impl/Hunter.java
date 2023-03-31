@@ -15,7 +15,7 @@ public class Hunter extends TowerImpl {
     final private static int COST = 100;
     final private static long ATTACK_FOR_SECOND = 750;
     final private static int DAMAGE = 5;
-    final public static String NAME = "sdrogo hunter";
+    final public static String NAME = "hunter";
     final public static double RADIOUS = 15;
     private Optional<Enemy> target = Optional.empty();
 

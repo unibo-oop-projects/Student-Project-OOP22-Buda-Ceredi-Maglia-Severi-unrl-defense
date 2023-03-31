@@ -19,10 +19,13 @@ public class EnemyImplTest {
         testPath.addDirection(Path.Direction.RIGHT, pathMostRight);
         testPath.addDirection(Path.Direction.END, 0);
         // testWorld doesn't need waves, available_towers, bank, and all the other stuff since the only thing it needs is a path
-        World testWorld = new WorldImpl("", null, null, testPath, null, null, null, null);
+        World testWorld = new WorldImpl.Builder(" ", new PlayerImpl(), new Position(0, 0), 5, 0)
+            .addPathSegment(Path.Direction.DOWN, pathMostBottom)
+            .addPathSegment(Path.Direction.RIGHT, pathMostRight)
+            .addPathSegment(Path.Direction.END, 0).build();
         Enemy enemy = new EnemyImpl("orc", 100, enemyInitialSpeed, 1);
         enemy.setParentWorld(testWorld);
-
+        enemy.setPosition(0, 0);
         enemy.updateState(SECOND);
         assert(enemy.getPosition().get().equals(new Position(0, enemyInitialSpeed)));
         enemy.updateState(SECOND);
