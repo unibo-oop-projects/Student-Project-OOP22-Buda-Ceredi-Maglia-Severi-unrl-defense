@@ -42,6 +42,9 @@ import it.unibo.unrldef.model.impl.SnowStorm;
  * This is the game panel where game gets rendered on the screen.
  * 
  * @author danilo.maglia@studio.unibo.it
+ * @author tommaso.ceredi@studio.unibo.it
+ * @author tommaso.severi2@studio.unibo.it
+ * @author francesco.buda3@studio.unibo.it
  */
 public final class GamePanel extends JPanel {
 
