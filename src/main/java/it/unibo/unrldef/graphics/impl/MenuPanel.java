@@ -22,12 +22,13 @@ import it.unibo.unrldef.input.api.Input.HitType;
 
 /**
  * This class modules the menu panel.
+ * 
  * @author tommaso.ceredi@studio.unibo.it
  */
 public final class MenuPanel extends JPanel {
 
-public class MenuPanel extends JPanel {
-
+    private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
+    private Image title;
     private static final long serialVersionUID = 1L;
     private final JButton exitButton, startButton;
     private final JTextField nameField;
@@ -100,15 +101,9 @@ public class MenuPanel extends JPanel {
                 this.inputHandler.setLastHit(0, 0, HitType.START_GAME, Optional.of(this.nameField.getText()));
             }
         });
-            if (this.nameField.getText().length() > 0) {
-                this.inputHandler.setLastHit(0, 0, HitType.START_GAME, Optional.of(this.nameField.getText()));
-            }
-        });
         exitButton = new JButton("Exit");
         exitButton.setBounds(DEFAULT_HEIGHT / 2, DEFAULT_HEIGHT / 2, BUTTON_WIDTH, BUTTON_HEIGHT);
         exitButton.addActionListener(e -> {
-            this.inputHandler.setLastHit(0, 0, HitType.EXIT_GAME, Optional.empty());
-        });
             this.inputHandler.setLastHit(0, 0, HitType.EXIT_GAME, Optional.empty());
         });
         this.add(nameField);
@@ -144,5 +139,4 @@ public class MenuPanel extends JPanel {
             this.startButton.setEnabled(false);
         }
     }
-
 }
