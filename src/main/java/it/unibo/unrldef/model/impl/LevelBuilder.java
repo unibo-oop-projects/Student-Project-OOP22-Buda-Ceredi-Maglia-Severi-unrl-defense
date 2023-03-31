@@ -155,8 +155,7 @@ public class LevelBuilder {
 				JSONObject hordeObj = (JSONObject) horde;
 				int delay = ((Long) hordeObj.get("delay")).intValue();
 				worldBuilder.addHordeToWave(waveIndex, delay);
-				JSONArray enemies = (JSONArray) hordeObj.get("enemies");
-				System.out.println(hordeIndex);
+				JSONArray enemies = (JSONArray) hordeObj.get("enemies");;
 				// loading enemies
 				for (Object enemy : enemies) {
 					JSONObject enemyObj = (JSONObject) enemy;

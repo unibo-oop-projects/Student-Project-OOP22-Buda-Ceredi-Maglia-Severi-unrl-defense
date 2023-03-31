@@ -69,20 +69,11 @@ public final class GameEngine {
     }
 
     /**
-     * Starts the end loop.
-     */
-    public void endLoop() {
-        while (!ended) {
-            this.processInput();
-        }
-    }
-
-    /**
      * Starts the game loop.
      */
     public void gameLoop() {
         long previousFrameStartTime = System.currentTimeMillis();
-        while (this.currentWorld.gameState() == GameState.PLAYING) {
+        while (this.gameState() == GameState.PLAYING) {
             final long currentFrameStartTime = System.currentTimeMillis();
             final long elapsed = currentFrameStartTime - previousFrameStartTime;
             this.processInput();
@@ -91,7 +82,6 @@ public final class GameEngine {
             this.waitForNextFrame(currentFrameStartTime);
             previousFrameStartTime = currentFrameStartTime;
         }
-        this.renderEndState(this.currentWorld.gameState());
         this.endLoop();
     }
 
@@ -138,6 +128,13 @@ public final class GameEngine {
     }
 
     /**
+     * @return the current state of the game
+     */
+    private GameState gameState() {
+        return this.currentWorld.gameState();
+    }
+
+    /**
      * Updates the game world.
      * @param elapsed the elapsed time since last frame
      */
@@ -150,6 +147,16 @@ public final class GameEngine {
      */
     private void render() {
         this.gameView.render();
+    }
+
+    /**
+     * Starts the end loop.
+     */
+    private void endLoop() {
+        while (!ended) {
+            this.renderEndState(this.gameState());
+            this.processInput();
+        }
     }
 
     /**
