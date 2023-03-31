@@ -12,14 +12,12 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
@@ -73,11 +71,11 @@ public final class GamePanel extends JPanel {
     private static final int DEFAULT_HEIGHT = 600;
     private static final long TOWER_ANIMATION_LENGTH = 500;
 
-    private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
     private String selectedEntity;
     private final Set<Position> towerAvailablePositions;
     private final World gameWorld;
     private ViewState viewState;
+    private final SpriteLoader spriteLoader = new SpriteLoader();
     private transient Sprite orc;
     private transient Sprite goblin;
     private transient Sprite fireball;
@@ -113,49 +111,34 @@ public final class GamePanel extends JPanel {
         this.viewState = ViewState.IDLE;
         this.panelRef = this;
         this.mousePosition = new Position(0, 0);
-        try {
-            this.map = new Sprite(SpriteLoader.MAP_WIDTH, SpriteLoader.MAP_HEIGHT,
-                    ImageIO.read(new File(ASSETS_FOLDER + "firstMap.png")));
-            this.fireball = new Sprite(SpriteLoader.FIREBALL_WIDHT, SpriteLoader.FIREBALL_HEIGHT,
-                    ImageIO.read(new File(ASSETS_FOLDER + "fireball.png")));
-            this.sprites.add(this.fireball);
-            this.snowStorm = new Sprite(SpriteLoader.SNOWSTORM_WIDTH, SpriteLoader.SNOWSTORM_HEIGHT,
-                    ImageIO.read(new File(ASSETS_FOLDER + "snowstorm.png")));
-            this.sprites.add(this.snowStorm);
-            this.orc = new Sprite(SpriteLoader.ORC_WIDTH, SpriteLoader.ORC_HEIGHT,
-                    ImageIO.read(new File(ASSETS_FOLDER + "orc.png")));
-            this.sprites.add(this.orc);
-            this.goblin = new Sprite(SpriteLoader.GOBLIN_WIDTH, SpriteLoader.GOBLIN_HEIGHT,
-                    ImageIO.read(new File(ASSETS_FOLDER + "goblin.png")));
-            this.sprites.add(this.goblin);
-            this.cannon = new Sprite(SpriteLoader.CANNON_WIDTH, SpriteLoader.CANNON_HEIGHT,
-                    ImageIO.read(new File(ASSETS_FOLDER + "cannon.png")));
-            this.sprites.add(this.cannon);
-            this.hunter = new Sprite(SpriteLoader.HUNTER_WIDTH, SpriteLoader.HUNTER_HEIGHT,
-                    ImageIO.read(new File(ASSETS_FOLDER + "Hunter.png")));
-            this.sprites.add(this.hunter);
-            this.shootingCannon = new Sprite(SpriteLoader.CANNON_WIDTH, SpriteLoader.CANNON_HEIGHT,
-                    ImageIO.read(new File(ASSETS_FOLDER + "shootingCannon.png")));
-            this.sprites.add(this.shootingCannon);
-            this.explosion = new Sprite(SpriteLoader.EXPLOSION_WIDTH, SpriteLoader.EXPLOSION_HEIGHT,
-                    ImageIO.read(new File(ASSETS_FOLDER + "explosion.png")));
-            this.sprites.add(this.explosion);
-            this.shootingHunter = new Sprite(SpriteLoader.HUNTER_WIDTH, SpriteLoader.HUNTER_HEIGHT,
-                    ImageIO.read(new File(ASSETS_FOLDER + "shootingHunter.png")));
-            this.sprites.add(this.shootingHunter);
-            this.towerPlace = new Sprite(SpriteLoader.TOWER_PLACE_WIDTH, SpriteLoader.TOWER_PLACE_HEIGHT,
-                    ImageIO.read(new File(ASSETS_FOLDER + "towerPlace.png")));
-            this.sprites.add(this.towerPlace);
-            this.heart = new Sprite(SpriteLoader.HEART_WIDTH, SpriteLoader.HEART_HEIGHT,
-                    ImageIO.read(new File(ASSETS_FOLDER + "heart.png")));
-            this.sprites.add(this.heart);
-            this.money = new Sprite(SpriteLoader.MONEY_WIDTH, SpriteLoader.MONEY_HEIGHT,
-                    ImageIO.read(new File(ASSETS_FOLDER + "money.png")));
-            this.sprites.add(this.money);
+        this.spriteLoader.loadSpritesFromFile("resources" + File.separator + "config" + File.separator + "spritesInfo.json");
+        this.map = this.spriteLoader.getSprite("firstMap");
+        this.orc = this.spriteLoader.getSprite("orc");
+        this.sprites.add(this.orc);
+        this.goblin = this.spriteLoader.getSprite("goblin");
+        this.sprites.add(this.goblin);
+        this.fireball = this.spriteLoader.getSprite("fireBall");
+        this.sprites.add(this.fireball);
+        this.snowStorm = this.spriteLoader.getSprite("snowStorm");
+        this.sprites.add(this.snowStorm);
+        this.cannon = this.spriteLoader.getSprite("cannon");
+        this.sprites.add(this.cannon);
+        this.hunter = this.spriteLoader.getSprite("hunter");
+        this.sprites.add(this.hunter);
+        this.shootingCannon = this.spriteLoader.getSprite("shootingCannon");
+        this.sprites.add(this.shootingCannon);
+        this.explosion = this.spriteLoader.getSprite("explosion");
+        this.sprites.add(this.explosion);
+        this.shootingHunter = this.spriteLoader.getSprite("shootingHunter");
+        this.sprites.add(this.shootingHunter);
+        this.towerPlace = this.spriteLoader.getSprite("towerPlace");
+        this.sprites.add(this.towerPlace);
+        this.heart = this.spriteLoader.getSprite("heart");
+        this.sprites.add(this.heart);
+        this.money = this.spriteLoader.getSprite("money");
+        this.sprites.add(this.money);
 
-        } catch (final IOException e) {
-            new ErrorDialog("error loading assets");
-        }
+
 
         this.animationMap = new HashMap<>();
         this.gameWorld = gameWorld;

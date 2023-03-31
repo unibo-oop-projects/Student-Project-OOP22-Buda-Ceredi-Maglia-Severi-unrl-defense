@@ -1,67 +1,80 @@
 {
-    "dimensions": [
+    "sprites": [
         {
-            "name": "map",
+            "name": "firstMap",
+            "fileName": "firstMap.png",
             "width": 80,
             "height": 80
         },
         {
             "name": "fireBall",
+            "fileName": "fireBall.png",
             "width": 8,
             "height": 8
         },
         {
             "name": "snowStorm",
+            "fileName": "snowStorm.png",
             "width": 14,
             "height": 14
         },
         {
             "name": "orc",
+            "fileName": "orc.png",
             "width": 6,
             "height": 6
         },
         {
             "name": "goblin",
+            "fileName": "goblin.png",
             "width": 4,
             "height": 4
         },
         {
             "name": "hunter",
+            "fileName": "hunter.png",
             "width": 9,
             "height": 12
         },
         {
             "name": "cannon",
+            "fileName": "cannon.png",
             "width": 14,
             "height": 14
         },
         {
-            "name": "shooting_hunter",
+            "name": "shootingHunter",
+            "fileName": "shootingHunter.png",
             "width": 9,
             "height": 12
         },
         {
-            "name": "shooting_cannon",
+            "name": "shootingCannon",
+            "fileName": "shootingCannon.png",
             "width": 14,
             "height": 14
         },
         {
             "name": "explosion",
+            "fileName": "explosion.png",
             "width": 8,
             "height": 4
         },
         {
-            "name": "tower_place",
+            "name": "towerPlace",
+            "fileName": "towerPlace.png",
             "width": 8,
             "height": 8
         },
         {
             "name": "heart",
+            "fileName": "heart.png",
             "width": 4,
             "height": 4
         },
         {
             "name": "money",
+            "fileName": "money.png",
             "width": 4,
             "height": 4
         }
