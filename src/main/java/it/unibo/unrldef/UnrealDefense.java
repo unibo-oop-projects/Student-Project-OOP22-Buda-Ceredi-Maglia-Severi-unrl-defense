@@ -15,9 +15,10 @@ import it.unibo.unrldef.core.GameEngine;
  */
 public final class UnrealDefense {
 
-    private UnrealDefense() {
-
-    }
+    /**
+     * Unused constructor.
+     */
+    private UnrealDefense() { }
 
     /**
      * Main method.
@@ -26,13 +27,12 @@ public final class UnrealDefense {
     public static void main(final String[] args) {
         final Player p = new PlayerImpl();
         final LevelBuilder level = new LevelBuilder(p);
-		final World world = level.fromFile("resources/config/levelOne.json");
-		if(world != null) {
-			final GameEngine engine = new GameEngine(world, p);
-			engine.menuLoop();
-		} else {
-			System.err.println("Error loading the level");
-		}
-		
-	}
+        final World world = level.fromFile("resources/config/levelOne.json");
+        if (world != null) {
+            final GameEngine engine = new GameEngine(world, p);
+            engine.menuLoop();
+        } else {
+            System.err.println("Error loading the level"); // NOPMD it's vital for the game to stop in this case
+        }
+    }
 }
