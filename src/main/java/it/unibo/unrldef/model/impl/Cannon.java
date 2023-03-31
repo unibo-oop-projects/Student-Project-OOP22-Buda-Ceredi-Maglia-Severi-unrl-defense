@@ -42,7 +42,7 @@ public final class Cannon extends TowerImpl {
         final List<Enemy> enemiesInExplosionRange = this.getParentWorld().sorroundingEnemies(target.getPosition().get(),
                 EXPLOSION_RADIUS);
         if (!enemiesInExplosionRange.isEmpty()) {
-            for (Enemy enemy : enemiesInExplosionRange) {
+            for (final Enemy enemy : enemiesInExplosionRange) {
                 enemy.reduceHealth(this.getDamage());
             }
         }
