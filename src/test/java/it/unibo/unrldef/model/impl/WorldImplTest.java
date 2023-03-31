@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.World;
+import it.unibo.unrldef.model.api.Path.Direction;
 
 /**
  * Test class for WorldImpl.
@@ -21,8 +22,20 @@ public class WorldImplTest {
      */
     @BeforeEach
     public void init() {
-        final LevelBuilder testLevel = new LevelBuilder(new PlayerImpl());
-        this.testWorld = testLevel.levelOne();
+        final int segment1 = 14;
+        final int segment2 = 50;
+        final int segment3 = 20;
+        final int segment4 = 24;
+
+        this.testWorld = new WorldImpl.Builder("testWorld", new PlayerImpl(), new Position(60, 0), 0, 0)
+                .addPathSegment(Direction.DOWN, segment1)
+                .addPathSegment(Direction.LEFT, segment2)
+                .addPathSegment(Direction.DOWN, segment3)
+                .addPathSegment(Direction.RIGHT, segment4)
+                .addPathSegment(Direction.DOWN, segment4)
+                .addPathSegment(Direction.END, 0)
+                .build();
+
     }
 
     @Test
@@ -55,11 +68,12 @@ public class WorldImplTest {
 
         final int testRadius = 14;
 
-        this.testWorld.spawnEnemy(testEnemy1, testPos1); //spawning the first enemy in the path
-        this.testWorld.spawnEnemy(testEnemy2, testPos2); //spawning the second enemy in the path
-        this.testWorld.spawnEnemy(testEnemy3, testPos3); //spawning the third enemy out of the path
-        this.testWorld.spawnEnemy(testEnemy4, testPos4); //spawning the fourth enemy in the path and more advanced than the others
-        this.testWorld.spawnEnemy(testEnemy5, testPos5); //spawning the fifth enemy in the path, but too far 
+        this.testWorld.spawnEnemy(testEnemy1, testPos1); // spawning the first enemy in the path
+        this.testWorld.spawnEnemy(testEnemy2, testPos2); // spawning the second enemy in the path
+        this.testWorld.spawnEnemy(testEnemy3, testPos3); // spawning the third enemy out of the path
+        this.testWorld.spawnEnemy(testEnemy4, testPos4); // spawning the fourth enemy in the path and more advanced than
+                                                         // the others
+        this.testWorld.spawnEnemy(testEnemy5, testPos5); // spawning the fifth enemy in the path, but too far
 
         var sorroundingEnemies = this.testWorld.sorroundingEnemies(testPos6, testRadius);
 

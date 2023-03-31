@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.World;
+import it.unibo.unrldef.model.api.Path.Direction;
 
 /**
  * Test class for SpellImpl.
@@ -26,8 +27,9 @@ public final class SpellImplTest {
      */
     @BeforeEach
     public void init() {
-        final LevelBuilder testLevel = new LevelBuilder(new PlayerImpl());
-        this.testWorld = testLevel.levelOne();
+        this.testWorld = new WorldImpl.Builder("testWorld", new PlayerImpl(), new Position(0, 0), 0, 0)
+        .addPathSegment(Direction.END, 0)
+        .build();
         this.testSpell = new SpellImpl("test", this.testWorld, this.testRadius, this.testDamage, 
                 this.testRechargeTime, this.testLingeringEffectTime, this.testLingeringEffectFrequency) {
             @Override
@@ -46,10 +48,8 @@ public final class SpellImplTest {
         // Checks if the spell activates before time 
         // An empty position is used since it doesn't matter
         final Position testPosition = new Position(0, 0);
-        this.testWorld.updateState(this.testRechargeTime - 1 * 1000);
         this.testSpell.updateState(this.testRechargeTime - 1 * 1000);
         assert (!this.testSpell.ifPossibleActivate(testPosition));
-        this.testWorld.updateState(1 * 1000);
         this.testSpell.updateState(1 * 1000);
         assert (this.testSpell.isReady());
         // Once ready it spawns an enemy with the same health as the spell damage and places the spell on it 
