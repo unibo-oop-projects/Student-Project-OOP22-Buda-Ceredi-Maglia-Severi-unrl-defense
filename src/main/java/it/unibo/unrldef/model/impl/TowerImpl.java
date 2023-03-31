@@ -8,7 +8,8 @@ import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
 
 /**
- * A tower that can be placed in a world
+ * A tower that can be placed in a world.
+ * 
  * @author tommaso.ceredi@studio.unibo.it
  */
 public abstract class TowerImpl extends DefenseEntity implements Tower {
@@ -17,29 +18,40 @@ public abstract class TowerImpl extends DefenseEntity implements Tower {
     private World parentWorld;
     private Optional<Enemy> target = Optional.empty();
 
-    public TowerImpl(String name, double radius, double damage,
-            long attackRate, final int cost) {
-        super( name, radius, damage, attackRate);
+    /**
+     * Constructor of TowerImpl.
+     * 
+     * @param name       name of the tower
+     * @param radius     radius of the tower
+     * @param damage     damage of the tower
+     * @param attackRate attack rate of the tower
+     * @param cost       cost of the tower
+     */
+    public TowerImpl(final String name, final double radius, final double damage,
+            final long attackRate, final int cost) {
+        super(name, radius, damage, attackRate);
         this.cost = cost;
         this.setParentWorld(parentWorld);
     }
 
+    @Override
     public abstract Tower copy();
 
     @Override
-    public int getCost() {
+    public final int getCost() {
         return this.cost;
     }
 
     @Override
-    public void updateState(final long time) {
+    public final void updateState(final long time) {
         this.incrementTime(time);
         this.checkAttack();
     }
 
     @Override
-    protected void attack() {
-        final List<Enemy> enemiesInRange = this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius());
+    protected final void attack() {
+        final List<Enemy> enemiesInRange = this.getParentWorld().sorroundingEnemies(this.getPosition().get(),
+                this.getRadius());
         if (!enemiesInRange.isEmpty()) {
             if (this.target.isEmpty() || !enemiesInRange.contains(this.target.get())) {
                 this.target = Optional.of(enemiesInRange.get(0));
@@ -52,12 +64,17 @@ public abstract class TowerImpl extends DefenseEntity implements Tower {
     }
 
     @Override
-    public Optional<Enemy> getTarget() {
+    public final Optional<Enemy> getTarget() {
         if (this.target != null) {
             return this.isAttacking() ? this.target : Optional.empty();
         }
         return Optional.empty();
     }
 
-    protected abstract void additionAttack(final Enemy target);
+    /**
+     * Additional attack of the tower.
+     * 
+     * @param target target of the attack
+     */
+    protected abstract void additionAttack(Enemy target);
 }
