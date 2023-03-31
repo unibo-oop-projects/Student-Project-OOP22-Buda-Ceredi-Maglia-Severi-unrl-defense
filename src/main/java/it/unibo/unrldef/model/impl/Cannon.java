@@ -6,19 +6,28 @@ import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Tower;
 
 /**
- * A cannon that can attack enemies
+ * A cannon that can attack enemies.
  * 
  * @author tommaso.ceredi@studio.unibo.it
  */
-public class Cannon extends TowerImpl {
+public final class Cannon extends TowerImpl {
 
-    final private static int COST = 200;
-    final private static long ATTACK_FOR_SECOND = 2000;
-    final private static int DAMAGE = 10;
-    final public static String NAME = "cannon";
-    final public static double RADIOUS = 20;
-    final private static double EXPLOSION_RADIUS = 5;
+    private static final int COST = 200;
+    private static final long ATTACK_FOR_SECOND = 2000;
+    private static final int DAMAGE = 10;
+    /**
+     * Name of the tower.
+     */
+    public static final String NAME = "cannon";
+    /**
+     * Radious of the tower.
+     */
+    public static final double RADIOUS = 20;
+    private static final double EXPLOSION_RADIUS = 5;
 
+    /**
+     * Constructor of Cannon.
+     */
     public Cannon() {
         super(NAME, RADIOUS, DAMAGE, ATTACK_FOR_SECOND, COST);
     }
@@ -29,7 +38,7 @@ public class Cannon extends TowerImpl {
     }
 
     @Override
-    protected void additionAttack(Enemy target) {
+    protected void additionAttack(final Enemy target) {
         final List<Enemy> enemiesInExplosionRange = this.getParentWorld().sorroundingEnemies(target.getPosition().get(),
                 EXPLOSION_RADIUS);
         if (!enemiesInExplosionRange.isEmpty()) {
