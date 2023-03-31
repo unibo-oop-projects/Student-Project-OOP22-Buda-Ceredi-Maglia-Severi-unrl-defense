@@ -22,7 +22,6 @@ import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.api.World.GameState;
-import it.unibo.unrldef.graphics.impl.MenuPanel;
 
 import java.util.HashSet;
 import java.util.Optional;
