@@ -106,7 +106,7 @@ public final class ViewImpl implements View {
                     + this.player.getName().substring(0, 8) 
                     + "...");
         } else {
-            playerName.setText(this.player.getName());
+            playerName.setText("Player" + this.player.getName());
         }
         return playerName;
     }
