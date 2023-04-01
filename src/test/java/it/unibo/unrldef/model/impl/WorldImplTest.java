@@ -26,14 +26,26 @@ public class WorldImplTest {
         final int segment2 = 50;
         final int segment3 = 20;
         final int segment4 = 24;
+        final int towerTestX1 = 4;
+        final int towerTestY1 = 4;
+        final int towerTestX2 = 16;
+        final int towerTestY2 = 16;
+        final int testSpawnX = 60;
+        final int testSpawnY = 0;
+        final int testMoney = 200;
 
-        this.testWorld = new WorldImpl.Builder("testWorld", new PlayerImpl(), new Position(60, 0), 0, 0)
+        this.testWorld = new WorldImpl.Builder("testWorld", new PlayerImpl(), new Position(testSpawnX, testSpawnY), 0, testMoney)
                 .addPathSegment(Direction.DOWN, segment1)
                 .addPathSegment(Direction.LEFT, segment2)
                 .addPathSegment(Direction.DOWN, segment3)
                 .addPathSegment(Direction.RIGHT, segment4)
                 .addPathSegment(Direction.DOWN, segment4)
                 .addPathSegment(Direction.END, 0)
+                .addTowerBuildingSpace(segment3, segment4)
+                .addAvailableTower("hunter", new Hunter())
+                .addAvailableTower("cannon", new Cannon())
+                .addTowerBuildingSpace(towerTestX1, towerTestY1)
+                .addTowerBuildingSpace(towerTestX2, towerTestY2)
                 .build();
 
     }
@@ -81,5 +93,26 @@ public class WorldImplTest {
         assert (!sorroundingEnemies.contains(testEnemy3));
         assert (!sorroundingEnemies.contains(testEnemy5));
         assert (sorroundingEnemies.get(0).equals(testEnemy4));
+    }
+
+    @Test
+    void testTryBuildTower() {
+        final int testX1 = 14;
+        final int testY1 = 14;
+        final int testX2 = 4;
+        final int testY2 = 4;
+        final int testX3 = 16;
+        final int testY3 = 16;
+
+        assert (!this.testWorld.tryBuildTower(new Position(testX1, testY1), "hunter")); // trying to build a tower in a
+                                                                                        // non-building space
+        assert (this.testWorld.tryBuildTower(new Position(testX2, testY2), "hunter")); // trying to build a tower in a
+                                                                                       // building space
+        assert (!this.testWorld.tryBuildTower(new Position(testX2, testY2), "hunter")); // trying to build a tower in a
+                                                                                        // building space already
+                                                                                        // occupied
+        assert (!this.testWorld.tryBuildTower(new Position(testX3, testY3), "cannon")); // trying to build a tower
+                                                                                        // having not enough money
+
     }
 }
