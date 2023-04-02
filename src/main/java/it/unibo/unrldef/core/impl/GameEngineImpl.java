@@ -1,13 +1,12 @@
-package it.unibo.unrldef.core;
+package it.unibo.unrldef.core.impl;
 
 import java.util.Optional;
 
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
+import it.unibo.unrldef.core.api.GameEngine;
 import it.unibo.unrldef.graphics.api.View;
-import it.unibo.unrldef.graphics.impl.ViewImpl;
 import it.unibo.unrldef.input.api.Input;
-import it.unibo.unrldef.input.impl.PlayerInput;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.api.World.GameState;
@@ -15,7 +14,7 @@ import it.unibo.unrldef.model.api.World.GameState;
 /**
  * This class modules the engine that updates the game.
  */
-public final class GameEngine {
+public final class GameEngineImpl implements GameEngine {
 
     private final long period = 1000 / 30;
     private final Player player;
@@ -29,37 +28,31 @@ public final class GameEngine {
      * Builds a new GameEngine.
      * @param world the world of the game
      * @param player the player of the game
+     * @param view the view of the game
+     * @param input the input of the game
      */
-    public GameEngine(final World world, final Player player) {
-        this.input = new PlayerInput();
+    public GameEngineImpl(final World world, final Player player, final View view, final Input input) {
+        this.input = input;
         this.player = player;
         this.setGameWorld(world);
-        this.gameView = new ViewImpl(player, this.currentWorld, this.input);
+        this.gameView = view;
         this.started = false;
         this.ended = false;
     }
 
-    /**
-     * Initializes the game.
-     * @param playerName the name of the player
-     */
+    @Override
     public void initGame(final String playerName) {
         this.player.setName(playerName);
         this.gameView.initGame();
         this.started = true;
     }
 
-    /**
-     * Sets the world of the game.
-     * @param world the world of the game
-     */
+    @Override
     public void setGameWorld(final World world) {
         this.currentWorld = world;
     }
 
-    /**
-     * Starts the menu loop.
-     */
+    @Override
     public void menuLoop() {
         while (!started) {
             this.processInput();
@@ -68,9 +61,7 @@ public final class GameEngine {
         this.gameLoop();
     }
 
-    /**
-     * Starts the game loop.
-     */
+    @Override
     public void gameLoop() {
         long previousFrameStartTime = System.currentTimeMillis();
         while (this.gameState() == GameState.PLAYING) {
