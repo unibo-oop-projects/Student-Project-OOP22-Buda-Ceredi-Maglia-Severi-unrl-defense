@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import java.awt.Image;
+import java.awt.Toolkit;
+
 import javax.imageio.ImageIO;
 
 import org.json.simple.JSONArray;
@@ -109,7 +111,7 @@ public class SpriteLoader {
             final JSONObject sprite = (JSONObject) s;
             final int width = Integer.parseInt(sprite.get("width").toString());
             final int height = Integer.parseInt(sprite.get("height").toString());
-            Image spriteImage = null;
+            Image spriteImage = Toolkit.getDefaultToolkit().createImage("");
             try {
                 spriteImage = ImageIO.read(new File(ASSETS_FOLDER + sprite.get("fileName").toString()));
             } catch (IOException e) {

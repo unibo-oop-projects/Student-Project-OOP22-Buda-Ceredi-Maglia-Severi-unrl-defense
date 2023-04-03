@@ -23,6 +23,8 @@ public class Sprite {
     public Sprite(final int width, final int height, final Image sprite) {
         this.dim = new Pair<>(width, height);
         this.spriteImage = sprite.getScaledInstance(height, width, Image.SCALE_SMOOTH);
+        this.scaledSprite = this.spriteImage;
+        this.scaledDim = this.dim;
     }
 
     /**
