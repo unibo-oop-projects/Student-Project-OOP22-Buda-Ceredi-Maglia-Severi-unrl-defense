@@ -72,15 +72,23 @@ public final class WorldImpl implements World {
 
     @Override
     public void updateState(final long time) {
+        // updateing time
         this.timeToNextHorde = this.timeToNextHorde - time < 0 ? 0 : this.timeToNextHorde - time;
         this.timeToNextSpawn = this.timeToNextSpawn - time < 0 ? 0 : this.timeToNextSpawn - time;
-        this.livingEnemies.stream().filter(Enemy::isDead).forEach(x -> this.bank.addMoney(x.getDropAmount()));
+        // getting money from dead enemies and removing them
+        this.livingEnemies.stream()
+                .filter(Enemy::isDead)
+                .forEach(x -> this.bank.addMoney(x.getDropAmount()));
         this.livingEnemies.removeAll(this.livingEnemies.stream().filter(Enemy::isDead).toList());
-        this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath)
+        // damaging castle and removing enemies that reached the end of the path
+        this.livingEnemies.stream()
+                .filter(Enemy::hasReachedEndOfPath)
                 .forEach(x -> this.castleIntegrity.damage(ENEMY_POWER));
         this.livingEnemies.removeAll(this.livingEnemies.stream().filter(Enemy::hasReachedEndOfPath).toList());
+        // updating living enemies and towers
         this.livingEnemies.forEach(x -> x.updateState(time));
         this.placedTowers.forEach(x -> x.updateState(time));
+        // updating player's spells
         this.player.updateSpellState(time);
         if (timeToNextHorde == 0 && !this.areWavesEnded()) {
             if (this.waves.get(this.waveCounter).isWaveOver()) {
@@ -103,8 +111,7 @@ public final class WorldImpl implements World {
 
     private Boolean areWavesEnded() {
         return this.waveCounter == this.waves.size() - 1
-                &&
-                this.waves.get(this.waveCounter).isWaveOver();
+            && this.waves.get(this.waveCounter).isWaveOver();
     }
 
     private List<Enemy> enemiesInArea(final Position upLeft, final Position downRight) {
@@ -259,7 +266,9 @@ public final class WorldImpl implements World {
 
     @Override
     public Set<Tower> getAvailableTowers() {
-        return this.availableTowers.entrySet().stream().map(x -> x.getValue()).collect(Collectors.toSet());
+        return this.availableTowers.entrySet().stream()
+                .map(x -> x.getValue())
+                .collect(Collectors.toSet());
     }
 
     @Override

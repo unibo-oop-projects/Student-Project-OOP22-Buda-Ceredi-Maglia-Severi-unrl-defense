@@ -36,7 +36,7 @@ public interface Player {
      * @param towerName the type of tower to build
      * @return true if the tower has been built, false otherwise
      */
-    boolean BuildTower(Position pos, String towerName);
+    boolean buildTower(Position pos, String towerName);
 
     /**
      * Places a new spell on the world map deling damage to enemies.

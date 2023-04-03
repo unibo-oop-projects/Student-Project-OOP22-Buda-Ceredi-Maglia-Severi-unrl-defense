@@ -1,13 +1,12 @@
-package it.unibo.unrldef.core;
+package it.unibo.unrldef.core.impl;
 
 import java.util.Optional;
 
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
+import it.unibo.unrldef.core.api.GameEngine;
 import it.unibo.unrldef.graphics.api.View;
-import it.unibo.unrldef.graphics.impl.ViewImpl;
 import it.unibo.unrldef.input.api.Input;
-import it.unibo.unrldef.input.impl.PlayerInput;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.api.World.GameState;
@@ -16,7 +15,7 @@ import it.unibo.unrldef.model.api.World.GameState;
  * This class modules the engine that updates the game.
  * @author tommaso.severi2@studio.unibo.it
  */
-public final class GameEngine {
+public final class GameEngineImpl implements GameEngine {
 
     private final long period = 1000 / 30;
     private final Player player;
@@ -30,37 +29,31 @@ public final class GameEngine {
      * Builds a new GameEngine.
      * @param world the world of the game
      * @param player the player of the game
+     * @param view the view of the game
+     * @param input the input of the game
      */
-    public GameEngine(final World world, final Player player) {
-        this.input = new PlayerInput();
+    public GameEngineImpl(final World world, final Player player, final View view, final Input input) {
+        this.input = input;
         this.player = player;
         this.setGameWorld(world);
-        this.gameView = new ViewImpl(player, this.currentWorld, this.input);
+        this.gameView = view;
         this.started = false;
         this.ended = false;
     }
 
-    /**
-     * Initializes the game.
-     * @param playerName the name of the player
-     */
+    @Override
     public void initGame(final String playerName) {
         this.player.setName(playerName);
         this.gameView.initGame();
         this.started = true;
     }
 
-    /**
-     * Sets the world of the game.
-     * @param world the world of the game
-     */
+    @Override
     public void setGameWorld(final World world) {
         this.currentWorld = world;
     }
 
-    /**
-     * Starts the menu loop.
-     */
+    @Override
     public void menuLoop() {
         while (!started) {
             this.processInput();
@@ -69,21 +62,10 @@ public final class GameEngine {
         this.gameLoop();
     }
 
-    /**
-     * Starts the end loop.
-     */
-    public void endLoop() {
-        while (!ended) {
-            this.processInput();
-        }
-    }
-
-    /**
-     * Starts the game loop.
-     */
+    @Override
     public void gameLoop() {
         long previousFrameStartTime = System.currentTimeMillis();
-        while (this.currentWorld.gameState() == GameState.PLAYING) {
+        while (this.gameState() == GameState.PLAYING) {
             final long currentFrameStartTime = System.currentTimeMillis();
             final long elapsed = currentFrameStartTime - previousFrameStartTime;
             this.processInput();
@@ -92,7 +74,6 @@ public final class GameEngine {
             this.waitForNextFrame(currentFrameStartTime);
             previousFrameStartTime = currentFrameStartTime;
         }
-        this.renderEndState(this.currentWorld.gameState());
         this.endLoop();
     }
 
@@ -121,7 +102,7 @@ public final class GameEngine {
             final Optional<String> selectedName = this.input.getSelectedName();
             switch (lastHit.get().getSecond()) {
                 case PLACE_TOWER:
-                    this.player.BuildTower(selectedPosition, selectedName.get());
+                    this.player.buildTower(selectedPosition, selectedName.get());
                     break;
                 case PLACE_SPELL:
                     this.player.throwSpell(selectedPosition, selectedName.get());
@@ -139,6 +120,13 @@ public final class GameEngine {
     }
 
     /**
+     * @return the current state of the game
+     */
+    private GameState gameState() {
+        return this.currentWorld.gameState();
+    }
+
+    /**
      * Updates the game world.
      * @param elapsed the elapsed time since last frame
      */
@@ -151,6 +139,16 @@ public final class GameEngine {
      */
     private void render() {
         this.gameView.render();
+    }
+
+    /**
+     * Starts the end loop.
+     */
+    private void endLoop() {
+        while (!ended) {
+            this.renderEndState(this.gameState());
+            this.processInput();
+        }
     }
 
     /**

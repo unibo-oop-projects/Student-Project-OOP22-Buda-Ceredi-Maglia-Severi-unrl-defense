@@ -38,10 +38,12 @@ public final class DefenseButtonPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     /**
      * The width used by this type of buttons.
+     * It's used a 16th of the total screen width so that the buttons are always visible.
      */
-    public static final int WIDTH = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 18);
+    public static final int WIDTH = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 16);
     /**
      * The height used by this type of buttons.
+     * It's the same as the width since the buttons are squares.
      */
     public static final int HEIGHT = WIDTH;
     private static final Color BACKGROUND_COLOR = new Color(255, 255, 255);

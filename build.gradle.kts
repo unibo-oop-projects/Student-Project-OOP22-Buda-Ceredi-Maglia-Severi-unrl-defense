@@ -36,6 +36,7 @@ dependencies {
     // Logback backend for SLF4J
     runtimeOnly("ch.qos.logback:logback-classic:1.4.5")
 
+    // Json class used to read configuration files
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
 
     // JUnit API and testing engine

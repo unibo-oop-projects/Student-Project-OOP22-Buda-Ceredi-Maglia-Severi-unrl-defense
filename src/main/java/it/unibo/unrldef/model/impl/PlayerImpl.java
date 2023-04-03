@@ -40,7 +40,7 @@ public final class PlayerImpl implements Player {
     }
 
     @Override
-    public boolean BuildTower(final Position pos, final String towerName) {
+    public boolean buildTower(final Position pos, final String towerName) {
         return this.currentWorld.tryBuildTower(pos, towerName);
     }
 

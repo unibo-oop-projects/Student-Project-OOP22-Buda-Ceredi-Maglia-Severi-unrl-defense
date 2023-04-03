@@ -22,7 +22,7 @@ public final class FireBall extends SpellImpl {
     private static final long LINGERING_EFFECT_TIME = 5 * 1000;
     private static final long LINGERING_EFFECT_FREQ = 1 * 1000;
 
-    private final double lingeringDamage = 4.0;
+    private static final double LINGERING_DAMAGE = 4.0;
 
     /**
      * Creates a new spell of type fireball.
@@ -34,7 +34,7 @@ public final class FireBall extends SpellImpl {
 
     @Override
     protected void effect(final Enemy enemy) {
-        enemy.reduceHealth(this.lingeringDamage);
+        enemy.reduceHealth(LINGERING_DAMAGE);
     }
 
     @Override
