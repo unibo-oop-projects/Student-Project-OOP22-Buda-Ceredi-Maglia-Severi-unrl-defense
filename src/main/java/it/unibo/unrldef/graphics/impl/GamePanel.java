@@ -105,8 +105,6 @@ public final class GamePanel extends JPanel {
 
     private transient Position mousePosition;
 
-    private final JPanel panelRef;
-
     private final transient Map<Entity, SpriteAnimation> animationMap;
 
     /**
@@ -116,7 +114,6 @@ public final class GamePanel extends JPanel {
      */
     public GamePanel(final World gameWorld, final Input inputHandler) {
         this.viewState = ViewState.IDLE;
-        this.panelRef = this;
         this.mousePosition = new Position(0, 0);
         this.spriteLoader
                 .loadSpritesFromFile("resources" + File.separator + "config" + File.separator + "spritesInfo.json",
@@ -158,7 +155,7 @@ public final class GamePanel extends JPanel {
         this.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(final ComponentEvent e) {
-                scaleAll(panelRef.getWidth(), panelRef.getHeight());
+                scaleAll(getWidth(), getHeight());
             }
 
             @Override
