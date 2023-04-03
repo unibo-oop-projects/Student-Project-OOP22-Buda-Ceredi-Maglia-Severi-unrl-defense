@@ -63,4 +63,8 @@ public interface Player {
      */
     void setSpells(Set<Spell> spells);
 
+    /**
+     * @return a copy of this player
+     */
+    Player copy();
 }

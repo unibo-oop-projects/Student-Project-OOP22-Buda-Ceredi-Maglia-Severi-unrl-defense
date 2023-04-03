@@ -7,11 +7,9 @@ import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.core.api.GameEngine;
 import it.unibo.unrldef.graphics.api.View;
 import it.unibo.unrldef.input.api.Input;
-import it.unibo.unrldef.input.impl.PlayerInput;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.api.World.GameState;
-import it.unibo.unrldef.graphics.impl.ViewImpl;
 
 /**
  * This class modules the engine that updates the game.
@@ -19,11 +17,11 @@ import it.unibo.unrldef.graphics.impl.ViewImpl;
  */
 public final class GameEngineImpl implements GameEngine {
 
-    private final long period = 1000 / 30;
-    private final Player player;
+    private static final long PERIOD = 1000 / 30;
+    private Player player;
     private World currentWorld;
-    private final Input input;
-    private final View gameView; 
+    private Input input;
+    private View gameView; 
     private boolean started;
     private boolean ended;
 
@@ -31,11 +29,13 @@ public final class GameEngineImpl implements GameEngine {
      * Builds a new GameEngine.
      * @param world the world of the game
      * @param player the player of the game
+     * @param input the input of the game
+     * @param view the view of the game
      */
-    public GameEngineImpl(final World world, final Player player) {
-        this.input = new PlayerInput();
-        this.gameView = new ViewImpl(player, world, input);
-        this.player = player;
+    public GameEngineImpl(final World world, final Player player, final Input input, final View view) {
+        this.setInput(input);
+        this.setView(view);
+        this.setPlayer(player);
         this.setGameWorld(world);
         this.started = false;
         this.ended = false;
@@ -51,6 +51,21 @@ public final class GameEngineImpl implements GameEngine {
     @Override
     public void setGameWorld(final World world) {
         this.currentWorld = world;
+    }
+
+    @Override
+    public void setPlayer(final Player player) {
+        this.player = player.copy();
+    }
+
+    @Override
+    public void setView(final View view) {
+        this.gameView = view;
+    }
+
+    @Override
+    public void setInput(final Input input) {
+        this.input = input;
     }
 
     @Override
@@ -83,9 +98,9 @@ public final class GameEngineImpl implements GameEngine {
      */
     private void waitForNextFrame(final long cycleStartTime) {
         final long elapsed = System.currentTimeMillis() - cycleStartTime;
-        if (elapsed < this.period) {
+        if (elapsed < PERIOD) {
             try {
-                Thread.sleep(period - elapsed);
+                Thread.sleep(PERIOD - elapsed);
             } catch (InterruptedException e) {
                 e.printStackTrace(); // NOPMD if this fails the game has to stop
             }

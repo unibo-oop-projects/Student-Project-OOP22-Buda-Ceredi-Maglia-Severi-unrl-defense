@@ -19,6 +19,15 @@ public final class PlayerImpl implements Player {
     private String name;
     private Set<Spell> spells;
 
+    /**
+     * Creates a new player.
+     */
+    public PlayerImpl() {
+        this.currentWorld = null;
+        this.name = "";
+        this.spells = new HashSet<>();
+    }
+
     @Override
     public String getName() {
         return this.name;
@@ -68,11 +77,20 @@ public final class PlayerImpl implements Player {
 
     @Override
     public Set<Spell> getSpells() {
-        return this.spells;
+        return Set.copyOf(this.spells);
     }
 
     @Override
     public void setSpells(final Set<Spell> spells) {
         this.spells = Set.copyOf(spells);
+    }
+
+    @Override
+    public Player copy() {
+        final PlayerImpl copy = new PlayerImpl();
+        copy.setGameMap(this.getGameWorld());
+        copy.setName(this.getName());
+        copy.setSpells(this.getSpells());
+        return copy;
     }
 }
