@@ -82,6 +82,10 @@ public class SpriteLoader {
      * the name of the sprite that represents the money.
      */
     public static final String MONEY = "money";
+    /**
+     * the name of the sprite that represents a missing asset.
+     */
+    public static final String MISSING_ASSET = "missingAsset";
 
     private final Map<String, Sprite> sprites = new HashMap<>();
 
