@@ -13,7 +13,7 @@ import it.unibo.unrldef.model.api.Path.Direction;
 /**
  * Test class for WorldImpl.
  */
-public class WorldImplTest {
+class WorldImplTest {
 
     private World testWorld;
 
@@ -34,7 +34,8 @@ public class WorldImplTest {
         final int testSpawnY = 0;
         final int testMoney = 200;
 
-        this.testWorld = new WorldImpl.Builder("testWorld", new PlayerImpl(), new Position(testSpawnX, testSpawnY), 0, testMoney)
+        this.testWorld = new WorldImpl.Builder("testWorld", new PlayerImpl(), new Position(testSpawnX, testSpawnY), 0,
+                testMoney)
                 .addPathSegment(Direction.DOWN, segment1)
                 .addPathSegment(Direction.LEFT, segment2)
                 .addPathSegment(Direction.DOWN, segment3)
@@ -42,8 +43,8 @@ public class WorldImplTest {
                 .addPathSegment(Direction.DOWN, segment4)
                 .addPathSegment(Direction.END, 0)
                 .addTowerBuildingSpace(segment3, segment4)
-                .addAvailableTower("hunter", new Hunter())
-                .addAvailableTower("cannon", new Cannon())
+                .addAvailableTower(Hunter.NAME, new Hunter())
+                .addAvailableTower(Cannon.NAME, new Cannon())
                 .addTowerBuildingSpace(towerTestX1, towerTestY1)
                 .addTowerBuildingSpace(towerTestX2, towerTestY2)
                 .build();
@@ -65,18 +66,18 @@ public class WorldImplTest {
         final int testX6 = 18;
         final int testY6 = 24;
 
-        Position testPos1 = new Position(testX1, testY1);
-        Position testPos2 = new Position(testX2, testY2);
-        Position testPos3 = new Position(testX3, testY3);
-        Position testPos4 = new Position(testX4, testY4);
-        Position testPos5 = new Position(testX5, testY5);
-        Position testPos6 = new Position(testX6, testY6);
+        final Position testPos1 = new Position(testX1, testY1);
+        final Position testPos2 = new Position(testX2, testY2);
+        final Position testPos3 = new Position(testX3, testY3);
+        final Position testPos4 = new Position(testX4, testY4);
+        final Position testPos5 = new Position(testX5, testY5);
+        final Position testPos6 = new Position(testX6, testY6);
 
-        Enemy testEnemy1 = new Orc();
-        Enemy testEnemy2 = new Orc();
-        Enemy testEnemy3 = new Goblin();
-        Enemy testEnemy4 = new Goblin();
-        Enemy testEnemy5 = new Goblin();
+        final Enemy testEnemy1 = new Orc();
+        final Enemy testEnemy2 = new Orc();
+        final Enemy testEnemy3 = new Goblin();
+        final Enemy testEnemy4 = new Goblin();
+        final Enemy testEnemy5 = new Goblin();
 
         final int testRadius = 14;
 
@@ -87,12 +88,12 @@ public class WorldImplTest {
                                                          // the others
         this.testWorld.spawnEnemy(testEnemy5, testPos5); // spawning the fifth enemy in the path, but too far
 
-        var sorroundingEnemies = this.testWorld.sorroundingEnemies(testPos6, testRadius);
+        final var sorroundingEnemies = this.testWorld.sorroundingEnemies(testPos6, testRadius);
 
-        assert (sorroundingEnemies.containsAll(List.of(testEnemy1, testEnemy2, testEnemy4)));
-        assert (!sorroundingEnemies.contains(testEnemy3));
-        assert (!sorroundingEnemies.contains(testEnemy5));
-        assert (sorroundingEnemies.get(0).equals(testEnemy4));
+        assert sorroundingEnemies.containsAll(List.of(testEnemy1, testEnemy2, testEnemy4));
+        assert !sorroundingEnemies.contains(testEnemy3);
+        assert !sorroundingEnemies.contains(testEnemy5);
+        assert sorroundingEnemies.get(0).equals(testEnemy4);
     }
 
     @Test
@@ -104,14 +105,14 @@ public class WorldImplTest {
         final int testX3 = 16;
         final int testY3 = 16;
 
-        assert (!this.testWorld.tryBuildTower(new Position(testX1, testY1), "hunter")); // trying to build a tower in a
+        assert !this.testWorld.tryBuildTower(new Position(testX1, testY1), Hunter.NAME); // trying to build a tower in a
                                                                                         // non-building space
-        assert (this.testWorld.tryBuildTower(new Position(testX2, testY2), "hunter")); // trying to build a tower in a
+        assert this.testWorld.tryBuildTower(new Position(testX2, testY2), Hunter.NAME); // trying to build a tower in a
                                                                                        // building space
-        assert (!this.testWorld.tryBuildTower(new Position(testX2, testY2), "hunter")); // trying to build a tower in a
+        assert !this.testWorld.tryBuildTower(new Position(testX2, testY2), Hunter.NAME); // trying to build a tower in a
                                                                                         // building space already
                                                                                         // occupied
-        assert (!this.testWorld.tryBuildTower(new Position(testX3, testY3), "cannon")); // trying to build a tower
+        assert !this.testWorld.tryBuildTower(new Position(testX3, testY3), Cannon.NAME); // trying to build a tower
                                                                                         // having not enough money
 
     }

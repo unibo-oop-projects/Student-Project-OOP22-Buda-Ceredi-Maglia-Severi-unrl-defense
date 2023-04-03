@@ -16,28 +16,48 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.input.api.Input.HitType;
 
-
-public class MenuPanel extends JPanel {
+/**
+ * This class modules the menu panel.
+ * 
+ * @author tommaso.ceredi@studio.unibo.it
+ */
+public final class MenuPanel extends JPanel {
 
     private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
+    private Image title;
+    private static final long serialVersionUID = 1L;
     private final JButton exitButton, startButton;
     private final JTextField nameField;
     private final Input inputHandler;
-    private MenuPanel panelRef;
+    private final MenuPanel panelRef;
     private double xScale = 1;
     private double yScale = 1;
-    private Image title;
-    private final int DEFAULT_WIDTH = 600;
-    private final int DEFAULT_HEIGHT = 400;
+    private static final int DEFAULT_WIDTH = 600;
+    private static final int DEFAULT_HEIGHT = 400;
+    private static final Color BACKGROUND_COLOR = new Color(255, 255, 255);
+    private static final int FONT_SUBTITLE_SIZE = 15;
+    private static final int PADDING = 15;
+    private static final int BUTTON_WIDTH = 140;
+    private static final int BUTTON_HEIGHT = 20;
+    private static final int BUTTON_PADDING = 30;
+    private static final int CENTER = 70;
+    private static final Pair<Integer, Integer> TITLE_CENTER = new Pair<>(85, 80);
 
+    @Override
     public Dimension getPreferredSize() {
         return new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
-    public MenuPanel(Input inputHandler) {
+    /**
+     * Constructor of the MenuPanel.
+     * 
+     * @param inputHandler the input handler
+     */
+    public MenuPanel(final Input inputHandler) {
         super();
         this.panelRef = this;
         try {
@@ -48,33 +68,39 @@ public class MenuPanel extends JPanel {
 
         this.addComponentListener(new ComponentListener() {
             @Override
-            public void componentResized(ComponentEvent e) {
-                int currWidth = panelRef.getWidth();
-                int currHeight = panelRef.getHeight();
-                xScale = (double)currWidth / DEFAULT_WIDTH;
-                yScale = (double)currHeight / DEFAULT_HEIGHT;
+            public void componentResized(final ComponentEvent e) {
+                final int currWidth = panelRef.getWidth();
+                final int currHeight = panelRef.getHeight();
+                xScale = (double) currWidth / DEFAULT_WIDTH;
+                yScale = (double) currHeight / DEFAULT_HEIGHT;
             }
+
             @Override
-            public void componentMoved(ComponentEvent e) {}
+            public void componentMoved(final ComponentEvent e) {
+            }
+
             @Override
-            public void componentShown(ComponentEvent e) {}
+            public void componentShown(final ComponentEvent e) {
+            }
+
             @Override
-            public void componentHidden(ComponentEvent e) {}
+            public void componentHidden(final ComponentEvent e) {
+            }
         });
         this.inputHandler = inputHandler;
         this.setLayout(null);
-        this.setBackground(new java.awt.Color(255, 255, 255));
+        this.setBackground(BACKGROUND_COLOR);
         this.nameField = new JTextField();
-        this.nameField.setBounds(DEFAULT_WIDTH / 2 - 70, DEFAULT_HEIGHT / 2, 140, 20);
+        this.nameField.setBounds(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2, BUTTON_WIDTH, BUTTON_HEIGHT);
         this.startButton = new JButton("Start");
-        this.startButton.setBounds(DEFAULT_WIDTH / 2 - 70, DEFAULT_HEIGHT / 2 + 30, 140, 20);
+        this.startButton.setBounds(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2 + BUTTON_PADDING, BUTTON_WIDTH, BUTTON_HEIGHT);
         this.startButton.addActionListener(e -> {
             if (this.nameField.getText().length() > 0) {
                 this.inputHandler.setLastHit(0, 0, HitType.START_GAME, Optional.of(this.nameField.getText()));
             }
         });
         exitButton = new JButton("Exit");
-        exitButton.setBounds(DEFAULT_WIDTH / 2 - 70, DEFAULT_HEIGHT / 2 + 60, 140, 20);
+        exitButton.setBounds(DEFAULT_HEIGHT / 2, DEFAULT_HEIGHT / 2, BUTTON_WIDTH, BUTTON_HEIGHT);
         exitButton.addActionListener(e -> {
             this.inputHandler.setLastHit(0, 0, HitType.EXIT_GAME, Optional.empty());
         });
@@ -84,24 +110,29 @@ public class MenuPanel extends JPanel {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(final Graphics g) {
         super.paint(g);
-        int width = (panelRef.getWidth()/2) - 90;
-        int height = (panelRef.getHeight()/2) - 100;
-        int fontSubtitle = Math.min((int)xScale, (int)yScale) == 0 ? 15 : (int)((15) * Math.min((int)xScale, (int)yScale));
-        g.drawImage(this.title, this.getWidth()/4, this.getHeight()/10, 
-                panelRef.getWidth()/2, panelRef.getHeight()/3, null);
+        final int width = panelRef.getWidth() / 2 - TITLE_CENTER.getFirst();
+        final int height = panelRef.getHeight() / 2 - TITLE_CENTER.getSecond();
+        final int fontSubtitle = Math.min((int) xScale, (int) yScale) == 0 ? FONT_SUBTITLE_SIZE
+                : (int) ((FONT_SUBTITLE_SIZE) * Math.min((int) xScale, (int) yScale));
+        g.drawImage(this.title, this.getWidth() / 4, this.getHeight() / 10,
+                panelRef.getWidth() / 2, panelRef.getHeight() / 3, null);
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, fontSubtitle));
-        g.drawString("Inserisci il tuo nome:", width+15, height + 80);
-        this.nameField.setBounds((int)((DEFAULT_WIDTH / 2 - 70) * xScale), (int)((DEFAULT_HEIGHT / 2) * yScale), (int)(140 * xScale), (int)(20 * yScale));
-        this.startButton.setBounds((int)((DEFAULT_WIDTH / 2 - 70) * xScale), (int)((DEFAULT_HEIGHT / 2 + 30) * yScale), (int)(140 * xScale), (int)(20 * yScale));
-        this.exitButton.setBounds((int)((DEFAULT_WIDTH / 2 - 70) * xScale), (int)((DEFAULT_HEIGHT / 2 + 60) * yScale), (int)(140 * xScale), (int)(20 * yScale));
+        g.drawString("Inserisci il tuo nome:", width + PADDING, height + CENTER);
+        this.nameField.setBounds((int) ((DEFAULT_WIDTH / 2 - CENTER) * xScale), (int) ((DEFAULT_HEIGHT / 2) * yScale),
+                (int) (BUTTON_WIDTH * xScale), (int) (BUTTON_HEIGHT * yScale));
+        this.startButton.setBounds((int) ((DEFAULT_WIDTH / 2 - CENTER) * xScale),
+                (int) ((DEFAULT_HEIGHT / 2 + BUTTON_PADDING) * yScale), (int) (BUTTON_WIDTH * xScale),
+                (int) (BUTTON_HEIGHT * yScale));
+        this.exitButton.setBounds((int) ((DEFAULT_WIDTH / 2 - CENTER) * xScale),
+                (int) ((DEFAULT_HEIGHT / 2 + CENTER) * yScale),
+                (int) (BUTTON_WIDTH * xScale), (int) (BUTTON_HEIGHT * yScale));
         if (this.nameField.getText().length() > 0) {
             this.startButton.setEnabled(true);
         } else {
             this.startButton.setEnabled(false);
         }
     }
-    
 }
