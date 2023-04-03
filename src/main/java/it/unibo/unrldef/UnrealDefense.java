@@ -1,10 +1,15 @@
 package it.unibo.unrldef;
 
+import it.unibo.unrldef.core.api.GameEngine;
+import it.unibo.unrldef.core.impl.GameEngineImpl;
+import it.unibo.unrldef.graphics.api.View;
+import it.unibo.unrldef.graphics.impl.ViewImpl;
+import it.unibo.unrldef.input.api.Input;
+import it.unibo.unrldef.input.impl.PlayerInput;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.LevelBuilder;
 import it.unibo.unrldef.model.impl.PlayerImpl;
-import it.unibo.unrldef.core.GameEngine;
 
 /**
  * Main class.
@@ -15,9 +20,10 @@ import it.unibo.unrldef.core.GameEngine;
  */
 public final class UnrealDefense {
 
-    private UnrealDefense() {
-
-    }
+    /**
+     * Unused constructor.
+     */
+    private UnrealDefense() { }
 
     /**
      * Main method.
@@ -26,13 +32,14 @@ public final class UnrealDefense {
     public static void main(final String[] args) {
         final Player p = new PlayerImpl();
         final LevelBuilder level = new LevelBuilder(p);
-		final World world = level.fromFile("resources/config/levelOne.json");
-		if(world != null) {
-			final GameEngine engine = new GameEngine(world, p);
-			engine.menuLoop();
-		} else {
-			System.err.println("Error loading the level");
-		}
-		
-	}
+        final World world = level.fromFile("resources/config/levelOne.json");
+        final Input input = new PlayerInput();
+        final View view = new ViewImpl(p, world, input);
+        if (world != null) {
+            final GameEngine engine = new GameEngineImpl(world, p, view, input);
+            engine.menuLoop();
+        } else {
+            System.err.println("Error loading the level"); // NOPMD it's vital for the game to stop in this case
+        }
+    }
 }
