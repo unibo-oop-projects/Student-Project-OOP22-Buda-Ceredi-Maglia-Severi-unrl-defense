@@ -95,6 +95,7 @@ public final class GamePanel extends JPanel {
     private final transient Sprite towerPlace;
     private final transient Sprite heart;
     private final transient Sprite money;
+    private final transient Sprite missingAsset;
     private final Set<Sprite> sprites = new HashSet<>();
     private double xScale;
     private double yScale;
@@ -145,6 +146,8 @@ public final class GamePanel extends JPanel {
         this.sprites.add(this.heart);
         this.money = this.spriteLoader.getSprite(SpriteLoader.MONEY);
         this.sprites.add(this.money);
+        this.missingAsset = this.spriteLoader.getSprite(SpriteLoader.MISSING_ASSET);
+        this.sprites.add(this.missingAsset);
 
         this.animationMap = new HashMap<>();
         this.gameWorld = gameWorld;
@@ -430,7 +433,7 @@ public final class GamePanel extends JPanel {
     private void renderEnemy(final Graphics2D graphic, final Entity enemy) {
         final Enemy e = (Enemy) enemy;
         double startingHealth = 0;
-        Sprite asset = new Sprite(0, 0, null);
+        Sprite asset = this.missingAsset;
         switch (e.getName()) {
             case Orc.NAME:
                 asset = orc;

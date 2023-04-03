@@ -5,6 +5,8 @@ import it.unibo.unrldef.common.Position;
 
 import java.awt.Image;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * the class that represents a sprite and its dimension.
  */
@@ -22,7 +24,7 @@ public class Sprite {
      */
     public Sprite(final int width, final int height, final Image sprite) {
         this.dim = new Pair<>(width, height);
-        this.spriteImage = sprite.getScaledInstance(height, width, Image.SCALE_SMOOTH);
+        this.spriteImage = sprite.getScaledInstance(sprite.getWidth(null), -1, Image.SCALE_SMOOTH);
         this.scaledSprite = this.spriteImage;
         this.scaledDim = this.dim;
     }
@@ -43,8 +45,9 @@ public class Sprite {
      * 
      * @return the sprite in the right dimension
      */
+    @SuppressFBWarnings("EI_EXPOSE_REP")
     public Image getScaledSprite() {
-        return this.scaledSprite.getScaledInstance(this.scaledDim.getFirst(), this.scaledDim.getSecond(), Image.SCALE_SMOOTH);
+        return this.scaledSprite; 
     }
 
     /**

@@ -77,6 +77,12 @@
             "fileName": "money.png",
             "width": 4,
             "height": 4
+        },
+        {
+            "name": "missingAsset",
+            "fileName": "missingAsset.png",
+            "width": 10,
+            "height": 10
         }
     ]
 }
