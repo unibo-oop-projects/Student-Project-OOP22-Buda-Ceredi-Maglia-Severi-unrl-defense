@@ -49,7 +49,7 @@ public final class DefenseButtonPanel extends JPanel {
     public static final int HEIGHT = WIDTH;
     private static final Color BACKGROUND_COLOR = new Color(255, 255, 255);
     private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
-    private final World world;
+    private World world;
     private final Map<String, JButton> buttons = new HashMap<>();
 
     /**
@@ -60,7 +60,7 @@ public final class DefenseButtonPanel extends JPanel {
      */
     public DefenseButtonPanel(final GamePanel gamePanel, final World world, final Input inputHandler) {
         super();
-        this.world = world;
+        this.setWorld(world);
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBackground(BACKGROUND_COLOR);
         JButton cannon = null;
@@ -147,6 +147,14 @@ public final class DefenseButtonPanel extends JPanel {
             }
             respectiveButton.setEnabled(enableState);
         }
+    }
+
+    /**
+     * Sets the world of the game.
+     * @param world
+     */
+    public void setWorld(final World world) {
+        this.world = world;
     }
 
     /**
