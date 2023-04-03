@@ -28,8 +28,8 @@ public final class SpellImplTest {
     @BeforeEach
     public void init() {
         this.testWorld = new WorldImpl.Builder("testWorld", new PlayerImpl(), new Position(0, 0), 0, 0)
-        .addPathSegment(Direction.END, 0)
-        .build();
+                .addPathSegment(Direction.END, 0)
+                .build();
         this.testSpell = new SpellImpl("test", this.testWorld, this.testRadius, this.testDamage, 
                 this.testRechargeTime, this.testLingeringEffectTime, this.testLingeringEffectFrequency) {
             @Override

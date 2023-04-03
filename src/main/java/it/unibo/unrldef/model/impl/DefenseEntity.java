@@ -3,8 +3,7 @@ package it.unibo.unrldef.model.impl;
 import java.util.Objects;
 
 /**
- * A model of a defensive type entity in a strategic game.
- * 
+ * A model of a defensive type entity in a strategic game
  * @author tommaso.severi2@studio.unibo.it
  * @author tommaso.ceredi@studio.unibo.it
  */
@@ -14,17 +13,17 @@ public abstract class DefenseEntity extends EntityImpl {
     private final double damage;
     private final long attackRate;
     private long timeSinceLastAction;
-    private boolean isAttacking;
+    private boolean isAttacking = false;
 
     /**
-     * Crates a new defensive entinty.
-     * 
-     * @param name       its name
-     * @param radius     the radius it can deal damage from
-     * @param damage     the damage it inflicts to an enemy
+     * Crates a new defensive entinty
+     * @param position where it'll placed
+     * @param name its name
+     * @param radius the radius it can deal damage from
+     * @param damage the damage it inflicts to an enemy
      * @param attackRate the rate at which it deals damage
      */
-    public DefenseEntity(final String name, final double radius,
+    public DefenseEntity(final String name, final double radius, 
             final double damage, final long attackRate) {
         super(name);
         this.radius = Objects.requireNonNull(radius);
@@ -32,11 +31,10 @@ public abstract class DefenseEntity extends EntityImpl {
         this.attackRate = Objects.requireNonNull(attackRate);
         this.timeSinceLastAction = 0;
     }
-
+    
     /**
      * 
-     * @return the time elapsed since the last action of the entity was performed in
-     *         milliseconds
+     * @return the time elapsed since the last action of the entity was performed in milliseconds
      */
     public long getTimeSinceLastAction() {
         return this.timeSinceLastAction;
@@ -46,13 +44,12 @@ public abstract class DefenseEntity extends EntityImpl {
      * 
      * @param amount increase the time elapsed in milliseconds since the last action
      */
-    public void incrementTime(final long amount) {
+    public void incrementTime(long amount) {
         this.timeSinceLastAction += amount;
     }
 
     /**
-     * 
-     * Reset elapsed time.
+     * Reset elapsed time
      */
     public void resetElapsedTime() {
         this.timeSinceLastAction = 0;
@@ -80,10 +77,10 @@ public abstract class DefenseEntity extends EntityImpl {
     }
 
     /**
-     * checks if the entity can attack.
+     * checks if the entity can attack
      */
-    public void checkAttack() {
-        if (this.getTimeSinceLastAction() >= this.getAttackRate()) {
+    public void checkAttack(){
+        if (this.getTimeSinceLastAction() >= this.getAttackRate()){
             this.resetElapsedTime();
             this.attack();
             this.isAttacking = true;
@@ -93,8 +90,7 @@ public abstract class DefenseEntity extends EntityImpl {
     }
 
     /**
-     * 
-     * this method is called when is time to attack.
+     * this method is called when is time to attack
      */
     protected abstract void attack();
 
