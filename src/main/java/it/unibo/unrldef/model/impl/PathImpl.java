@@ -24,7 +24,7 @@ public final class PathImpl implements Path {
      */
     public PathImpl(final Position spawningPoint) {
         this.path = new ArrayList<>();
-        this.spawingPoint = spawningPoint;
+        this.spawingPoint = new Position(spawningPoint.getX(), spawningPoint.getY());
     }
 
     @Override
@@ -39,7 +39,7 @@ public final class PathImpl implements Path {
 
     @Override
     public Position getSpawningPoint() {
-        return this.spawingPoint;
+        return new Position(this.spawingPoint.getX(), this.spawingPoint.getY());
     }
 
 }
