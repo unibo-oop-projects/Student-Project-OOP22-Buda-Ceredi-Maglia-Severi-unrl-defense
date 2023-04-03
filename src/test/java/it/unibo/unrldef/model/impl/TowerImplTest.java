@@ -31,4 +31,22 @@ public class TowerImplTest {
                 .addTowerBuildingSpace(0, 0)
                 .build();
     }
+
+    /**
+     * Test the attack method.
+     */
+    @Test
+    void testAttack() {
+        final int testDamage = 5;
+        final Position testPosition = new Position(0, 0);
+        this.testWorld.tryBuildTower(testPosition, Hunter.NAME);
+        final Tower testTower = (Tower) this.testWorld.getSceneEntities().stream()
+                .filter(e -> e instanceof Tower).findFirst().get();
+        this.testEnemy = new EnemyImpl("test", testDamage, 0, 0);
+        final double startingHealth = this.testEnemy.getHealth();
+        this.testWorld.spawnEnemy(this.testEnemy, testPosition);
+        this.testWorld.getSceneEntities().forEach(e -> System.out.println(e.getPosition()));
+        testTower.updateState(testAttackForSecond);
+        assert testEnemy.getHealth() < startingHealth;
+    }
 }
