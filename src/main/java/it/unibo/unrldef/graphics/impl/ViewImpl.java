@@ -30,6 +30,7 @@ import java.util.Set;
 
 /**
  * Implements the view of the game.
+ * 
  * @author danilo.maglia@studio.unibo.it
  * @author tommaso.severi2@studio.unibo.it
  */
@@ -38,8 +39,8 @@ public final class ViewImpl implements View {
     private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
     private static final int MAX_NAME_LENGTH = 8;
 
-    private GamePanel gamePanel;
-    private DefenseButtonPanel buttonPanel;
+    private final GamePanel gamePanel;
+    private final DefenseButtonPanel buttonPanel;
     private final JFrame frame;
     private final Player player;
     private final World world;
@@ -48,8 +49,9 @@ public final class ViewImpl implements View {
 
     /**
      * Builds the view of the game starting with the menu.
-     * @param player the player of the game
-     * @param world the world of the game
+     * 
+     * @param player       the player of the game
+     * @param world        the world of the game
      * @param inputHandler the input handler of the game
      */
     public ViewImpl(final Player player, final World world, final Input inputHandler) {
@@ -57,6 +59,8 @@ public final class ViewImpl implements View {
         this.world = world;
         this.inputHandler = inputHandler;
         this.frame = new JFrame("Unreal Defense");
+        this.gamePanel = new GamePanel(world, inputHandler);
+        this.buttonPanel = new DefenseButtonPanel(this.gamePanel, this.world, this.inputHandler);
         this.menuPanel = new MenuPanel(inputHandler);
         this.frame.getContentPane().add(this.menuPanel);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,8 +74,7 @@ public final class ViewImpl implements View {
     @Override
     public void initGame() {
         this.frame.getContentPane().remove(this.menuPanel);
-        this.gamePanel = new GamePanel(world, inputHandler);
-        this.buttonPanel = new DefenseButtonPanel(this.gamePanel, this.world);
+
         this.buttonPanel.add(this.createExitButton());
         this.buttonPanel.add(this.addPlayerName());
         this.frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
@@ -97,13 +100,14 @@ public final class ViewImpl implements View {
 
     /**
      * Renders the name of the player with a max of 8 characters.
+     * 
      * @return the label with the name of the player
      */
     private JLabel addPlayerName() {
         final JLabel playerName = new JLabel();
         if (this.player.getName().length() > MAX_NAME_LENGTH) {
-            playerName.setText("Player: " 
-                    + this.player.getName().substring(0, 8) 
+            playerName.setText("Player: "
+                    + this.player.getName().substring(0, 8)
                     + "...");
         } else {
             playerName.setText("Player" + this.player.getName());
@@ -113,6 +117,7 @@ public final class ViewImpl implements View {
 
     /**
      * Creates a new button to exit the game.
+     * 
      * @return the button to exit the game
      */
     private JButton createExitButton() {
@@ -121,7 +126,8 @@ public final class ViewImpl implements View {
             exit = new JButton(new ImageIcon(new ImageIcon(ImageIO.read(
                     new File(ASSETS_FOLDER + "exit.png")))
                     .getImage()
-                    .getScaledInstance(DefenseButtonPanel.WIDTH, DefenseButtonPanel.HEIGHT, java.awt.Image.SCALE_SMOOTH)));
+                    .getScaledInstance(DefenseButtonPanel.WIDTH, DefenseButtonPanel.HEIGHT,
+                            java.awt.Image.SCALE_SMOOTH)));
             exit.setPreferredSize(new Dimension(DefenseButtonPanel.WIDTH, DefenseButtonPanel.HEIGHT));
             exit.addActionListener(new ActionListener() {
                 @Override
@@ -130,7 +136,7 @@ public final class ViewImpl implements View {
                 }
             });
         } catch (IOException e) {
-            new ErrorDialog("Error reading the images files");
+            new ErrorDialog("Error reading the images files", this.inputHandler).showDialog();
         }
         return exit;
     }
@@ -147,7 +153,7 @@ public final class ViewImpl implements View {
     @Override
     public void renderEndGame(final GameState state) {
         final Graphics g = this.frame.getGraphics();
-        // the font is setted to be 1/8 of the width of the frame just 
+        // the font is setted to be 1/8 of the width of the frame just
         // as a reference so that it is always readable
         g.setFont(new Font("Serif", Font.PLAIN, this.frame.getWidth() / 8));
         String displayState = "";
@@ -164,7 +170,7 @@ public final class ViewImpl implements View {
                 break;
         }
         this.buttonPanel.disableAllButtons();
-        // the text is centered in the middle of the frame using the height and 
+        // the text is centered in the middle of the frame using the height and
         // the width of the frame as a reference so that it is always centered
         g.drawString(displayState, this.frame.getWidth() / 10, this.frame.getHeight() / 2);
         g.setColor(Color.GREEN);

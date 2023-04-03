@@ -41,12 +41,12 @@ public final class PlayerImpl implements Player {
 
     @Override
     public boolean buildTower(final Position pos, final String towerName) {
-        return this.currentWorld.tryBuildTower(pos, towerName);
+        return this.getGameWorld().tryBuildTower(pos, towerName);
     }
 
     @Override
     public boolean throwSpell(final Position pos, final String name) {
-        return this.spells.stream()
+        return this.getSpells().stream()
                 .filter(p -> Objects.equals(p.getName(), name))
                 .findFirst().get()
                 .ifPossibleActivate(pos);
@@ -54,25 +54,25 @@ public final class PlayerImpl implements Player {
 
     @Override
     public void updateSpellState(final long elapsed) {
-        this.spells.forEach(sp -> sp.updateState(elapsed));
+        this.getSpells().forEach(sp -> sp.updateState(elapsed));
     }
 
     /**
      * @return a set of spells that are active
      */
     public Set<Spell> getActiveSpells() {
-        return new HashSet<Spell>(this.spells.stream()
+        return new HashSet<Spell>(this.getSpells().stream()
                 .filter(sp -> sp.isActive())
                 .toList());
     }
 
     @Override
     public Set<Spell> getSpells() {
-        return Set.copyOf(this.spells);
+        return this.spells;
     }
 
     @Override
     public void setSpells(final Set<Spell> spells) {
-        this.spells = spells;
+        this.spells = Set.copyOf(spells);
     }
 }

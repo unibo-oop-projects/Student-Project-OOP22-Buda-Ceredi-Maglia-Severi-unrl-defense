@@ -68,7 +68,7 @@ public final class MenuPanel extends JPanel {
         try {
             this.title = ImageIO.read(new File(ASSETS_FOLDER + "logo.png"));
         } catch (IOException e) {
-            new ErrorDialog("Error while loading the logo");
+            new ErrorDialog("Error while loading the logo", inputHandler).showDialog();
         }
 
         this.addComponentListener(new ComponentListener() {

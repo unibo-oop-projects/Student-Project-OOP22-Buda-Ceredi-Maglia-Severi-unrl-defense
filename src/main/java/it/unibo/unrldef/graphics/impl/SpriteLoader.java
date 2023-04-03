@@ -15,6 +15,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import it.unibo.unrldef.input.api.Input;
+
 /**
  * Class that loads from file and contains the data of the sprites.
  * 
@@ -85,8 +87,9 @@ public class SpriteLoader {
      * loads the sprites from the JSON file passed as argument.
      * 
      * @param fileName
+     * @param inputHandler 
      */
-    public void loadSpritesFromFile(final String fileName) {
+    public void loadSpritesFromFile(final String fileName, final Input inputHandler) {
         final JSONParser parser = new JSONParser();
         String fileContent;
         JSONObject json = new JSONObject();
@@ -95,10 +98,8 @@ public class SpriteLoader {
             // read the whole file passed as argument and put the content in a string
             fileContent = new String(Files.readAllBytes(Paths.get(fileName)));
             json = (JSONObject) parser.parse(fileContent);
-        } catch (IOException e) {
-            new ErrorDialog("Error loading the sprites");
-        } catch (ParseException e) {
-            new ErrorDialog("Error parsing the sprites");
+        } catch (ParseException | IOException e) {
+            new ErrorDialog("Error loading the sprites", inputHandler).showDialog();
         }
 
         final JSONArray sprites = (JSONArray) json.get("sprites");
@@ -112,7 +113,7 @@ public class SpriteLoader {
             try {
                 spriteImage = ImageIO.read(new File(ASSETS_FOLDER + sprite.get("fileName").toString()));
             } catch (IOException e) {
-                new ErrorDialog("Error loading the sprite " + sprite.get("name").toString());
+                new ErrorDialog("Error loading the sprite " + sprite.get("name").toString(), inputHandler).showDialog();
             }
             final Sprite newSprite = new Sprite(width, height, spriteImage);
             this.sprites.put(sprite.get("name").toString(), newSprite);

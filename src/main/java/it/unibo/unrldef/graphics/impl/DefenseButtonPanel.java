@@ -20,6 +20,7 @@ import it.unibo.unrldef.model.impl.SnowStorm;
 import it.unibo.unrldef.model.impl.Cannon;
 import it.unibo.unrldef.model.impl.SpellImpl;
 import it.unibo.unrldef.model.impl.TowerImpl;
+import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
@@ -48,17 +49,18 @@ public final class DefenseButtonPanel extends JPanel {
     public static final int HEIGHT = WIDTH;
     private static final Color BACKGROUND_COLOR = new Color(255, 255, 255);
     private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
-    private final World world;
+    private World world;
     private final Map<String, JButton> buttons = new HashMap<>();
 
     /**
      * Builds a new Panel for the defensive buttons.
      * @param gamePanel the game panel
      * @param world the world of the game
+     * @param inputHandler the input handler of the game
      */
-    public DefenseButtonPanel(final GamePanel gamePanel, final World world) {
+    public DefenseButtonPanel(final GamePanel gamePanel, final World world, final Input inputHandler) {
         super();
-        this.world = world;
+        this.setWorld(world);
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBackground(BACKGROUND_COLOR);
         JButton cannon = null;
@@ -75,7 +77,7 @@ public final class DefenseButtonPanel extends JPanel {
             snowStorm = this.placeDefenseButton(GamePanel.ViewState.SPELL_SELECTED, SnowStorm.NAME, gamePanel, 
                     new ImageIcon(ImageIO.read(new File(ASSETS_FOLDER + "snowstormIcon.png"))));
         } catch (IOException e) {
-            new ErrorDialog("Error reading icon's images");
+            new ErrorDialog("Error reading icon's images", inputHandler).showDialog();
         }
         this.add(cannon);
         this.buttons.put(Cannon.NAME, cannon);
@@ -145,6 +147,14 @@ public final class DefenseButtonPanel extends JPanel {
             }
             respectiveButton.setEnabled(enableState);
         }
+    }
+
+    /**
+     * Sets the world of the game.
+     * @param world
+     */
+    public void setWorld(final World world) {
+        this.world = world;
     }
 
     /**
