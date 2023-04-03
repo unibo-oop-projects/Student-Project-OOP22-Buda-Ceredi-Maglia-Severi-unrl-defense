@@ -430,7 +430,7 @@ public final class GamePanel extends JPanel {
     private void renderEnemy(final Graphics2D graphic, final Entity enemy) {
         final Enemy e = (Enemy) enemy;
         double startingHealth = 0;
-        Sprite asset = new Sprite(0, 0, null);
+        Sprite asset = null;
         switch (e.getName()) {
             case Orc.NAME:
                 asset = orc;
