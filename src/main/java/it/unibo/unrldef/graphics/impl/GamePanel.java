@@ -12,6 +12,9 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -103,7 +106,7 @@ public final class GamePanel extends JPanel {
 
     private final JPanel panelRef;
 
-    private final Map<Entity, SpriteAnimation> animationMap;
+    private final transient Map<Entity, SpriteAnimation> animationMap;
 
     /**
      * 
@@ -115,7 +118,8 @@ public final class GamePanel extends JPanel {
         this.panelRef = this;
         this.mousePosition = new Position(0, 0);
         this.spriteLoader
-                .loadSpritesFromFile("resources" + File.separator + "config" + File.separator + "spritesInfo.json");
+                .loadSpritesFromFile("resources" + File.separator + "config" + File.separator + "spritesInfo.json",
+                        inputHandler);
         this.map = this.spriteLoader.getSprite(SpriteLoader.FIRST_MAP);
         this.orc = this.spriteLoader.getSprite(SpriteLoader.ORC);
         this.sprites.add(this.orc);
@@ -181,10 +185,10 @@ public final class GamePanel extends JPanel {
                                 .filter(pos -> {
                                     final Position realPos = fromPositionToRealPosition(pos);
                                     return isInSquare(pView,
-                                            new Position(realPos.getX() - towerWidth / 2,
-                                                    realPos.getY() - towerHeight / 2),
-                                            new Position(realPos.getX() + towerWidth / 2,
-                                                    realPos.getY() + towerHeight / 2));
+                                            new Position(realPos.getX() - towerWidth / 2.0,
+                                                    realPos.getY() - towerHeight / 2.0),
+                                            new Position(realPos.getX() + towerWidth / 2.0,
+                                                    realPos.getY() + towerHeight / 2.0));
                                 })
                                 .findFirst().ifPresent(modelP -> {
                                     towerAvailablePositions.remove(modelP);
@@ -299,10 +303,10 @@ public final class GamePanel extends JPanel {
         towerAvailablePositions.stream()
                 .map(x -> this.fromPositionToRealPosition(x))
                 .filter(pos -> this.isInSquare(mousePosition,
-                        new Position(pos.getX() - towerPlace.getScaledDimension().getFirst() / 2,
-                                pos.getY() - towerWidth / 2),
-                        new Position(pos.getX() + towerPlace.getScaledDimension().getFirst() / 2,
-                                pos.getY() + towerHeight / 2)))
+                        new Position(pos.getX() - towerPlace.getScaledDimension().getFirst() / 2.0,
+                                pos.getY() - towerWidth / 2.0),
+                        new Position(pos.getX() + towerPlace.getScaledDimension().getFirst() / 2.0,
+                                pos.getY() + towerHeight / 2.0)))
                 .findFirst()
                 .ifPresent(towerSquare -> {
                     int radius = 0;
@@ -538,5 +542,13 @@ public final class GamePanel extends JPanel {
                 && pos.getX() <= downRight.getX()
                 && pos.getY() <= downRight.getY()
                 && pos.getY() >= upLeft.getY();
+    }
+
+    private void writeObject(final ObjectOutputStream stream) throws IOException {
+        stream.defaultWriteObject();
+    }
+
+    private void readObject(final ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
     }
 }

@@ -51,7 +51,6 @@ public abstract class DefenseEntity extends EntityImpl {
     }
 
     /**
-     * 
      * Reset elapsed time.
      */
     public void resetElapsedTime() {
@@ -93,7 +92,6 @@ public abstract class DefenseEntity extends EntityImpl {
     }
 
     /**
-     * 
      * this method is called when is time to attack.
      */
     protected abstract void attack();

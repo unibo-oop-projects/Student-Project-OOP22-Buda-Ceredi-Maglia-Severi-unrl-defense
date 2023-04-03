@@ -7,9 +7,11 @@ import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.core.api.GameEngine;
 import it.unibo.unrldef.graphics.api.View;
 import it.unibo.unrldef.input.api.Input;
+import it.unibo.unrldef.input.impl.PlayerInput;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.api.World.GameState;
+import it.unibo.unrldef.graphics.impl.ViewImpl;
 
 /**
  * This class modules the engine that updates the game.
@@ -29,14 +31,12 @@ public final class GameEngineImpl implements GameEngine {
      * Builds a new GameEngine.
      * @param world the world of the game
      * @param player the player of the game
-     * @param view the view of the game
-     * @param input the input of the game
      */
-    public GameEngineImpl(final World world, final Player player, final View view, final Input input) {
-        this.input = input;
+    public GameEngineImpl(final World world, final Player player) {
+        this.input = new PlayerInput();
+        this.gameView = new ViewImpl(player, world, input);
         this.player = player;
         this.setGameWorld(world);
-        this.gameView = view;
         this.started = false;
         this.ended = false;
     }
@@ -65,7 +65,7 @@ public final class GameEngineImpl implements GameEngine {
     @Override
     public void gameLoop() {
         long previousFrameStartTime = System.currentTimeMillis();
-        while (this.gameState() == GameState.PLAYING) {
+        while (this.isGameRunning()) {
             final long currentFrameStartTime = System.currentTimeMillis();
             final long elapsed = currentFrameStartTime - previousFrameStartTime;
             this.processInput();
@@ -117,6 +117,14 @@ public final class GameEngineImpl implements GameEngine {
                     break;
             }
         }
+    }
+
+    /**
+     * Checks if the game is running.
+     * @return true if the game is running, false otherwise
+     */
+    private boolean isGameRunning() {
+        return this.gameState().equals(GameState.PLAYING) && !this.ended;
     }
 
     /**

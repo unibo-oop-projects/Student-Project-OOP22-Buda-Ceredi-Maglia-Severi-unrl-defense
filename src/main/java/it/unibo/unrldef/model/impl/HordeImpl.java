@@ -24,7 +24,7 @@ public final class HordeImpl implements Horde {
 
     @Override
     public List<Enemy> getEnemies() {
-        return this.enemies;
+        return List.copyOf(this.enemies);
     }
 
     @Override

@@ -20,6 +20,7 @@ import it.unibo.unrldef.model.impl.SnowStorm;
 import it.unibo.unrldef.model.impl.Cannon;
 import it.unibo.unrldef.model.impl.SpellImpl;
 import it.unibo.unrldef.model.impl.TowerImpl;
+import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
@@ -55,8 +56,9 @@ public final class DefenseButtonPanel extends JPanel {
      * Builds a new Panel for the defensive buttons.
      * @param gamePanel the game panel
      * @param world the world of the game
+     * @param inputHandler the input handler of the game
      */
-    public DefenseButtonPanel(final GamePanel gamePanel, final World world) {
+    public DefenseButtonPanel(final GamePanel gamePanel, final World world, final Input inputHandler) {
         super();
         this.world = world;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -75,7 +77,7 @@ public final class DefenseButtonPanel extends JPanel {
             snowStorm = this.placeDefenseButton(GamePanel.ViewState.SPELL_SELECTED, SnowStorm.NAME, gamePanel, 
                     new ImageIcon(ImageIO.read(new File(ASSETS_FOLDER + "snowstormIcon.png"))));
         } catch (IOException e) {
-            new ErrorDialog("Error reading icon's images");
+            new ErrorDialog("Error reading icon's images", inputHandler).showDialog();
         }
         this.add(cannon);
         this.buttons.put(Cannon.NAME, cannon);
