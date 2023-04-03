@@ -73,6 +73,6 @@ public final class PlayerImpl implements Player {
 
     @Override
     public void setSpells(final Set<Spell> spells) {
-        this.spells = spells;
+        this.spells = Set.copyOf(spells);
     }
 }
