@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Tower;
-import it.unibo.unrldef.model.api.World;
 
 /**
  * A tower that can be placed in a world.
@@ -15,7 +14,6 @@ import it.unibo.unrldef.model.api.World;
 public abstract class TowerImpl extends DefenseEntity implements Tower {
 
     private final int cost;
-    private World parentWorld;
     private Optional<Enemy> target = Optional.empty();
 
     /**
@@ -31,7 +29,6 @@ public abstract class TowerImpl extends DefenseEntity implements Tower {
             final long attackRate, final int cost) {
         super(name, radius, damage, attackRate);
         this.cost = cost;
-        this.setParentWorld(parentWorld);
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
@@ -28,12 +29,12 @@ import it.unibo.unrldef.input.api.Input.HitType;
 public final class MenuPanel extends JPanel {
 
     private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
-    private Image title;
+    private transient Image title;
     private static final long serialVersionUID = 1L;
     private final JButton exitButton, startButton;
     private final JTextField nameField;
-    private final Input inputHandler;
-    private final MenuPanel panelRef;
+    private final transient Input inputHandler;
+    private final Dimension panelRef;
     private double xScale = 1;
     private double yScale = 1;
     private static final int DEFAULT_WIDTH = 600;
@@ -52,6 +53,10 @@ public final class MenuPanel extends JPanel {
         return new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
+    private Dimension getPanelDimension() {
+        return this.getSize();
+    }
+
     /**
      * Constructor of the MenuPanel.
      * 
@@ -59,7 +64,7 @@ public final class MenuPanel extends JPanel {
      */
     public MenuPanel(final Input inputHandler) {
         super();
-        this.panelRef = this;
+        this.panelRef = getPanelDimension();
         try {
             this.title = ImageIO.read(new File(ASSETS_FOLDER + "logo.png"));
         } catch (IOException e) {
@@ -69,8 +74,8 @@ public final class MenuPanel extends JPanel {
         this.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(final ComponentEvent e) {
-                final int currWidth = panelRef.getWidth();
-                final int currHeight = panelRef.getHeight();
+                final int currWidth = (int) panelRef.getWidth();
+                final int currHeight = (int) panelRef.getHeight();
                 xScale = (double) currWidth / DEFAULT_WIDTH;
                 yScale = (double) currHeight / DEFAULT_HEIGHT;
             }
@@ -87,7 +92,7 @@ public final class MenuPanel extends JPanel {
             public void componentHidden(final ComponentEvent e) {
             }
         });
-        this.inputHandler = inputHandler;
+        this.inputHandler = Objects.requireNonNull(inputHandler);
         this.setLayout(null);
         this.setBackground(BACKGROUND_COLOR);
         this.nameField = new JTextField();
@@ -112,12 +117,12 @@ public final class MenuPanel extends JPanel {
     @Override
     public void paint(final Graphics g) {
         super.paint(g);
-        final int width = panelRef.getWidth() / 2 - TITLE_CENTER.getFirst();
-        final int height = panelRef.getHeight() / 2 - TITLE_CENTER.getSecond();
+        final int width = (int) (panelRef.getWidth() / 2 - TITLE_CENTER.getFirst());
+        final int height = (int) (panelRef.getHeight() / 2 - TITLE_CENTER.getSecond());
         final int fontSubtitle = Math.min((int) xScale, (int) yScale) == 0 ? FONT_SUBTITLE_SIZE
                 : (int) ((FONT_SUBTITLE_SIZE) * Math.min((int) xScale, (int) yScale));
         g.drawImage(this.title, this.getWidth() / 4, this.getHeight() / 10,
-                panelRef.getWidth() / 2, panelRef.getHeight() / 3, null);
+                (int) panelRef.getWidth() / 2, (int) panelRef.getHeight() / 3, null);
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, fontSubtitle));
         g.drawString("Inserisci il tuo nome:", width + PADDING, height + CENTER);
