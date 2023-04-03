@@ -24,7 +24,7 @@ public final class SnowStorm extends SpellImpl {
     private static final long LINGERING_EFFECT_TIME = 6 * 1000;
     private static final long LINGERING_EFFECT_FREQ = 500;
 
-    private final double speedReduction = 0.2;
+    private static final double SPEED_REDUCTION = 0.2;
     private final Set<Enemy> enemiesEffected = new HashSet<>();
 
     /**
@@ -37,7 +37,7 @@ public final class SnowStorm extends SpellImpl {
 
     @Override
     protected void effect(final Enemy enemy) {
-        enemy.setSpeed(enemy.getSpeed() - (enemy.getSpeed() * this.speedReduction));
+        enemy.setSpeed(enemy.getSpeed() - (enemy.getSpeed() * SPEED_REDUCTION));
         this.enemiesEffected.add(enemy);
     }
 

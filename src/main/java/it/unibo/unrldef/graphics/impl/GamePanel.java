@@ -78,7 +78,7 @@ public final class GamePanel extends JPanel {
     private final Set<Position> towerAvailablePositions;
     private final World gameWorld;
     private ViewState viewState;
-    private transient final SpriteLoader spriteLoader = new SpriteLoader();
+    private final transient SpriteLoader spriteLoader = new SpriteLoader();
     private final transient Sprite orc;
     private final transient Sprite goblin;
     private final transient Sprite fireball;
