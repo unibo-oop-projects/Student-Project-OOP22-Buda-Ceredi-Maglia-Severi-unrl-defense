@@ -22,7 +22,7 @@ public class Sprite {
      */
     public Sprite(final int width, final int height, final Image sprite) {
         this.dim = new Pair<>(width, height);
-        this.spriteImage = sprite;
+        this.spriteImage = sprite.getScaledInstance(height, width, Image.SCALE_SMOOTH);
     }
 
     /**
@@ -42,7 +42,7 @@ public class Sprite {
      * @return the sprite in the right dimension
      */
     public Image getScaledSprite() {
-        return this.scaledSprite;
+        return this.scaledSprite.getScaledInstance(this.scaledDim.getFirst(), this.scaledDim.getSecond(), Image.SCALE_SMOOTH);
     }
 
     /**
@@ -59,6 +59,6 @@ public class Sprite {
      * @return the point in witch to render the sprite in order to have it centered
      */
     public Position getApplicationPoint(final Position pos) {
-        return new Position(pos.getX() - this.dim.getFirst() / 2, pos.getY() - this.dim.getSecond() / 2);
+        return new Position(pos.getX() - this.dim.getFirst().doubleValue() / 2, pos.getY() - this.dim.getSecond().doubleValue() / 2);
     }
 }

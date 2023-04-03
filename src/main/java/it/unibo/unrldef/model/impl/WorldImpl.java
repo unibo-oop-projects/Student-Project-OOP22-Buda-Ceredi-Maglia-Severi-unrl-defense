@@ -50,6 +50,7 @@ public final class WorldImpl implements World {
     private final Queue<Enemy> spawningQueue;
     private long timeToNextHorde;
     private long timeToNextSpawn;
+    private final Random rand = new Random();
 
     private WorldImpl(final String name, final Player player, final Integrity castleIntegrity, final Path path,
             final List<Wave> waves,
@@ -68,6 +69,7 @@ public final class WorldImpl implements World {
         this.timeToNextSpawn = 0;
         this.waveCounter = 0;
         this.bank = bank;
+    
     }
 
     @Override
@@ -102,7 +104,6 @@ public final class WorldImpl implements World {
             timeToNextSpawn = SPAWNING_TIME;
             final Enemy newEnemy = this.spawningQueue.poll();
             final Position spawningPoint = this.path.getSpawningPoint();
-            final Random rand = new Random();
             final Position pos = new Position(spawningPoint.getX() + rand.nextInt(-PATH_DEPHT / 2, PATH_DEPHT / 2),
                     spawningPoint.getY() + rand.nextInt(-PATH_DEPHT / 2, PATH_DEPHT / 2));
             this.spawnEnemy(newEnemy, pos);
@@ -301,7 +302,7 @@ public final class WorldImpl implements World {
 
     @Override
     public Set<Position> getAvailablePositions() {
-        return this.availablePositions;
+        return new HashSet<>(this.availablePositions);
     }
 
     /**
