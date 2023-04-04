@@ -55,7 +55,7 @@ public final class GameEngineImpl implements GameEngine {
 
     @Override
     public void setPlayer(final Player player) {
-        this.player = player.copy();
+        this.player = player;
     }
 
     @Override

@@ -62,9 +62,4 @@ public interface Player {
      * @param spells a set of spells
      */
     void setSpells(Set<Spell> spells);
-
-    /**
-     * @return a copy of this player
-     */
-    Player copy();
 }

@@ -84,13 +84,4 @@ public final class PlayerImpl implements Player {
     public void setSpells(final Set<Spell> spells) {
         this.spells = Set.copyOf(spells);
     }
-
-    @Override
-    public Player copy() {
-        final PlayerImpl copy = new PlayerImpl();
-        copy.setGameMap(this.getGameWorld());
-        copy.setName(this.getName());
-        copy.setSpells(this.getSpells());
-        return copy;
-    }
 }
