@@ -2,6 +2,7 @@ package it.unibo.unrldef.graphics.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -102,7 +103,7 @@ public class SpriteLoader {
 
         try {
             // read the whole file passed as argument and put the content in a string
-            fileContent = new String(Files.readAllBytes(Paths.get(fileName)));
+            fileContent = new String(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
             json = (JSONObject) parser.parse(fileContent);
         } catch (ParseException | IOException e) {
             new ErrorDialog("Error loading the sprites", inputHandler).showDialog();

@@ -18,7 +18,8 @@ public class Sprite {
 
     /**
      * the constructor.
-     * @param width the real width of the sprite
+     * 
+     * @param width  the real width of the sprite
      * @param height the real height of the sprite
      * @param sprite the image of the sprite
      */
@@ -31,6 +32,7 @@ public class Sprite {
 
     /**
      * Scales the sprite, given the scale factors.
+     * 
      * @param xScale the scale factor for the x axis
      * @param yScale the scale factor for the y axis
      */
@@ -47,7 +49,7 @@ public class Sprite {
      */
     @SuppressFBWarnings("EI_EXPOSE_REP")
     public Image getScaledSprite() {
-        return this.scaledSprite; 
+        return this.scaledSprite;
     }
 
     /**
@@ -64,6 +66,7 @@ public class Sprite {
      * @return the point in witch to render the sprite in order to have it centered
      */
     public Position getApplicationPoint(final Position pos) {
-        return new Position(pos.getX() - this.dim.getFirst().doubleValue() / 2, pos.getY() - this.dim.getSecond().doubleValue() / 2);
+        return new Position(pos.getX() - this.dim.getFirst().doubleValue() / 2,
+                pos.getY() - this.dim.getSecond().doubleValue() / 2);
     }
 }

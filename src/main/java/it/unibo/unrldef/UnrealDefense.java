@@ -34,8 +34,8 @@ public final class UnrealDefense {
         final LevelBuilder level = new LevelBuilder(p);
         final World world = level.fromFile("resources/config/levelOne.json");
         final Input input = new PlayerInput();
-        final View view = new ViewImpl(p, world, input);
         if (world != null) {
+            final View view = new ViewImpl(p, world, input);
             final GameEngine engine = new GameEngineImpl(world, p, input, view);
             engine.menuLoop();
         } else {

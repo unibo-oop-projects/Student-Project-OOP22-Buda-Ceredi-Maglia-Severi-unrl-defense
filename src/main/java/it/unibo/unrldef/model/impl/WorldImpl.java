@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
@@ -69,7 +70,7 @@ public final class WorldImpl implements World {
         this.timeToNextSpawn = 0;
         this.waveCounter = 0;
         this.bank = bank;
-    
+
     }
 
     @Override
@@ -112,7 +113,7 @@ public final class WorldImpl implements World {
 
     private Boolean areWavesEnded() {
         return this.waveCounter == this.waves.size() - 1
-            && this.waves.get(this.waveCounter).isWaveOver();
+                && this.waves.get(this.waveCounter).isWaveOver();
     }
 
     private List<Enemy> enemiesInArea(final Position upLeft, final Position downRight) {
@@ -274,7 +275,7 @@ public final class WorldImpl implements World {
 
     @Override
     public Path getPath() {
-        return this.path;
+        return new PathImpl(this.path);
     }
 
     private double distance(final Position a, final Position b) {
@@ -329,6 +330,7 @@ public final class WorldImpl implements World {
          * @param castleHearts  castle's number of hearts
          * @param startingMoney the starting money of the player
          */
+        @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Player is meant to be the same as the other objects")
         public Builder(final String worldName, final Player player, final Position spawnPoint, final int castleHearts,
                 final double startingMoney) {
             this.name = worldName;

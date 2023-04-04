@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.input.api.Input.HitType;
@@ -58,6 +59,7 @@ public final class MenuPanel extends JPanel {
      * 
      * @param inputHandler the input handler
      */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Input is meant to be changed by the view")
     public MenuPanel(final Input inputHandler) {
         super();
         try {

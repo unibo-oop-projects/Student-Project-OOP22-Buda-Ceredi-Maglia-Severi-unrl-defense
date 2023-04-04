@@ -10,11 +10,15 @@ import it.unibo.unrldef.model.api.Path.Direction;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import org.json.simple.parser.JSONParser;
 
 /**
@@ -31,6 +35,7 @@ public class LevelBuilder {
      * 
      * @param player
      */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Player is meant to be the same as the other objects")
     public LevelBuilder(final Player player) {
         this.player = player;
     }
@@ -50,7 +55,7 @@ public class LevelBuilder {
         String fileContent;
         try {
             // read the whole file passed as argument and put the content in a string
-            fileContent = new String(Files.readAllBytes(Paths.get(fileName)));
+            fileContent = new String(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
             json = (JSONObject) parser.parse(fileContent);
         } catch (IOException | ParseException e) {
             e.printStackTrace(); // NOPMD

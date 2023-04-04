@@ -5,13 +5,13 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.input.api.Input.HitType;
 
 import java.awt.BorderLayout;
 
 import java.awt.event.ActionListener;
-import java.util.Objects;
 import java.util.Optional;
 import java.awt.event.ActionEvent;
 
@@ -32,12 +32,13 @@ public final class ErrorDialog extends JDialog {
      * @param error the error message to show
      * @param input the input handler
      */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Input is meant to be changed by the view")
     public ErrorDialog(final String error, final Input input) {
         super();
 
         final JPanel dialogPanel = new JPanel(new BorderLayout());
         final JButton exitButton = new JButton("Exit");
-        this.inputHandler = Objects.requireNonNull(input);
+        this.inputHandler = input;
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {

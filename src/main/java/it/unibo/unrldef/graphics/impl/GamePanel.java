@@ -24,6 +24,7 @@ import java.util.Set;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.input.api.Input;
 import it.unibo.unrldef.model.api.Enemy;
@@ -254,6 +255,7 @@ public final class GamePanel extends JPanel {
         this.selectedEntity = entity;
     }
 
+    @SuppressFBWarnings(value = "BC_UNCONFIRMED_CAST", justification = "It's a Graphics2D object")
     @Override
     public void paint(final Graphics g) {
         super.paint(g);

@@ -2,6 +2,7 @@ package it.unibo.unrldef.core.impl;
 
 import java.util.Optional;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.core.api.GameEngine;
@@ -13,6 +14,7 @@ import it.unibo.unrldef.model.api.World.GameState;
 
 /**
  * This class modules the engine that updates the game.
+ * 
  * @author tommaso.severi2@studio.unibo.it
  */
 public final class GameEngineImpl implements GameEngine {
@@ -21,16 +23,17 @@ public final class GameEngineImpl implements GameEngine {
     private Player player;
     private World currentWorld;
     private Input input;
-    private View gameView; 
+    private View gameView;
     private boolean started;
     private boolean ended;
 
     /**
      * Builds a new GameEngine.
-     * @param world the world of the game
+     * 
+     * @param world  the world of the game
      * @param player the player of the game
-     * @param input the input of the game
-     * @param view the view of the game
+     * @param input  the input of the game
+     * @param view   the view of the game
      */
     public GameEngineImpl(final World world, final Player player, final Input input, final View view) {
         this.setInput(input);
@@ -53,6 +56,7 @@ public final class GameEngineImpl implements GameEngine {
         this.currentWorld = world;
     }
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Player is meant to be the same as the other objects")
     @Override
     public void setPlayer(final Player player) {
         this.player = player;
@@ -63,6 +67,7 @@ public final class GameEngineImpl implements GameEngine {
         this.gameView = view;
     }
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Input is meant to be the same as the other objects")
     @Override
     public void setInput(final Input input) {
         this.input = input;
@@ -94,6 +99,7 @@ public final class GameEngineImpl implements GameEngine {
 
     /**
      * Waits for the next frame.
+     * 
      * @param cycleStartTime the start time of the cycle
      */
     private void waitForNextFrame(final long cycleStartTime) {
@@ -136,6 +142,7 @@ public final class GameEngineImpl implements GameEngine {
 
     /**
      * Checks if the game is running.
+     * 
      * @return true if the game is running, false otherwise
      */
     private boolean isGameRunning() {
@@ -151,6 +158,7 @@ public final class GameEngineImpl implements GameEngine {
 
     /**
      * Updates the game world.
+     * 
      * @param elapsed the elapsed time since last frame
      */
     private void update(final long elapsed) {
@@ -184,6 +192,7 @@ public final class GameEngineImpl implements GameEngine {
 
     /**
      * Renders the end of the game.
+     * 
      * @param state the final state of the game
      */
     private void renderEndState(final GameState state) {

@@ -27,6 +27,21 @@ public final class PathImpl implements Path {
         this.spawingPoint = new Position(spawningPoint.getX(), spawningPoint.getY());
     }
 
+    /**
+     * Create a new path.
+     * 
+     * @param p
+     *          the path to copy
+     */
+    public PathImpl(final Path p) {
+        final PathImpl p2 = (PathImpl) p;
+        this.path = new ArrayList<>();
+        for (int i = 0; i < p2.size(); i++) {
+            this.path.add(p2.getDirection(i));
+        }
+        this.spawingPoint = new Position(p2.getSpawningPoint().getX(), p2.getSpawningPoint().getY());
+    }
+
     @Override
     public Pair<Direction, Double> getDirection(final int index) {
         return path.get(index).copy();
@@ -40,6 +55,10 @@ public final class PathImpl implements Path {
     @Override
     public Position getSpawningPoint() {
         return new Position(this.spawingPoint.getX(), this.spawingPoint.getY());
+    }
+
+    private int size() {
+        return path.size();
     }
 
 }

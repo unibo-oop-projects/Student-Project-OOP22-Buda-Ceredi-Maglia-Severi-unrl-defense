@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
@@ -162,5 +164,13 @@ public final class DefenseButtonPanel extends JPanel {
      */
     public void disableAllButtons() {
         this.buttons.values().forEach(b -> b.setEnabled(false));
+    }
+
+    private void writeObject(final ObjectOutputStream stream) throws IOException {
+        stream.defaultWriteObject();
+    }
+
+    private void readObject(final ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
     }
 }

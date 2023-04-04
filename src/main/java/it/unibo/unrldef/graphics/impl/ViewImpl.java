@@ -6,6 +6,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -54,6 +56,8 @@ public final class ViewImpl implements View {
      * @param world        the world of the game
      * @param inputHandler the input handler of the game
      */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", 
+            justification = "Input and player are meant to be the same as the other objects")
     public ViewImpl(final Player player, final World world, final Input inputHandler) {
         this.player = player;
         this.world = world;
