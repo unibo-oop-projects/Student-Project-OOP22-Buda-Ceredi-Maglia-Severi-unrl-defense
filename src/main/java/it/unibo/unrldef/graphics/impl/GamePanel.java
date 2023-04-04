@@ -337,7 +337,7 @@ public final class GamePanel extends JPanel {
     private void renderSpellMouseRange(final Graphics2D graphic) {
         if (this.mousePosition.getY() < this.getHeight() - 2 && this.mousePosition.getX() < this.getWidth() - 2
                 && this.mousePosition.getY() > 0 && this.mousePosition.getX() > 0) {
-            Sprite asset = new Sprite(0, 0, null);
+            Sprite asset = null;
             switch (selectedEntity) {
                 case FireBall.NAME:
                     asset = this.fireball;
@@ -346,6 +346,7 @@ public final class GamePanel extends JPanel {
                     asset = this.snowStorm;
                     break;
                 default:
+                    asset = this.missingAsset;
                     break;
             }
             final Position mPos = this.fromRealPositionToPosition(this.mousePosition);
@@ -365,7 +366,7 @@ public final class GamePanel extends JPanel {
     }
 
     private void renderTower(final Graphics2D graphic, final Entity tower) {
-        Sprite towerAsset = new Sprite(0, 0, null);
+        Sprite towerAsset = null;
         final int electrodeHeight = 4;
         final Optional<Enemy> target = ((Tower) tower).getTarget();
         final Position rayStartPos = this.fromPositionToRealPosition(new Position(
@@ -384,6 +385,7 @@ public final class GamePanel extends JPanel {
                 towerAsset = animation.isAnimationRunning() ? this.shootingHunter : this.hunter;
                 break;
             default:
+                towerAsset = this.missingAsset;
                 break;
         }
 
@@ -461,7 +463,7 @@ public final class GamePanel extends JPanel {
     }
 
     private void renderSpell(final Graphics2D graphic, final Entity spell) {
-        Sprite asset = new Sprite(0, 0, null);
+        Sprite asset = null;
         switch (spell.getName()) {
             case FireBall.NAME:
                 asset = this.fireball;
@@ -470,6 +472,7 @@ public final class GamePanel extends JPanel {
                 asset = this.snowStorm;
                 break;
             default:
+                asset = this.missingAsset;
                 break;
         }
         final Position pos = spell.getPosition().get();
