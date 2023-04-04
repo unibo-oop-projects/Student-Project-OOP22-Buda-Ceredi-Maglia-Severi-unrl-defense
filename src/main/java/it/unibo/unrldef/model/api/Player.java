@@ -20,15 +20,26 @@ public interface Player {
     void setName(String name);
 
     /**
-     * Sets the map where the player will be playing.
-     * @param map the next map
-     */
-    void setGameMap(World map);
-
-    /**
      * @return the map where the player is currently playing
      */
     World getGameWorld();
+
+    /**
+     * Sets the world where the player will be playing.
+     * @param world the playing world
+     */
+    void setGameWorld(World world);
+
+    /**
+     * @return a set containing all the spells that the player can use
+     */
+    Set<Spell> getSpells();
+
+    /**
+     * Sets the spells that the player can use in the game.
+     * @param spells a set of spells
+     */
+    void setSpells(Set<Spell> spells);
 
     /**
      * Places a new tower on the world map if the player has enough money.
@@ -51,15 +62,4 @@ public interface Player {
      * @param elapsed time passed since last frame
      */
     void updateSpellState(long elapsed);
-
-    /**
-     * @return a set containing all the spells that the player can use
-     */
-    Set<Spell> getSpells();
-
-    /**
-     * Sets the spells that the player can use in the game.
-     * @param spells a set of spells
-     */
-    void setSpells(Set<Spell> spells);
 }

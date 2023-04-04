@@ -39,13 +39,23 @@ public final class PlayerImpl implements Player {
     }
 
     @Override
-    public void setGameMap(final World world) {
+    public World getGameWorld() {
+        return this.currentWorld;
+    }
+
+    @Override
+    public void setGameWorld(final World world) {
         this.currentWorld = Objects.requireNonNull(world);
     }
 
     @Override
-    public World getGameWorld() {
-        return this.currentWorld;
+    public Set<Spell> getSpells() {
+        return Set.copyOf(this.spells);
+    }
+
+    @Override
+    public void setSpells(final Set<Spell> spells) {
+        this.spells = Set.copyOf(spells);
     }
 
     @Override
@@ -73,15 +83,5 @@ public final class PlayerImpl implements Player {
         return new HashSet<Spell>(this.getSpells().stream()
                 .filter(sp -> sp.isActive())
                 .toList());
-    }
-
-    @Override
-    public Set<Spell> getSpells() {
-        return Set.copyOf(this.spells);
-    }
-
-    @Override
-    public void setSpells(final Set<Spell> spells) {
-        this.spells = Set.copyOf(spells);
     }
 }
