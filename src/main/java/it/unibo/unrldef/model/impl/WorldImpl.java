@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
+import it.unibo.unrldef.model.api.Bank;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Horde;
@@ -40,7 +41,7 @@ public final class WorldImpl implements World {
     private final String name;
     private final Player player;
     private final Integrity castleIntegrity;
-    private final BankImpl bank;
+    private final Bank bank;
     private final Path path;
     private final List<Wave> waves;
     private int waveCounter;
@@ -55,7 +56,7 @@ public final class WorldImpl implements World {
 
     private WorldImpl(final String name, final Player player, final Integrity castleIntegrity, final Path path,
             final List<Wave> waves,
-            final Map<String, Tower> availableTowers, final Set<Position> validPositions, final BankImpl bank) {
+            final Map<String, Tower> availableTowers, final Set<Position> validPositions, final Bank bank) {
         this.name = name;
         this.player = player;
         this.castleIntegrity = castleIntegrity;
@@ -314,12 +315,13 @@ public final class WorldImpl implements World {
     public static class Builder {
         private final String name;
         private final Player player;
-        private final Integrity castleIntegrity;
+        private Integrity castleIntegrity;
         private final Path path;
-        private final BankImpl bank;
+        private Bank bank;
         private final List<List<Pair<Horde, Long>>> wavesTemp;
         private final Map<String, Tower> availableTowers;
         private final Set<Position> validTowersPositions;
+
 
         /**
          * the builder's constructor.
@@ -428,6 +430,26 @@ public final class WorldImpl implements World {
          */
         public Builder addTowerBuildingSpace(final double x, final double y) {
             this.validTowersPositions.add(new Position(x, y));
+            return this;
+        }
+
+        /**
+         * changes the default implementation of bank with a personal one.
+         * @param bank
+         * @return the builder
+         */
+        public Builder changeBank(final Bank bank) {
+            this.bank = bank;
+            return this;
+        }
+
+        /**
+         * changes the default implementation of castle integrity with a personal one.
+         * @param castleIntegrity
+         * @return the builder
+         */
+        public Builder changeCastleIntegrity(final Integrity castleIntegrity) {
+            this.castleIntegrity = castleIntegrity;
             return this;
         }
 
