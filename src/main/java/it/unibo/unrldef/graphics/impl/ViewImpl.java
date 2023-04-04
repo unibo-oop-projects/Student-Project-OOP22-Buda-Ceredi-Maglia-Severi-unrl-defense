@@ -55,8 +55,7 @@ public final class ViewImpl implements View {
      * @param world        the world of the game
      * @param inputHandler the input handler of the game
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", 
-            justification = "Input and player are meant to be the same as the other objects")
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Input and player are meant to be the same as the other objects")
     public ViewImpl(final Player player, final World world, final Input inputHandler) {
         this.player = player;
         this.world = world;
@@ -176,5 +175,10 @@ public final class ViewImpl implements View {
         // the width of the frame as a reference so that it is always centered
         g.drawString(displayState, this.frame.getWidth() / 10, this.frame.getHeight() / 2);
         g.setColor(Color.GREEN);
+    }
+
+    @Override
+    public void exitGame() {
+        this.frame.dispose();
     }
 }

@@ -43,6 +43,7 @@ public final class ErrorDialog extends JDialog {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 inputHandler.setLastHit(0, 0, HitType.EXIT_GAME, Optional.empty());
+                dispose();
             }
         });
 

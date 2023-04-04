@@ -28,4 +28,9 @@ public interface View {
      * @param state the state of the game
      */
     void renderEndGame(GameState state);
+
+    /**
+     * Exits the game render.
+     */
+    void exitGame();
 }

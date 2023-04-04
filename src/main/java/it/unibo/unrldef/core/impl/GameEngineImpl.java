@@ -75,7 +75,7 @@ public final class GameEngineImpl implements GameEngine {
 
     @Override
     public void menuLoop() {
-        while (!started) {
+        while (!started && !ended) {
             this.processInput();
             this.gameView.updateMenu();
         }
@@ -187,7 +187,7 @@ public final class GameEngineImpl implements GameEngine {
      */
     private void exitGame() {
         this.ended = true;
-        System.exit(0);
+        this.gameView.exitGame();
     }
 
     /**
