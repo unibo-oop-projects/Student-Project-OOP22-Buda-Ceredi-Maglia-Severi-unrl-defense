@@ -7,7 +7,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,7 +28,7 @@ import it.unibo.unrldef.input.api.Input.HitType;
  */
 public final class MenuPanel extends JPanel {
 
-    private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
+    private static final String ASSETS_FOLDER = "/assets/";
     private transient Image title;
     private static final long serialVersionUID = 1L;
     private final JButton exitButton, startButton;
@@ -63,7 +62,7 @@ public final class MenuPanel extends JPanel {
     public MenuPanel(final Input inputHandler) {
         super();
         try {
-            this.title = ImageIO.read(new File(ASSETS_FOLDER + "logo.png"));
+            this.title = ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + "logo.png"));
         } catch (IOException e) {
             new ErrorDialog("Error while loading the logo", inputHandler).showDialog();
         }

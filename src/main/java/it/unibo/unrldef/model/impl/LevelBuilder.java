@@ -11,8 +11,6 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
@@ -55,11 +53,13 @@ public class LevelBuilder {
         String fileContent;
         try {
             // read the whole file passed as argument and put the content in a string
-            fileContent = new String(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
+            fileContent = new String((this.getClass().getResourceAsStream(fileName).readAllBytes()),
+                    StandardCharsets.UTF_8);
             json = (JSONObject) parser.parse(fileContent);
         } catch (IOException | ParseException e) {
             e.printStackTrace(); // NOPMD
         }
+
         if (json == null) {
             return null;
         }

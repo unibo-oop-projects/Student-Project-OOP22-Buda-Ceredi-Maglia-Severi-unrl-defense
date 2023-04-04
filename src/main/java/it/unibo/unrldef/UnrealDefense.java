@@ -32,7 +32,7 @@ public final class UnrealDefense {
     public static void main(final String[] args) {
         final Player p = new PlayerImpl();
         final LevelBuilder level = new LevelBuilder(p);
-        final World world = level.fromFile("resources/config/levelOne.json");
+        final World world = level.fromFile("/config/levelOne.json");
         final Input input = new PlayerInput();
         if (world != null) {
             final View view = new ViewImpl(p, world, input);

@@ -1,10 +1,7 @@
 package it.unibo.unrldef.graphics.impl;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +27,7 @@ public class SpriteLoader {
     /**
      * the folder where the assets are stored.
      */
-    private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
+    private static final String ASSETS_FOLDER = "/assets/";
     /**
      * the name of the sprite that represents the first map.
      */
@@ -103,7 +100,8 @@ public class SpriteLoader {
 
         try {
             // read the whole file passed as argument and put the content in a string
-            fileContent = new String(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
+            fileContent = new String((this.getClass().getResourceAsStream(fileName).readAllBytes()),
+                    StandardCharsets.UTF_8);
             json = (JSONObject) parser.parse(fileContent);
         } catch (ParseException | IOException e) {
             new ErrorDialog("Error loading the sprites", inputHandler).showDialog();
@@ -118,7 +116,8 @@ public class SpriteLoader {
             final int height = Integer.parseInt(sprite.get("height").toString());
             Image spriteImage = Toolkit.getDefaultToolkit().createImage("");
             try {
-                spriteImage = ImageIO.read(new File(ASSETS_FOLDER + sprite.get("fileName").toString()));
+                System.out.println(ASSETS_FOLDER + sprite.get("fileName").toString());
+                spriteImage = ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + sprite.get("fileName").toString()));
             } catch (IOException e) {
                 new ErrorDialog("Error loading the sprite " + sprite.get("name").toString(), inputHandler).showDialog();
             }

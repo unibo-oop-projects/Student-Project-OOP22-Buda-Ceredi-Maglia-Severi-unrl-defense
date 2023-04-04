@@ -11,7 +11,6 @@ import java.awt.RenderingHints;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -117,7 +116,7 @@ public final class GamePanel extends JPanel {
         this.viewState = ViewState.IDLE;
         this.mousePosition = new Position(0, 0);
         this.spriteLoader
-                .loadSpritesFromFile("resources" + File.separator + "config" + File.separator + "spritesInfo.json",
+                .loadSpritesFromFile("/config/spritesInfo.json",
                         inputHandler);
         this.map = this.spriteLoader.getSprite(SpriteLoader.FIRST_MAP);
         this.orc = this.spriteLoader.getSprite(SpriteLoader.ORC);

@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -50,7 +49,7 @@ public final class DefenseButtonPanel extends JPanel {
      */
     public static final int HEIGHT = WIDTH;
     private static final Color BACKGROUND_COLOR = new Color(255, 255, 255);
-    private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
+    private static final String ASSETS_FOLDER = "/assets/";
     private World world;
     private final Map<String, JButton> buttons = new HashMap<>();
 
@@ -71,13 +70,14 @@ public final class DefenseButtonPanel extends JPanel {
         JButton snowStorm = null;
         try {
             cannon = this.placeDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Cannon.NAME, gamePanel, 
-                    new ImageIcon(ImageIO.read(new File(ASSETS_FOLDER + "cannonIcon.png"))));
+                    new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + "cannonIcon.png"))));
             hunter = this.placeDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Hunter.NAME, gamePanel, 
-                    new ImageIcon(ImageIO.read(new File(ASSETS_FOLDER + "hunterIcon.png"))));
-            fireBall = this.placeDefenseButton(GamePanel.ViewState.SPELL_SELECTED, FireBall.NAME, gamePanel, 
-                    new ImageIcon(ImageIO.read(new File(ASSETS_FOLDER + "fireballIcon.png"))));
-            snowStorm = this.placeDefenseButton(GamePanel.ViewState.SPELL_SELECTED, SnowStorm.NAME, gamePanel, 
-                    new ImageIcon(ImageIO.read(new File(ASSETS_FOLDER + "snowstormIcon.png"))));
+                    new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + "hunterIcon.png"))));
+            fireBall = this.placeDefenseButton(GamePanel.ViewState.SPELL_SELECTED, FireBall.NAME, gamePanel,
+                    new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + "fireballIcon.png"))));
+            snowStorm = this.placeDefenseButton(GamePanel.ViewState.SPELL_SELECTED, SnowStorm.NAME, gamePanel,
+                    new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + "snowstormIcon.png"))));
+
         } catch (IOException e) {
             new ErrorDialog("Error reading icon's images", inputHandler).showDialog();
         }

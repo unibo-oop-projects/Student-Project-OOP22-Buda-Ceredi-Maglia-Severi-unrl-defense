@@ -15,7 +15,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 
 import it.unibo.unrldef.graphics.api.View;
@@ -38,7 +37,7 @@ import java.util.Set;
  */
 public final class ViewImpl implements View {
 
-    private static final String ASSETS_FOLDER = "resources/assets" + File.separator;
+    private static final String ASSETS_FOLDER = "/assets/";
     private static final int MAX_NAME_LENGTH = 8;
 
     private final GamePanel gamePanel;
@@ -127,8 +126,7 @@ public final class ViewImpl implements View {
     private JButton createExitButton() {
         JButton exit = null;
         try {
-            exit = new JButton(new ImageIcon(new ImageIcon(ImageIO.read(
-                    new File(ASSETS_FOLDER + "exit.png")))
+            exit = new JButton(new ImageIcon(new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + "exit.png")))
                     .getImage()
                     .getScaledInstance(DefenseButtonPanel.WIDTH, DefenseButtonPanel.HEIGHT,
                             java.awt.Image.SCALE_SMOOTH)));
