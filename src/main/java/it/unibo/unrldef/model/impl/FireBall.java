@@ -25,7 +25,6 @@ public final class FireBall extends SpellImpl {
 
     /**
      * Creates a new spell of type fireball.
-     * @param parentWorld the world where it'll be having effect
      */
     public FireBall() {
         super(NAME, RAD, DMG, RECHARGE_TIME, LINGERING_EFFECT_TIME, LINGERING_EFFECT_FREQ);

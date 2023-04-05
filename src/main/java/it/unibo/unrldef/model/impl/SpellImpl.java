@@ -20,7 +20,6 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
     /**
      * Creates a new spell.
      * @param name the name of the spell
-     * @param parentWorld the world where it'll be having effect
      * @param radius the radius of the spell
      * @param damage the damage of the spell
      * @param rechargeTime the recharge time of the spell

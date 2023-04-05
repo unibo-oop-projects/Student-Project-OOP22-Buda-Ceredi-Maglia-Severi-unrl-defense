@@ -28,7 +28,6 @@ public final class SnowStorm extends SpellImpl {
 
     /**
      * Creates a new spell of type ice.
-     * @param parentWorld the world where it'll be having effect
      */
     public SnowStorm() {
         super(NAME, RAD, DMG, RECHARGE_TIME, LINGERING_EFFECT_TIME, LINGERING_EFFECT_FREQ);
