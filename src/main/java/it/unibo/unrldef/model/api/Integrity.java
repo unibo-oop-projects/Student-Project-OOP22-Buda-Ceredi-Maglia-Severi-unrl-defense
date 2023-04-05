@@ -25,4 +25,10 @@ public interface Integrity {
      * @return true if the entity'integrity is compromised, false otherwise
      */
     Boolean isCompromised();
+
+    /**
+     * 
+     * @return a copy of the integrity
+     */
+    Integrity copy();
 }

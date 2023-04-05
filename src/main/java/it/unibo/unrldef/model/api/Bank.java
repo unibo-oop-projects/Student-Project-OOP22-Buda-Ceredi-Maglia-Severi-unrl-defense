@@ -23,4 +23,10 @@ public interface Bank {
      * @return the money in the bank
      */
     double getMoney();
+
+    /**
+     * 
+     * @return a copy of the bank
+     */
+    Bank copy();
 }

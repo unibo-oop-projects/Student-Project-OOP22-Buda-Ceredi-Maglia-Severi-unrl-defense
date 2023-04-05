@@ -39,4 +39,9 @@ public final class BankImpl implements Bank {
         return this.money;
     }
 
+    @Override
+    public Bank copy() {
+        return new BankImpl(this.money);
+    }
+
 }

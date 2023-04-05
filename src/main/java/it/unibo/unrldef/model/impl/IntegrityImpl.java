@@ -35,4 +35,9 @@ public final class IntegrityImpl implements Integrity {
     public Boolean isCompromised() {
         return this.hearts == 0;
     }
+
+    @Override
+    public Integrity copy() {
+        return new IntegrityImpl(this.hearts);
+    }
 }

@@ -439,7 +439,7 @@ public final class WorldImpl implements World {
          * @return the builder
          */
         public Builder changeBank(final Bank bank) {
-            this.bank = bank;
+            this.bank = bank.copy();
             return this;
         }
 
@@ -449,7 +449,7 @@ public final class WorldImpl implements World {
          * @return the builder
          */
         public Builder changeCastleIntegrity(final Integrity castleIntegrity) {
-            this.castleIntegrity = castleIntegrity;
+            this.castleIntegrity = castleIntegrity.copy();
             return this;
         }
 
