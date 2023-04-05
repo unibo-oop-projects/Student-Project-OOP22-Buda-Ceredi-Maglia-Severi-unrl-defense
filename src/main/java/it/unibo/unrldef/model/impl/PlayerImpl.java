@@ -1,6 +1,8 @@
 package it.unibo.unrldef.model.impl;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -17,7 +19,7 @@ public final class PlayerImpl implements Player {
 
     private World currentWorld;
     private String name;
-    private Set<Spell> spells;
+    private final Map<String, Spell> spells;
 
     /**
      * Creates a new player.
@@ -25,7 +27,7 @@ public final class PlayerImpl implements Player {
     public PlayerImpl() {
         this.currentWorld = null;
         this.name = "";
-        this.spells = new HashSet<>();
+        this.spells = new HashMap<>();
     }
 
     @Override
@@ -50,12 +52,12 @@ public final class PlayerImpl implements Player {
 
     @Override
     public Set<Spell> getSpells() {
-        return Set.copyOf(this.spells);
+        return new HashSet<Spell>(this.spells.values());
     }
 
     @Override
     public void setSpells(final Set<Spell> spells) {
-        this.spells = Set.copyOf(spells);
+        spells.forEach(sp -> this.spells.put(sp.getName(), sp));
     }
 
     @Override
@@ -65,10 +67,7 @@ public final class PlayerImpl implements Player {
 
     @Override
     public boolean throwSpell(final Position pos, final String name) {
-        return this.getSpells().stream()
-                .filter(p -> Objects.equals(p.getName(), name))
-                .findFirst().get()
-                .ifPossibleActivate(pos);
+        return this.spells.get(name).ifPossibleActivate(pos);
     }
 
     @Override
@@ -81,7 +80,7 @@ public final class PlayerImpl implements Player {
      */
     public Set<Spell> getActiveSpells() {
         return new HashSet<Spell>(this.getSpells().stream()
-                .filter(sp -> sp.isActive())
+                .filter(Spell::isActive)
                 .toList());
     }
 }
