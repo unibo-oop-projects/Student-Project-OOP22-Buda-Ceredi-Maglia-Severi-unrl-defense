@@ -318,7 +318,7 @@ public final class GamePanel extends JPanel {
                         radius = (int) (Cannon.RADIOUS);
                     }
                     if (radius != 0) {
-                        graphic.setColor(Color.GREEN);
+                        graphic.setColor(Color.GRAY);
                         final Position realPL = fromPositionToRealPosition(
                                 new Position(modelP.getX() - radius, modelP.getY() - radius));
                         final Position realPR = fromPositionToRealPosition(
