@@ -7,6 +7,8 @@ import it.unibo.unrldef.model.api.World;
 
 /**
  * This interface models the engine that updates the game.
+ * 
+ * @author tommaso.severi2@studio.unibo.it
  */
 public interface GameEngine {
 
