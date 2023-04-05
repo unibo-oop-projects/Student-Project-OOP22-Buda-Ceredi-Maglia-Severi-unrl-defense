@@ -19,13 +19,35 @@ import it.unibo.unrldef.model.api.World.GameState;
  */
 public final class GameEngineImpl implements GameEngine {
 
+    /**
+     * This is used to manage the various states that 
+     * the loop of the game can be on.
+     */
+    private enum LoopState {
+        /**
+         * The game is currently in the menu.
+         */
+        MENU, 
+        /**
+         * The game is currently int it's playing state.
+         */
+        PLAYING, 
+        /**
+         * The game is displaying the end screen.
+         */
+        ENDING, 
+        /**
+         * The game needs to be closed.
+         */
+        EXIT
+    }
+
     private static final long PERIOD = 1000 / 30;
     private Player player;
     private World currentWorld;
     private Input input;
     private View gameView;
-    private boolean started;
-    private boolean ended;
+    private LoopState status;
 
     /**
      * Builds a new GameEngine.
@@ -40,15 +62,14 @@ public final class GameEngineImpl implements GameEngine {
         this.setView(view);
         this.setPlayer(player);
         this.setGameWorld(world);
-        this.started = false;
-        this.ended = false;
+        this.status = LoopState.MENU;
     }
 
     @Override
     public void initGame(final String playerName) {
         this.player.setName(playerName);
         this.gameView.initGame();
-        this.started = true;
+        this.status = LoopState.PLAYING;
     }
 
     @Override
@@ -74,15 +95,6 @@ public final class GameEngineImpl implements GameEngine {
     }
 
     @Override
-    public void menuLoop() {
-        while (!started && !ended) {
-            this.processInput();
-            this.gameView.updateMenu();
-        }
-        this.gameLoop();
-    }
-
-    @Override
     public void gameLoop() {
         long previousFrameStartTime = System.currentTimeMillis();
         while (this.isGameRunning()) {
@@ -94,7 +106,6 @@ public final class GameEngineImpl implements GameEngine {
             this.waitForNextFrame(currentFrameStartTime);
             previousFrameStartTime = currentFrameStartTime;
         }
-        this.endLoop();
     }
 
     /**
@@ -111,6 +122,22 @@ public final class GameEngineImpl implements GameEngine {
                 e.printStackTrace(); // NOPMD if this fails the game has to stop
             }
         }
+    }
+
+    /**
+     * Checks if the game is running.
+     * 
+     * @return true if the game is running, false otherwise
+     */
+    private boolean isGameRunning() {
+        return this.status != LoopState.EXIT;
+    }
+
+    /**
+     * @return the current state of the game
+     */
+    private GameState gameState() {
+        return this.currentWorld.gameState();
     }
 
     /**
@@ -141,44 +168,40 @@ public final class GameEngineImpl implements GameEngine {
     }
 
     /**
-     * Checks if the game is running.
-     * 
-     * @return true if the game is running, false otherwise
-     */
-    private boolean isGameRunning() {
-        return this.gameState().equals(GameState.PLAYING) && !this.ended;
-    }
-
-    /**
-     * @return the current state of the game
-     */
-    private GameState gameState() {
-        return this.currentWorld.gameState();
-    }
-
-    /**
-     * Updates the game world.
+     * Updates the game.
      * 
      * @param elapsed the elapsed time since last frame
      */
     private void update(final long elapsed) {
-        this.currentWorld.updateState(elapsed);
+        switch (this.status) {
+            case PLAYING:
+                if (this.gameState() == GameState.PLAYING) {
+                    this.currentWorld.updateState(elapsed);
+                } else {
+                    this.status = LoopState.ENDING;
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     /**
      * Renders the game.
      */
     private void render() {
-        this.gameView.render();
-    }
-
-    /**
-     * Starts the end loop.
-     */
-    private void endLoop() {
-        while (!ended) {
-            this.renderEndState(this.gameState());
-            this.processInput();
+        switch (this.status) {
+            case MENU:
+                this.gameView.renderMenu();
+                break;
+            case PLAYING:
+                this.gameView.renderGame();
+                break;
+            case ENDING:
+                this.gameView.renderEndGame(this.gameState());
+                break;
+            default:
+                break;
         }
     }
 
@@ -186,16 +209,7 @@ public final class GameEngineImpl implements GameEngine {
      * Exits the game.
      */
     private void exitGame() {
-        this.ended = true;
+        this.status = LoopState.EXIT;
         this.gameView.exitGame();
-    }
-
-    /**
-     * Renders the end of the game.
-     * 
-     * @param state the final state of the game
-     */
-    private void renderEndState(final GameState state) {
-        this.gameView.renderEndGame(state);
     }
 }

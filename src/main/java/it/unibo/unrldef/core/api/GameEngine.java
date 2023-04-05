@@ -41,11 +41,6 @@ public interface GameEngine {
     void initGame(String playerName);
 
     /**
-     * Starts the menu loop.
-     */
-    void menuLoop();
-
-    /**
      * Starts the game loop.
      */
     void gameLoop();

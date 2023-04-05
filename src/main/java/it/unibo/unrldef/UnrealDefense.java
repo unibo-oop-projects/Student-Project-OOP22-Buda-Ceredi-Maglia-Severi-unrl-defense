@@ -37,7 +37,7 @@ public final class UnrealDefense {
         if (world != null) {
             final View view = new ViewImpl(p, world, input);
             final GameEngine engine = new GameEngineImpl(world, p, input, view);
-            engine.menuLoop();
+            engine.gameLoop();
         } else {
             System.err.println("Error loading the level"); // NOPMD it's vital for the game to stop in this case
         }

@@ -91,13 +91,13 @@ public final class ViewImpl implements View {
     }
 
     @Override
-    public void render() {
+    public void renderGame() {
         this.updateHUD();
         this.gamePanel.repaint();
     }
 
     @Override
-    public void updateMenu() {
+    public void renderMenu() {
         this.menuPanel.repaint();
     }
 

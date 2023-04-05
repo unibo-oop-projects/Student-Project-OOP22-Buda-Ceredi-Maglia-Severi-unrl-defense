@@ -11,12 +11,12 @@ public interface View {
     /**
      * Render the current state of the game.
      */
-    void render();
+    void renderGame();
 
     /**
      * Updates the memu of the game.
      */
-    void updateMenu();
+    void renderMenu();
 
     /**
      * Starts the rendering of the game.
