@@ -31,7 +31,7 @@ class SpellImplTest {
         this.testWorld = new WorldImpl.Builder("testWorld", new PlayerImpl(), new Position(0, 0), 0, 0)
                 .addPathSegment(Direction.END, 0)
                 .build();
-        this.testSpell = new SpellImpl("test", this.testWorld, TEST_RADIUS, TEST_DAMAGE,
+        this.testSpell = new SpellImpl("test", TEST_RADIUS, TEST_DAMAGE,
                 this.testRechargeTime, this.testLingeringEffectTime, this.testLingeringEffectFrequency) {
             @Override
             protected void effect(final Enemy enemy) {
@@ -41,6 +41,7 @@ class SpellImplTest {
             protected void resetEffect() {
             }
         };
+        this.testSpell.setParentWorld(testWorld);
     }
 
     /**

@@ -1,7 +1,6 @@
 package it.unibo.unrldef.model.impl;
 
 import it.unibo.unrldef.model.api.Enemy;
-import it.unibo.unrldef.model.api.World;
 
 /**
  * A fireball spell used in a tower defense game.
@@ -28,8 +27,8 @@ public final class FireBall extends SpellImpl {
      * Creates a new spell of type fireball.
      * @param parentWorld the world where it'll be having effect
      */
-    public FireBall(final World parentWorld) {
-        super(NAME, parentWorld, RAD, DMG, RECHARGE_TIME, LINGERING_EFFECT_TIME, LINGERING_EFFECT_FREQ);
+    public FireBall() {
+        super(NAME, RAD, DMG, RECHARGE_TIME, LINGERING_EFFECT_TIME, LINGERING_EFFECT_FREQ);
     }
 
     @Override

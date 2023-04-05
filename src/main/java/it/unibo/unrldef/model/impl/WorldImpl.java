@@ -483,7 +483,6 @@ public final class WorldImpl implements World {
             }
 
             this.player.setGameWorld(ret);
-            this.player.setSpells(Set.of(new FireBall(ret), new SnowStorm(ret)));
 
             return ret;
         }
