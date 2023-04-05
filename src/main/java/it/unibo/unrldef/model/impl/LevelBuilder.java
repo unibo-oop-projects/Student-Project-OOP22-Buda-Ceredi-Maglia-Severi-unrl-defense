@@ -78,7 +78,7 @@ public final class LevelBuilder {
         this.loadTowerBuildingSpacesFromJson(json, worldBuilder);
 
         final World world = worldBuilder.build();
-        for(Spell spell : this.player.getSpells()) {
+        for (final Spell spell : this.player.getSpells()) {
             spell.setParentWorld(world);
         }
         return world;
