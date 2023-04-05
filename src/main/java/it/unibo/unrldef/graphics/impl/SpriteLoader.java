@@ -23,7 +23,7 @@ import it.unibo.unrldef.input.api.Input;
  * @author danilo.maglia@studio.unibo.it
  * @author francesco.buda3@studio.unibo.it
  */
-public class SpriteLoader {
+public final class SpriteLoader {
     /**
      * the folder where the assets are stored.
      */
@@ -91,7 +91,7 @@ public class SpriteLoader {
      * loads the sprites from the JSON file passed as argument.
      * 
      * @param fileName
-     * @param inputHandler 
+     * @param inputHandler
      */
     public void loadSpritesFromFile(final String fileName, final Input inputHandler) {
         final JSONParser parser = new JSONParser();
@@ -100,7 +100,7 @@ public class SpriteLoader {
 
         try {
             // read the whole file passed as argument and put the content in a string
-            fileContent = new String((this.getClass().getResourceAsStream(fileName).readAllBytes()),
+            fileContent = new String(this.getClass().getResourceAsStream(fileName).readAllBytes(),
                     StandardCharsets.UTF_8);
             json = (JSONObject) parser.parse(fileContent);
         } catch (ParseException | IOException e) {
@@ -116,8 +116,8 @@ public class SpriteLoader {
             final int height = Integer.parseInt(sprite.get("height").toString());
             Image spriteImage = Toolkit.getDefaultToolkit().createImage("");
             try {
-                System.out.println(ASSETS_FOLDER + sprite.get("fileName").toString());
-                spriteImage = ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + sprite.get("fileName").toString()));
+                spriteImage = ImageIO
+                        .read(this.getClass().getResourceAsStream(ASSETS_FOLDER + sprite.get("fileName").toString()));
             } catch (IOException e) {
                 new ErrorDialog("Error loading the sprite " + sprite.get("name").toString(), inputHandler).showDialog();
             }

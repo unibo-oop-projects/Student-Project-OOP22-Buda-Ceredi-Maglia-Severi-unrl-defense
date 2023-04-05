@@ -28,7 +28,7 @@ import org.json.simple.parser.JSONParser;
  * @author francesco.buda3@studio.unibo.it
  *
  */
-public class LevelBuilder {
+public final class LevelBuilder {
     private final Player player;
 
     /**
@@ -56,7 +56,7 @@ public class LevelBuilder {
         String fileContent;
         try {
             // read the whole file passed as argument and put the content in a string
-            fileContent = new String((this.getClass().getResourceAsStream(fileName).readAllBytes()),
+            fileContent = new String(this.getClass().getResourceAsStream(fileName).readAllBytes(),
                     StandardCharsets.UTF_8);
             json = (JSONObject) parser.parse(fileContent);
         } catch (IOException | ParseException e) {
