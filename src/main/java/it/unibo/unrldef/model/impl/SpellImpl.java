@@ -5,7 +5,6 @@ import java.util.Objects;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Spell;
-import it.unibo.unrldef.model.api.World;
 
 /**
  * Implememntation of a generic spell in a tower defense game.
@@ -28,11 +27,10 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
      * @param lingeringEffectTime the time the spell will be active
      * @param lingeringEffectFrequency the frequency of the effect
      */
-    public SpellImpl(final String name, final World parentWorld, final double radius,
+    public SpellImpl(final String name, final double radius,
             final double damage, final long rechargeTime, final long lingeringEffectTime, 
             final long lingeringEffectFrequency) {
         super(name, radius, damage, rechargeTime);
-        this.setParentWorld(parentWorld);
         this.lingeringEffectTime = Objects.requireNonNull(lingeringEffectTime);
         this.lingeringEffectFrequency = Objects.requireNonNull(lingeringEffectFrequency);
         this.active = false;

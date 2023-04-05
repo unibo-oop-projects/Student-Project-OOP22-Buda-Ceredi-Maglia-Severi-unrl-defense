@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import it.unibo.unrldef.model.api.Enemy;
-import it.unibo.unrldef.model.api.World;
 
 /**
  * An ice spell used in a tower defense game to slow down enemies.
@@ -31,8 +30,8 @@ public final class SnowStorm extends SpellImpl {
      * Creates a new spell of type ice.
      * @param parentWorld the world where it'll be having effect
      */
-    public SnowStorm(final World parentWorld) {
-        super(NAME, parentWorld, RAD, DMG, RECHARGE_TIME, LINGERING_EFFECT_TIME, LINGERING_EFFECT_FREQ);
+    public SnowStorm() {
+        super(NAME, RAD, DMG, RECHARGE_TIME, LINGERING_EFFECT_TIME, LINGERING_EFFECT_FREQ);
     }
 
     @Override

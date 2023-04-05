@@ -3,6 +3,7 @@ package it.unibo.unrldef.model.impl;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Player;
+import it.unibo.unrldef.model.api.Spell;
 import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.api.Path.Direction;
@@ -11,6 +12,8 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
@@ -67,11 +70,18 @@ public final class LevelBuilder {
         this.loadPathFromJson(json, worldBuilder);
         // loading waves
         this.loadWavesFromJson(json, worldBuilder);
+        //loading available spells into the player
+        this.loadAvailableSpells(json);
         // loading available towers
         this.loadAvailableTowers(json, worldBuilder);
         // loading tower building spaces
         this.loadTowerBuildingSpacesFromJson(json, worldBuilder);
-        return worldBuilder.build();
+
+        final World world = worldBuilder.build();
+        for(Spell spell : this.player.getSpells()) {
+            spell.setParentWorld(world);
+        }
+        return world;
     }
 
     private WorldImpl.Builder loadBuilderFromJson(final JSONObject json) {
@@ -142,6 +152,27 @@ public final class LevelBuilder {
             final int y = ((Long) spaceObj.get("y")).intValue();
             worldBuilder.addTowerBuildingSpace(x, y);
         }
+    }
+
+    private void loadAvailableSpells(final JSONObject json) {
+        final JSONArray availableSpells = (JSONArray) json.get("availableSpells");
+        final Set<Spell> spells = new HashSet<>();
+        for (final Object spell : availableSpells) {
+            final String spellName = (String) spell;
+            Spell spellType = null;
+            switch (spellName) {
+                case "fireBall":
+                    spellType = new FireBall();
+                    break;
+                case "snowStorm":
+                    spellType = new SnowStorm();
+                    break;
+                default:
+                    break;
+            }
+            spells.add(spellType);
+        }
+        this.player.setSpells(spells);
     }
 
     private void loadAvailableTowers(final JSONObject json, final WorldImpl.Builder worldBuilder) {

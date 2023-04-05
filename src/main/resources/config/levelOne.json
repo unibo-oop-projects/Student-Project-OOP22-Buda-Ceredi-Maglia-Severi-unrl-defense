@@ -118,6 +118,7 @@
             ]
         }
     ],
+    "availableSpells": ["fireBall", "snowStorm"],
     "availableTowers": ["hunter", "cannon"],
     "towerBuildingSpaces": [
         {
