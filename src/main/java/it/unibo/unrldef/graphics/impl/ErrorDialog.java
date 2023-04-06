@@ -6,13 +6,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import it.unibo.unrldef.input.api.Input;
-import it.unibo.unrldef.input.api.Input.HitType;
+import it.unibo.unrldef.input.api.InputHandler;
+import it.unibo.unrldef.input.api.Input.InputType;
+import it.unibo.unrldef.input.impl.InputImpl;
 
 import java.awt.BorderLayout;
 
 import java.awt.event.ActionListener;
-import java.util.Optional;
 import java.awt.event.ActionEvent;
 
 /**
@@ -22,7 +22,7 @@ import java.awt.event.ActionEvent;
  */
 public final class ErrorDialog extends JDialog {
 
-    private final Input inputHandler;
+    private final InputHandler inputHandler;
 
     private static final long serialVersionUID = 1L;
 
@@ -33,7 +33,7 @@ public final class ErrorDialog extends JDialog {
      * @param input the input handler
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Input is meant to be changed by the view")
-    public ErrorDialog(final String error, final Input input) {
+    public ErrorDialog(final String error, final InputHandler input) {
         super();
 
         final JPanel dialogPanel = new JPanel(new BorderLayout());
@@ -42,7 +42,7 @@ public final class ErrorDialog extends JDialog {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                inputHandler.setLastHit(0, 0, HitType.EXIT_GAME, Optional.empty());
+                inputHandler.addInput(new InputImpl(InputType.EXIT_GAME));
                 dispose();
             }
         });

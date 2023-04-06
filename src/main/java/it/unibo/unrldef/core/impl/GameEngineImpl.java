@@ -3,11 +3,11 @@ package it.unibo.unrldef.core.impl;
 import java.util.Optional;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import it.unibo.unrldef.common.Pair;
 import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.core.api.GameEngine;
 import it.unibo.unrldef.graphics.api.View;
-import it.unibo.unrldef.input.api.Input;
+import it.unibo.unrldef.input.api.InputHandler;
+import it.unibo.unrldef.input.api.Input.InputType;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.api.World.GameState;
@@ -45,7 +45,7 @@ public final class GameEngineImpl implements GameEngine {
     private static final long PERIOD = 1000 / 20;
     private Player player;
     private World currentWorld;
-    private Input input;
+    private InputHandler input;
     private View gameView;
     private LoopState status;
 
@@ -57,7 +57,7 @@ public final class GameEngineImpl implements GameEngine {
      * @param input  the input of the game
      * @param view   the view of the game
      */
-    public GameEngineImpl(final World world, final Player player, final Input input, final View view) {
+    public GameEngineImpl(final World world, final Player player, final InputHandler input, final View view) {
         this.setInput(input);
         this.setView(view);
         this.setPlayer(player);
@@ -90,7 +90,7 @@ public final class GameEngineImpl implements GameEngine {
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Input is meant to be the same as the other objects")
     @Override
-    public void setInput(final Input input) {
+    public void setInput(final InputHandler input) {
         this.input = input;
     }
 
@@ -144,19 +144,19 @@ public final class GameEngineImpl implements GameEngine {
      * Processes the input.
      */
     private void processInput() {
-        final Optional<Pair<Position, Input.HitType>> lastHit = input.getLastHit();
-        if (lastHit.isPresent()) {
-            final Position selectedPosition = lastHit.get().getFirst();
-            final Optional<String> selectedName = this.input.getSelectedName();
-            switch (lastHit.get().getSecond()) {
+        this.input.getInputs().forEach(in -> {
+            final InputType type = in.getInputType();
+            final Optional<Position> position = in.getSelectedPosition();
+            final Optional<String> name = in.getSelectedName();
+            switch (type) {
                 case PLACE_TOWER:
-                    this.player.buildTower(selectedPosition, selectedName.get());
+                    this.player.buildTower(position.get(), name.get());
                     break;
                 case PLACE_SPELL:
-                    this.player.throwSpell(selectedPosition, selectedName.get());
+                    this.player.throwSpell(position.get(), name.get());
                     break;
                 case START_GAME:
-                    this.initGame(selectedName.get());
+                    this.initGame(name.get());
                     break;
                 case EXIT_GAME:
                     this.exitGame();
@@ -164,7 +164,7 @@ public final class GameEngineImpl implements GameEngine {
                 default:
                     break;
             }
-        }
+        });
     }
 
     /**

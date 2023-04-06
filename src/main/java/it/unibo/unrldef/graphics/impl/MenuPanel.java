@@ -9,7 +9,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.Optional;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -18,8 +17,9 @@ import javax.swing.JTextField;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.unrldef.common.Pair;
-import it.unibo.unrldef.input.api.Input;
-import it.unibo.unrldef.input.api.Input.HitType;
+import it.unibo.unrldef.input.api.InputHandler;
+import it.unibo.unrldef.input.api.Input.InputType;
+import it.unibo.unrldef.input.impl.InputImpl;
 
 /**
  * This class modules the menu panel.
@@ -33,7 +33,7 @@ public final class MenuPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private final JButton exitButton, startButton;
     private final JTextField nameField;
-    private final transient Input inputHandler;
+    private final transient InputHandler inputHandler;
     private double xScale = 1;
     private double yScale = 1;
     private static final int DEFAULT_WIDTH = 600;
@@ -59,7 +59,7 @@ public final class MenuPanel extends JPanel {
      * @param inputHandler the input handler
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Input is meant to be changed by the view")
-    public MenuPanel(final Input inputHandler) {
+    public MenuPanel(final InputHandler inputHandler) {
         super();
         try {
             this.title = ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + "logo.png"));
@@ -97,13 +97,13 @@ public final class MenuPanel extends JPanel {
         this.startButton.setBounds(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2 + BUTTON_PADDING, BUTTON_WIDTH, BUTTON_HEIGHT);
         this.startButton.addActionListener(e -> {
             if (this.nameField.getText().length() > 0) {
-                this.inputHandler.setLastHit(0, 0, HitType.START_GAME, Optional.of(this.nameField.getText()));
+                this.inputHandler.addInput(new InputImpl(InputType.START_GAME, this.nameField.getText()));
             }
         });
         exitButton = new JButton("Exit");
         exitButton.setBounds(DEFAULT_HEIGHT / 2, DEFAULT_HEIGHT / 2, BUTTON_WIDTH, BUTTON_HEIGHT);
         exitButton.addActionListener(e -> {
-            this.inputHandler.setLastHit(0, 0, HitType.EXIT_GAME, Optional.empty());
+            this.inputHandler.addInput(new InputImpl(InputType.EXIT_GAME));
         });
         this.add(nameField);
         this.add(startButton);

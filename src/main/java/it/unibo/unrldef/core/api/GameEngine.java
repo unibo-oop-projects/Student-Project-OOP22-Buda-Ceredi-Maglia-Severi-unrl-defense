@@ -1,7 +1,7 @@
 package it.unibo.unrldef.core.api;
 
 import it.unibo.unrldef.graphics.api.View;
-import it.unibo.unrldef.input.api.Input;
+import it.unibo.unrldef.input.api.InputHandler;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 
@@ -34,7 +34,7 @@ public interface GameEngine {
      * Sets the input of the game.
      * @param input the input of the game
      */
-    void setInput(Input input);
+    void setInput(InputHandler input);
 
     /**
      * Initializes the game.

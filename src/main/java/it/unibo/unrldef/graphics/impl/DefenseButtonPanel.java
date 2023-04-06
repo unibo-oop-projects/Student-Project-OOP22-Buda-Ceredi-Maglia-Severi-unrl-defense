@@ -21,7 +21,7 @@ import it.unibo.unrldef.model.impl.SnowStorm;
 import it.unibo.unrldef.model.impl.Cannon;
 import it.unibo.unrldef.model.impl.SpellImpl;
 import it.unibo.unrldef.model.impl.TowerImpl;
-import it.unibo.unrldef.input.api.Input;
+import it.unibo.unrldef.input.api.InputHandler;
 import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
@@ -59,7 +59,7 @@ public final class DefenseButtonPanel extends JPanel {
      * @param world the world of the game
      * @param inputHandler the input handler of the game
      */
-    public DefenseButtonPanel(final GamePanel gamePanel, final World world, final Input inputHandler) {
+    public DefenseButtonPanel(final GamePanel gamePanel, final World world, final InputHandler inputHandler) {
         super();
         this.setWorld(world);
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

@@ -15,7 +15,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import it.unibo.unrldef.input.api.Input;
+import it.unibo.unrldef.input.api.InputHandler;
 
 /**
  * Class that loads from file and contains the data of the sprites.
@@ -93,7 +93,7 @@ public final class SpriteLoader {
      * @param fileName
      * @param inputHandler
      */
-    public void loadSpritesFromFile(final String fileName, final Input inputHandler) {
+    public void loadSpritesFromFile(final String fileName, final InputHandler inputHandler) {
         final JSONParser parser = new JSONParser();
         String fileContent;
         JSONObject json = new JSONObject();

@@ -70,7 +70,7 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
     }
 
     @Override
-    public boolean isReady() {
+    public final boolean isReady() {
         return this.getTimeSinceLastAction() >= this.getAttackRate() && !this.isActive();
     }
 

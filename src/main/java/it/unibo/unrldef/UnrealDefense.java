@@ -4,8 +4,8 @@ import it.unibo.unrldef.core.api.GameEngine;
 import it.unibo.unrldef.core.impl.GameEngineImpl;
 import it.unibo.unrldef.graphics.api.View;
 import it.unibo.unrldef.graphics.impl.ViewImpl;
-import it.unibo.unrldef.input.api.Input;
-import it.unibo.unrldef.input.impl.PlayerInput;
+import it.unibo.unrldef.input.api.InputHandler;
+import it.unibo.unrldef.input.impl.InputHandlerImpl;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.impl.LevelBuilder;
@@ -33,7 +33,7 @@ public final class UnrealDefense {
         final Player p = new PlayerImpl();
         final LevelBuilder level = new LevelBuilder(p);
         final World world = level.fromFile("/config/levelOne.json");
-        final Input input = new PlayerInput();
+        final InputHandler input = new InputHandlerImpl();
         if (world != null) {
             final View view = new ViewImpl(p, world, input);
             final GameEngine engine = new GameEngineImpl(world, p, input, view);

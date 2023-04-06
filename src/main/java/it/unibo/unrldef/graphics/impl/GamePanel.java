@@ -25,7 +25,9 @@ import javax.swing.event.MouseInputListener;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.unrldef.common.Position;
-import it.unibo.unrldef.input.api.Input;
+import it.unibo.unrldef.input.api.InputHandler;
+import it.unibo.unrldef.input.api.Input.InputType;
+import it.unibo.unrldef.input.impl.InputImpl;
 import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Spell;
@@ -112,7 +114,7 @@ public final class GamePanel extends JPanel {
      * @param gameWorld    the game world
      * @param inputHandler the input handler
      */
-    public GamePanel(final World gameWorld, final Input inputHandler) {
+    public GamePanel(final World gameWorld, final InputHandler inputHandler) {
         this.viewState = ViewState.IDLE;
         this.mousePosition = new Position(0, 0);
         this.spriteLoader
@@ -192,13 +194,13 @@ public final class GamePanel extends JPanel {
                                 })
                                 .findFirst().ifPresent(modelP -> {
                                     towerAvailablePositions.remove(modelP);
-                                    inputHandler.setLastHit((int) modelP.getX(), (int) modelP.getY(),
-                                            Input.HitType.PLACE_TOWER, Optional.of(selectedEntity));
+                                    inputHandler.addInput(new InputImpl(
+                                            InputType.PLACE_TOWER, modelP, selectedEntity));
                                 });
                         break;
                     case SPELL_SELECTED:
-                        inputHandler.setLastHit((int) pModel.getX(), (int) pModel.getY(), Input.HitType.PLACE_SPELL,
-                                Optional.of(selectedEntity));
+                    inputHandler.addInput(new InputImpl(InputType.PLACE_SPELL, pModel,
+                                selectedEntity));
                         break;
                     default:
                         break;

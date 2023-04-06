@@ -34,5 +34,5 @@ public interface Spell extends Entity {
     /**
      * @return true if the spell is ready to be used, false otherwise
      */
-    public boolean isReady();
+    boolean isReady();
 }

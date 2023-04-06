@@ -18,15 +18,15 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import it.unibo.unrldef.graphics.api.View;
-import it.unibo.unrldef.input.api.Input;
-import it.unibo.unrldef.input.api.Input.HitType;
+import it.unibo.unrldef.input.api.InputHandler;
+import it.unibo.unrldef.input.api.Input.InputType;
+import it.unibo.unrldef.input.impl.InputImpl;
 import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Player;
 import it.unibo.unrldef.model.api.World;
 import it.unibo.unrldef.model.api.World.GameState;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -46,7 +46,7 @@ public final class ViewImpl implements View {
     private final Player player;
     private final World world;
     private final MenuPanel menuPanel;
-    private final Input inputHandler;
+    private final InputHandler inputHandler;
 
     /**
      * Builds the view of the game starting with the menu.
@@ -57,7 +57,7 @@ public final class ViewImpl implements View {
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", 
             justification = "Input and player are meant to be the same as the other objects")
-    public ViewImpl(final Player player, final World world, final Input inputHandler) {
+    public ViewImpl(final Player player, final World world, final InputHandler inputHandler) {
         this.player = player;
         this.world = world;
         this.inputHandler = inputHandler;
@@ -135,7 +135,7 @@ public final class ViewImpl implements View {
             exit.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
-                    inputHandler.setLastHit(0, 0, HitType.EXIT_GAME, Optional.empty());
+                    inputHandler.addInput(new InputImpl(InputType.EXIT_GAME));
                 }
             });
         } catch (IOException e) {
