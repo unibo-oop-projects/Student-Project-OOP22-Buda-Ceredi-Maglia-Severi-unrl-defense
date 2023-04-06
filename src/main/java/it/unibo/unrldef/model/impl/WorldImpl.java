@@ -258,8 +258,8 @@ public final class WorldImpl implements World {
     }
 
     @Override
-    public Integrity getCastleIntegrity() {
-        return this.castleIntegrity;
+    public int getHearts() {
+        return this.castleIntegrity.getHearts();
     }
 
     @Override

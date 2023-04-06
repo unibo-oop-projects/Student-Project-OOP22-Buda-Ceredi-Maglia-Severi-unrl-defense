@@ -482,7 +482,7 @@ public final class GamePanel extends JPanel {
     }
 
     private void renderHearts(final Graphics2D graphic) {
-        final int n = this.gameWorld.getCastleIntegrity().getHearts();
+        final int n = this.gameWorld.getHearts();
         final int denominator = 4;
         final int startX = this.xMapPosition + this.heart.getScaledDimension().getFirst() / denominator;
         final int startY = this.yMapPosition + this.heart.getScaledDimension().getSecond() / denominator;

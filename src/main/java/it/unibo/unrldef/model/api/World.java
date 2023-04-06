@@ -75,7 +75,7 @@ public interface World {
      * 
      * @return the castle's integrity
      */
-    Integrity getCastleIntegrity();
+    int getHearts();
 
     /**
      * 
