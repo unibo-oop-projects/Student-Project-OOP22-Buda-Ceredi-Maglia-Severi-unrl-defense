@@ -3,7 +3,8 @@ package it.unibo.unrldef.model.impl;
 import it.unibo.unrldef.model.api.Enemy;
 
 /**
- * A fireball spell used in a tower defense game.
+ * A fireball spell that can be used in a tower defense game.
+ * 
  * @author tommaso.severi2@studio.unibo.it
  */
 public final class FireBall extends SpellImpl {
@@ -31,10 +32,11 @@ public final class FireBall extends SpellImpl {
     }
 
     @Override
-    protected void effect(final Enemy enemy) {
-        enemy.reduceHealth(LINGERING_DAMAGE);
+    protected void effect(final Enemy target) {
+        target.reduceHealth(LINGERING_DAMAGE);
     }
 
     @Override
-    protected void resetEffect() { }
+    protected void resetEffect() {
+    }
 }

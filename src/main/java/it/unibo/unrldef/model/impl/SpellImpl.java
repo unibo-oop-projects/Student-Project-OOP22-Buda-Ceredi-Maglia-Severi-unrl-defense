@@ -7,7 +7,8 @@ import it.unibo.unrldef.model.api.Enemy;
 import it.unibo.unrldef.model.api.Spell;
 
 /**
- * Implememntation of a generic spell in a tower defense game.
+ * Implementation of a generic spell in a tower defense game.
+ * 
  * @author tommaso.severi2@studio.unibo.it
  */
 public abstract class SpellImpl extends DefenseEntity implements Spell {
@@ -19,15 +20,16 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
 
     /**
      * Creates a new spell.
-     * @param name the name of the spell
-     * @param radius the radius of the spell
-     * @param damage the damage of the spell
-     * @param rechargeTime the recharge time of the spell
-     * @param lingeringEffectTime the time the spell will be active
-     * @param lingeringEffectFrequency the frequency of the effect
+     * 
+     * @param name                     the name of the spell
+     * @param radius                   the radius of the spell
+     * @param damage                   the damage of the spell
+     * @param rechargeTime             the recharge time of the spell
+     * @param lingeringEffectTime      the time the spell will be active
+     * @param lingeringEffectFrequency the frequency in which the effect is applied
      */
     public SpellImpl(final String name, final double radius,
-            final double damage, final long rechargeTime, final long lingeringEffectTime, 
+            final double damage, final long rechargeTime, final long lingeringEffectTime,
             final long lingeringEffectFrequency) {
         super(name, radius, damage, rechargeTime);
         this.lingeringEffectTime = Objects.requireNonNull(lingeringEffectTime);
@@ -67,9 +69,7 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
         }
     }
 
-    /**
-     * @return true if the spell is ready to be used, false otherwise
-     */
+    @Override
     public boolean isReady() {
         return this.getTimeSinceLastAction() >= this.getAttackRate() && !this.isActive();
     }
@@ -101,9 +101,10 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
 
     /**
      * The effect of the spell while lingering.
-     * @param enemy the enemy to apply the effect to
+     * 
+     * @param target the target to apply the effect to
      */
-    protected abstract void effect(Enemy enemy);
+    protected abstract void effect(Enemy target);
 
     /**
      * Resets the effect applied by the spell after deactivating.

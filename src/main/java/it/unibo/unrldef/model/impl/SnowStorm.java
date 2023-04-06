@@ -7,6 +7,7 @@ import it.unibo.unrldef.model.api.Enemy;
 
 /**
  * An ice spell used in a tower defense game to slow down enemies.
+ * 
  * @author tommaso.severi2@studio.unibo.it
  */
 public final class SnowStorm extends SpellImpl {
@@ -34,9 +35,9 @@ public final class SnowStorm extends SpellImpl {
     }
 
     @Override
-    protected void effect(final Enemy enemy) {
-        enemy.setSpeed(enemy.getSpeed() - (enemy.getSpeed() * SPEED_REDUCTION));
-        this.enemiesEffected.add(enemy);
+    protected void effect(final Enemy target) {
+        target.setSpeed(target.getSpeed() - (target.getSpeed() * SPEED_REDUCTION));
+        this.enemiesEffected.add(target);
     }
 
     @Override
