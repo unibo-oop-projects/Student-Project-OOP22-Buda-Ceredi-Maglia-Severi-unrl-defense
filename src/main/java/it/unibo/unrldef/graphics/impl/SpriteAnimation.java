@@ -6,7 +6,8 @@ import it.unibo.unrldef.common.Position;
 import it.unibo.unrldef.model.api.Enemy;
 
 /**
- * Handles the attck animation of a game entity.
+ * Handles the attack animation of a game entity.
+ * 
  * @author tommaso.severi2@studio.unibo.it
  */
 public class SpriteAnimation {
@@ -21,6 +22,7 @@ public class SpriteAnimation {
 
     /**
      * Builds a new animation handler.
+     * 
      * @param animationLength the length of the animation
      */
     public SpriteAnimation(final long animationLength) {
@@ -30,8 +32,9 @@ public class SpriteAnimation {
 
     /**
      * Sets up the start of the animation.
+     * 
      * @param startTime the current time in which the animation is starting
-     * @param target the target towards the animation is referred to 
+     * @param target    the target towards the animation is referred to
      */
     public void startAnimation(final long startTime, final Enemy target) {
         this.startTime = startTime;
@@ -56,7 +59,8 @@ public class SpriteAnimation {
 
     /**
      * Checks if the animation is still running.
-     * @return true if it is, false otherwise
+     * 
+     * @return true if it is running, false otherwise
      */
     public boolean isAnimationRunning() {
         return this.timePassed < this.animationLength && this.timePassed != DEFAULT_TIME;
@@ -70,7 +74,7 @@ public class SpriteAnimation {
     }
 
     /**
-     * Resets the animation to iss deafult state.
+     * Resets the animation to its deafult state.
      */
     public final void resetAnimation() {
         this.startTime = DEFAULT_TIME;

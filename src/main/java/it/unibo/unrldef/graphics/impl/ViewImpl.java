@@ -108,13 +108,10 @@ public final class ViewImpl implements View {
      */
     private JLabel addPlayerName() {
         final JLabel playerName = new JLabel();
-        if (this.player.getName().length() > MAX_NAME_LENGTH) {
-            playerName.setText("Player: "
-                    + this.player.getName().substring(0, 8)
-                    + "...");
-        } else {
-            playerName.setText("Player: " + this.player.getName());
-        }
+        final String name = this.player.getName().length() > MAX_NAME_LENGTH 
+                ? this.player.getName().substring(0, MAX_NAME_LENGTH) + "..." 
+                : this.player.getName();
+        playerName.setText("Player: " + name);
         return playerName;
     }
 

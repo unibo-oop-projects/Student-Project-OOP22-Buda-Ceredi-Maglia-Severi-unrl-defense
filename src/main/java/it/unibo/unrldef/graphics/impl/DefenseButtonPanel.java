@@ -19,19 +19,19 @@ import it.unibo.unrldef.model.impl.FireBall;
 import it.unibo.unrldef.model.impl.Hunter;
 import it.unibo.unrldef.model.impl.SnowStorm;
 import it.unibo.unrldef.model.impl.Cannon;
-import it.unibo.unrldef.model.impl.SpellImpl;
-import it.unibo.unrldef.model.impl.TowerImpl;
 import it.unibo.unrldef.input.api.InputHandler;
 import it.unibo.unrldef.model.api.Entity;
 import it.unibo.unrldef.model.api.Tower;
 import it.unibo.unrldef.model.api.World;
+import it.unibo.unrldef.model.api.Spell;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * Builds the panel used for the buttons in the game.
+ * Builds the panel used for the game buttons.
+ * 
  * @author tommaso.severi2@studio.unibo.it
  * @author danilo.maglia@studio.unibo.it
  */
@@ -40,7 +40,8 @@ public final class DefenseButtonPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     /**
      * The width used by this type of buttons.
-     * It's used a 16th of the total screen width so that the buttons are always visible.
+     * It's used a 16th of the total screen width so that the buttons are always
+     * visible.
      */
     public static final int WIDTH = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 16);
     /**
@@ -55,8 +56,9 @@ public final class DefenseButtonPanel extends JPanel {
 
     /**
      * Builds a new Panel for the defensive buttons.
-     * @param gamePanel the game panel
-     * @param world the world of the game
+     * 
+     * @param gamePanel    the game panel
+     * @param world        the world of the game
      * @param inputHandler the input handler of the game
      */
     public DefenseButtonPanel(final GamePanel gamePanel, final World world, final InputHandler inputHandler) {
@@ -69,14 +71,16 @@ public final class DefenseButtonPanel extends JPanel {
         JButton fireBall = null;
         JButton snowStorm = null;
         try {
-            cannon = this.placeDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Cannon.NAME, gamePanel, 
+            cannon = this.placeDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Cannon.NAME, gamePanel,
                     new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + "cannonIcon.png"))));
-            hunter = this.placeDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Hunter.NAME, gamePanel, 
+            hunter = this.placeDefenseButton(GamePanel.ViewState.TOWER_SELECTED, Hunter.NAME, gamePanel,
                     new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + "hunterIcon.png"))));
             fireBall = this.placeDefenseButton(GamePanel.ViewState.SPELL_SELECTED, FireBall.NAME, gamePanel,
-                    new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + "fireballIcon.png"))));
+                    new ImageIcon(
+                            ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + "fireballIcon.png"))));
             snowStorm = this.placeDefenseButton(GamePanel.ViewState.SPELL_SELECTED, SnowStorm.NAME, gamePanel,
-                    new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + "snowstormIcon.png"))));
+                    new ImageIcon(
+                            ImageIO.read(this.getClass().getResourceAsStream(ASSETS_FOLDER + "snowstormIcon.png"))));
 
         } catch (IOException e) {
             new ErrorDialog("Error reading icon's images", inputHandler).showDialog();
@@ -93,13 +97,14 @@ public final class DefenseButtonPanel extends JPanel {
 
     /**
      * Creates a defensive type button and sets its parameters.
-     * @param state the state the button sets when pressed
+     * 
+     * @param state          the state the button sets when pressed
      * @param selectedEntity the entity selected by the button
-     * @param gamePanel the game panel
-     * @param icon the icon of the button
+     * @param gamePanel      the game panel
+     * @param icon           the icon of the button
      * @return the defense button
      */
-    private JButton placeDefenseButton(final GamePanel.ViewState state, final String selectedEntity, 
+    private JButton placeDefenseButton(final GamePanel.ViewState state, final String selectedEntity,
             final GamePanel gamePanel, final ImageIcon icon) {
         final JButton button = new JButton(new ImageIcon(icon.getImage()
                 .getScaledInstance(WIDTH, HEIGHT, java.awt.Image.SCALE_SMOOTH)));
@@ -116,14 +121,16 @@ public final class DefenseButtonPanel extends JPanel {
 
     /**
      * Updates the state of the buttons.
-     * @param referenceEntities the entities from which are taken the informations used to update the buttons
+     * 
+     * @param referenceEntities the entities from which are taken the informations
+     *                          used to update the buttons
      */
     public void update(final Set<Entity> referenceEntities) {
         for (final Entity entity : referenceEntities) {
             boolean enableState;
             JButton respectiveButton = new JButton();
             if (entity instanceof Tower) {
-                enableState = ((TowerImpl) entity).getCost() <= this.world.getMoney();
+                enableState = ((Tower) entity).getCost() <= this.world.getMoney();
                 switch (entity.getName()) {
                     case Hunter.NAME:
                         respectiveButton = this.buttons.get(Hunter.NAME);
@@ -135,7 +142,7 @@ public final class DefenseButtonPanel extends JPanel {
                         break;
                 }
             } else {
-                enableState = ((SpellImpl) entity).isReady();
+                enableState = ((Spell) entity).isReady();
                 switch (entity.getName()) {
                     case FireBall.NAME:
                         respectiveButton = this.buttons.get(FireBall.NAME);
@@ -153,7 +160,8 @@ public final class DefenseButtonPanel extends JPanel {
 
     /**
      * Sets the world of the game.
-     * @param world
+     * 
+     * @param world the world of the game
      */
     public void setWorld(final World world) {
         this.world = world;
