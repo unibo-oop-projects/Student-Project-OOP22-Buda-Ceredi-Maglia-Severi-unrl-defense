@@ -68,7 +68,7 @@ public final class PlayerImpl implements Player {
 
     @Override
     public boolean throwSpell(final Position pos, final String name) {
-        return this.spells.get(name).ifPossibleActivate(pos);
+        return this.spells.containsKey(name) ? this.spells.get(name).ifPossibleActivate(pos) : false;
     }
 
     @Override
