@@ -13,6 +13,7 @@ import it.unibo.unrldef.model.api.World;
 
 /**
  * The main player in a tower defense game.
+ * 
  * @author tommaso.severi2@studio.unibo.it
  */
 public final class PlayerImpl implements Player {
@@ -76,7 +77,7 @@ public final class PlayerImpl implements Player {
     }
 
     /**
-     * @return a set of spells that are active
+     * @return a set of spells that have been activeted
      */
     public Set<Spell> getActiveSpells() {
         return new HashSet<Spell>(this.getSpells().stream()
