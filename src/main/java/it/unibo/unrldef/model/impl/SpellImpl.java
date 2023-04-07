@@ -41,7 +41,7 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
     @Override
     public final boolean ifPossibleActivate(final Position position) {
         if (!this.isActive() && this.isReady()) {
-            this.active = true;
+            this.activate();
             super.setPosition(position.getX(), position.getY());
             this.checkAttack();
             return true;
@@ -64,8 +64,8 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
     public final void updateState(final long time) {
         this.incrementTime(time);
         if (this.isActive()) {
-            this.ifPossibleApplyEffect();
             this.lingerTime += time;
+            this.ifPossibleApplyEffect();
         }
     }
 
@@ -75,12 +75,21 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
     }
 
     /**
+     * Activates the spell.
+     */
+    private void activate() {
+        this.active = true;
+    }
+
+    /**
      * Sets the spell back to its waiting state after dealing damage.
      */
     private void deactivate() {
+        this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius())
+                .forEach(e -> this.effect(e));
         this.active = false;
-        this.resetElapsedTime();
         this.lingerTime = 0;
+        this.resetElapsedTime();
         this.resetEffect();
     }
 
@@ -88,11 +97,11 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
      * Applies the affect of the spell to the enemies in range if possible.
      */
     private void ifPossibleApplyEffect() {
-        if (this.getTimeSinceLastAction() <= this.lingeringEffectTime) {
+        if (this.getTimeSinceLastAction() < this.lingeringEffectTime) {
             if (this.lingerTime >= this.lingeringEffectFrequency) {
                 this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius())
                         .forEach(e -> this.effect(e));
-                this.lingerTime = 0;
+                this.lingerTime -= this.lingeringEffectFrequency;
             }
         } else {
             this.deactivate();
