@@ -11,6 +11,7 @@ import it.unibo.unrldef.model.api.Path.Direction;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
@@ -56,8 +57,10 @@ public final class LevelBuilder {
         String fileContent;
         try {
             // read the whole file passed as argument and put the content in a string
-            fileContent = new String(this.getClass().getResourceAsStream(fileName).readAllBytes(),
+            final InputStream stream = this.getClass().getResourceAsStream(fileName);
+            fileContent = new String(stream.readAllBytes(),
                     StandardCharsets.UTF_8);
+            stream.close();
             json = (JSONObject) parser.parse(fileContent);
         } catch (IOException | ParseException e) {
             e.printStackTrace(); // NOPMD
