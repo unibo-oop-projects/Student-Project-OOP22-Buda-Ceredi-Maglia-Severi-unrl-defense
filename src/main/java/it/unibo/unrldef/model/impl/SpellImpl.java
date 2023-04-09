@@ -85,8 +85,6 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
      * Sets the spell back to its waiting state after dealing damage.
      */
     private void deactivate() {
-        this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius())
-                .forEach(e -> this.effect(e));
         this.active = false;
         this.lingerTime = 0;
         this.resetElapsedTime();
@@ -97,13 +95,12 @@ public abstract class SpellImpl extends DefenseEntity implements Spell {
      * Applies the affect of the spell to the enemies in range if possible.
      */
     private void ifPossibleApplyEffect() {
-        if (this.getTimeSinceLastAction() < this.lingeringEffectTime) {
-            if (this.lingerTime >= this.lingeringEffectFrequency) {
-                this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius())
-                        .forEach(e -> this.effect(e));
-                this.lingerTime -= this.lingeringEffectFrequency;
-            }
-        } else {
+        if (this.lingerTime >= this.lingeringEffectFrequency) {
+            this.getParentWorld().sorroundingEnemies(this.getPosition().get(), this.getRadius())
+                    .forEach(e -> this.effect(e));
+            this.lingerTime -= this.lingeringEffectFrequency;
+        }
+        if (this.getTimeSinceLastAction() >= this.lingeringEffectTime) {
             this.deactivate();
         }
     }
