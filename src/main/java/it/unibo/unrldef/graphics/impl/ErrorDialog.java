@@ -32,7 +32,6 @@ public final class ErrorDialog extends JDialog {
      * @param error the error message to show
      * @param input the input handler
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Input is meant to be changed by the view")
     public ErrorDialog(final String error, final InputHandler input) {
         super();
 

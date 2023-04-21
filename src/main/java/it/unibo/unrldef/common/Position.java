@@ -78,7 +78,7 @@ public final class Position {
         if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x)) {
             return false;
         }
-        if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y)) { // NOPMD
+        if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y)) {
             return false;
         }
         return true;

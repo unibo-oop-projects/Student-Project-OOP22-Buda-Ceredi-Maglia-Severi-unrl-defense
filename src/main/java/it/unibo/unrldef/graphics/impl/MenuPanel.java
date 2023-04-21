@@ -58,7 +58,6 @@ public final class MenuPanel extends JPanel {
      * 
      * @param inputHandler the input handler
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Input is meant to be changed by the view")
     public MenuPanel(final InputHandler inputHandler) {
         super();
         try {

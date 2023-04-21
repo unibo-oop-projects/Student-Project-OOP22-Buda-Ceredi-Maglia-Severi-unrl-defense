@@ -77,7 +77,6 @@ public final class GameEngineImpl implements GameEngine {
         this.currentWorld = world;
     }
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Player is meant to be the same as the other objects")
     @Override
     public void setPlayer(final Player player) {
         this.player = player;
@@ -88,7 +87,6 @@ public final class GameEngineImpl implements GameEngine {
         this.gameView = view;
     }
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Input is meant to be the same as the other objects")
     @Override
     public void setInput(final InputHandler input) {
         this.input = input;
@@ -119,7 +117,7 @@ public final class GameEngineImpl implements GameEngine {
             try {
                 Thread.sleep(PERIOD - elapsed);
             } catch (InterruptedException e) {
-                e.printStackTrace(); // NOPMD if this fails the game has to stop
+                e.printStackTrace();
             }
         }
     }

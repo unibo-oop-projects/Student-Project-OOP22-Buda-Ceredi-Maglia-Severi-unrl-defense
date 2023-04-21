@@ -332,7 +332,6 @@ public final class WorldImpl implements World {
          * @param castleHearts  castle's number of hearts
          * @param startingMoney the starting money of the player
          */
-        @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Player is meant to be the same as the other objects")
         public Builder(final String worldName, final Player player, final Position spawnPoint, final int castleHearts,
                 final double startingMoney) {
             this.name = worldName;

@@ -37,7 +37,6 @@ public final class LevelBuilder {
      * 
      * @param player
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Player is meant to be the same as the other objects")
     public LevelBuilder(final Player player) {
         this.player = player;
     }
@@ -63,7 +62,7 @@ public final class LevelBuilder {
             stream.close();
             json = (JSONObject) parser.parse(fileContent);
         } catch (IOException | ParseException e) {
-            e.printStackTrace(); // NOPMD
+            e.printStackTrace();
         }
 
         if (json == null) {

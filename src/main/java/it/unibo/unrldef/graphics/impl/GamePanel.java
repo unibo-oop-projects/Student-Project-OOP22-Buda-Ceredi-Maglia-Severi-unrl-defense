@@ -256,7 +256,6 @@ public final class GamePanel extends JPanel {
         this.selectedEntity = entity;
     }
 
-    @SuppressFBWarnings(value = "BC_UNCONFIRMED_CAST", justification = "It's a Graphics2D object")
     @Override
     public void paint(final Graphics g) {
         super.paint(g);
